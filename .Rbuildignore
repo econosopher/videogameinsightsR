@@ -12,6 +12,8 @@
 ^inst/images/.*\.ai$
 ^data-raw$
 ^examples$
+^examples/outputs$
+^inst/images$
 ^scripts$
 ^tests/testthat/fixtures$
 ^API_SPEC\.yaml$
