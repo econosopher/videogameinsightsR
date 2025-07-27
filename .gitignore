@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.tar.gz
+inst/doc
+/doc/
+/Meta/
+.DS_Store
+API_SPEC.yaml

@@ -1,0 +1,24 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^README\.Rmd$
+^LICENSE\.md$
+^\.github$
+^docs$
+^pkgdown$
+^cran-comments\.md$
+^CRAN-SUBMISSION$
+^revdep$
+^\.DS_Store$
+^inst/images/.*\.ai$
+^data-raw$
+^examples$
+^scripts$
+^tests/testthat/fixtures$
+^API_SPEC\.yaml$
+^\.claude$
+^API_MIGRATION\.md$
+^Business API instructions v3\.pdf$
+^CRAN-SUBMISSION\.md$
+^ENDPOINT_IMPLEMENTATION_STRATEGY\.md$
+^dev$
+^vgi-api-spec\.json$

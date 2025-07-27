@@ -1,0 +1,1235 @@
+Hmm ... looks like a package
+Converting parsed Rd's to LaTeX ....
+Creating pdf output from LaTeX ...
+
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2015/01/01>
+Babel <3.9l> and hyphenation patterns for 79 languages loaded.
+(./Rd2.tex
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/bk10.clo))
+(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/jknapltx/mathrsfs.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/generic/iftex/iftex.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.05, 2014/06/22 Text macros for Inconsolata (msharpe)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/color.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 394.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 394.
+
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1enc.dfu)))
+Writing index file Rd2.idx
+No file Rd2.aux.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/jknapltx/ursfs.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1phv.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [1{/usr/local/texl
+ive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 69--71
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[2]
+Underfull \vbox (badness 10000) has occurred while \output is active [3]
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 204--206
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[4] (/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [5]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 323--325
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[6] [7] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 471--473
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[8] [9] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [10]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 602--604
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[11] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [12]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 720--722
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[13] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [14]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 854--856
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[15]
+Underfull \vbox (badness 10000) has occurred while \output is active [16]
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 985--987
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[17] [18] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1118--1120
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[19] [20] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1245--1247
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[21] [22] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [23]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1373--1375
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[24] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1463--1465
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[25] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1542--1544
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[26] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [27]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1629--1631
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[28] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1741--1743
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[29] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [30]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1824--1826
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1874--1876
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[31] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1918--1920
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[32] [33] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2021--2023
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[34] [35] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2143--2145
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[36] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2212--2214
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[37] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2322--2324
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[38] [39] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2418--2420
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[40] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2518--2520
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[41] [42] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2627--2629
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[43] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [44]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2718--2720
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2781--2783
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[45]
+Overfull \hbox (52.75864pt too wide) in paragraph at lines 2789--2792
+\T1/ptm/m/n/10 late the over-all rat-ing per-cent-age from the to-tals: []\T1/z
+i4/m/n/10 rating = positiveReviewsTotal / (positiveReviewsTotal
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [46]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2859--2861
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[47] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2929--2931
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[48] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [49]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3035--3037
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[50] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3150--3152
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[51] [52] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3248--3250
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[53] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3327--3329
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[54] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [55]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3418--3420
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[56] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [57]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3549--3551
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[58]
+Overfull \hbox (10.68091pt too wide) in paragraph at lines 3622--3622
+ []\T1/zi4/m/n/9 comparison$new_reviews <- comparison$totalReviews_today - comp
+arison$totalReviews_yesterday[] 
+
+Overfull \hbox (24.18091pt too wide) in paragraph at lines 3623--3623
+ []\T1/zi4/m/n/9 comparison$ratio_change <- comparison$positiveRatio_today - co
+mparison$positiveRatio_yesterday[] 
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [59]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3659--3661
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3712--3714
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[60] [61] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3813--3815
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[62] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (0.39732pt too wide) in paragraph at lines 3892--3894
+[]\T1/ptm/m/n/10 Retrieve top games ranked by var-i-ous met-rics in-clud-ing re
+v-enue, units sold, con-cur-rent users (CCU),
+[63]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3926--3928
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[64] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3992--3994
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[65]
+Overfull \hbox (10.68091pt too wide) in paragraph at lines 4047--4047
+ []\T1/zi4/m/n/9 comparison$conversion_rate <- comparison$percentage_player / c
+omparison$percentage_wishlist[] 
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [66]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 4097--4099
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[67] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [68]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 4214--4216
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[69]
+No file Rd2.ind.
+[70]
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.aux)
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)pdfTeX warning (dest): name
+{Rfn.tibble} has been referenced but does not exist, replaced by a fixed one
+
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/us
+r/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive
+/2015/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}</usr/local/texlive/20
+15/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/t
+exlive/2015/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/
+2015/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf
+-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/font
+s/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/ur
+w/times/utmri8a.pfb>
+Output written on Rd2.pdf (70 pages, 187468 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2015] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (47 entries accepted, 0 rejected).
+Sorting entries....done (265 comparisons).
+Generating output file Rd2.ind....done (53 lines written, 0 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2015/01/01>
+Babel <3.9l> and hyphenation patterns for 79 languages loaded.
+(./Rd2.tex
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/bk10.clo))
+(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/jknapltx/mathrsfs.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/generic/iftex/iftex.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.05, 2014/06/22 Text macros for Inconsolata (msharpe)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/color.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 394.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 394.
+
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1enc.dfu)))
+Writing index file Rd2.idx
+
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.aux) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.out)
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.out) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/jknapltx/ursfs.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1phv.fd)
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.toc [1{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/
+pdftex.map}]) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+[2]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 69--71
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[3] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [4]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 204--206
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[5] (/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [6]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 323--325
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[7]
+Underfull \vbox (badness 10000) has occurred while \output is active [8]
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 471--473
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[9] [10] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 602--604
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[11] [12] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 720--722
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[13] [14] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [15]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 854--856
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[16] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [17]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 985--987
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[18]
+Underfull \vbox (badness 10000) has occurred while \output is active [19]
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1118--1120
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[20] [21] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1245--1247
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[22] [23] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1373--1375
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[24] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [25]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1463--1465
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[26] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1542--1544
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[27] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [28]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1629--1631
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[29] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1741--1743
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[30] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [31]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1824--1826
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1874--1876
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[32] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1918--1920
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[33] [34] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2021--2023
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[35] [36] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2143--2145
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[37] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2212--2214
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[38] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2322--2324
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[39] [40] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2418--2420
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[41] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2518--2520
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[42] [43] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2627--2629
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[44] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [45]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2718--2720
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2781--2783
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[46]
+Overfull \hbox (52.75864pt too wide) in paragraph at lines 2789--2792
+\T1/ptm/m/n/10 late the over-all rat-ing per-cent-age from the to-tals: []\T1/z
+i4/m/n/10 rating = positiveReviewsTotal / (positiveReviewsTotal
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [47]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2859--2861
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[48] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2929--2931
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[49] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [50]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3035--3037
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[51] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3150--3152
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[52] [53] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3248--3250
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[54] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3327--3329
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[55] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [56]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3418--3420
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[57] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [58]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3549--3551
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[59]
+Overfull \hbox (10.68091pt too wide) in paragraph at lines 3622--3622
+ []\T1/zi4/m/n/9 comparison$new_reviews <- comparison$totalReviews_today - comp
+arison$totalReviews_yesterday[] 
+
+Overfull \hbox (24.18091pt too wide) in paragraph at lines 3623--3623
+ []\T1/zi4/m/n/9 comparison$ratio_change <- comparison$positiveRatio_today - co
+mparison$positiveRatio_yesterday[] 
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [60]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3659--3661
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3712--3714
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[61] [62] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3813--3815
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[63] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (0.39732pt too wide) in paragraph at lines 3892--3894
+[]\T1/ptm/m/n/10 Retrieve top games ranked by var-i-ous met-rics in-clud-ing re
+v-enue, units sold, con-cur-rent users (CCU),
+[64]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3926--3928
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[65] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3992--3994
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[66]
+Overfull \hbox (10.68091pt too wide) in paragraph at lines 4047--4047
+ []\T1/zi4/m/n/9 comparison$conversion_rate <- comparison$percentage_player / c
+omparison$percentage_wishlist[] 
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [67]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 4097--4099
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[68] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [69]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 4214--4216
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[70]
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.ind [71] [72])
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.aux)
+
+Package rerunfilecheck Warning: File `Rd2.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+ )
+(see the transcript file for additional information)pdfTeX warning (dest): name
+{Rfn.tibble} has been referenced but does not exist, replaced by a fixed one
+
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/us
+r/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive
+/2015/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}</usr/local/texlive/20
+15/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/t
+exlive/2015/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/
+2015/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf
+-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/font
+s/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/ur
+w/times/utmri8a.pfb>
+Output written on Rd2.pdf (72 pages, 196205 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2015] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (47 entries accepted, 0 rejected).
+Sorting entries....done (265 comparisons).
+Generating output file Rd2.ind....done (53 lines written, 0 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2015/01/01>
+Babel <3.9l> and hyphenation patterns for 79 languages loaded.
+(./Rd2.tex
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/bk10.clo))
+(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/jknapltx/mathrsfs.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/generic/iftex/iftex.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.05, 2014/06/22 Text macros for Inconsolata (msharpe)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/color.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 394.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 394.
+
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1enc.dfu)))
+Writing index file Rd2.idx
+
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.aux) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.out)
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.out) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/jknapltx/ursfs.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1phv.fd)
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.toc [1{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/
+pdftex.map}]) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+[2]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 69--71
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[3]
+Underfull \vbox (badness 10000) has occurred while \output is active [4]
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 204--206
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[5] (/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [6]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 323--325
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[7] [8] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 471--473
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[9] [10] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [11]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 602--604
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[12] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [13]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 720--722
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[14] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [15]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 854--856
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[16]
+Underfull \vbox (badness 10000) has occurred while \output is active [17]
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 985--987
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[18] [19] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1118--1120
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[20] [21] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1245--1247
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[22] [23] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [24]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1373--1375
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[25] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1463--1465
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[26] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1542--1544
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[27] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [28]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1629--1631
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[29] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1741--1743
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[30] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [31]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1824--1826
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1874--1876
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[32] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1918--1920
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[33] [34] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2021--2023
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[35] [36] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2143--2145
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[37] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2212--2214
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[38] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2322--2324
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[39] [40] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2418--2420
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[41] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2518--2520
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[42] [43] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2627--2629
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[44] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [45]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2718--2720
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2781--2783
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[46]
+Overfull \hbox (52.75864pt too wide) in paragraph at lines 2789--2792
+\T1/ptm/m/n/10 late the over-all rat-ing per-cent-age from the to-tals: []\T1/z
+i4/m/n/10 rating = positiveReviewsTotal / (positiveReviewsTotal
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [47]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2859--2861
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[48] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2929--2931
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[49] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [50]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3035--3037
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[51] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3150--3152
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[52] [53] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3248--3250
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[54] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3327--3329
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[55] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [56]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3418--3420
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[57] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [58]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3549--3551
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[59]
+Overfull \hbox (10.68091pt too wide) in paragraph at lines 3622--3622
+ []\T1/zi4/m/n/9 comparison$new_reviews <- comparison$totalReviews_today - comp
+arison$totalReviews_yesterday[] 
+
+Overfull \hbox (24.18091pt too wide) in paragraph at lines 3623--3623
+ []\T1/zi4/m/n/9 comparison$ratio_change <- comparison$positiveRatio_today - co
+mparison$positiveRatio_yesterday[] 
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [60]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3659--3661
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3712--3714
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[61] [62] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3813--3815
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[63] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (0.39732pt too wide) in paragraph at lines 3892--3894
+[]\T1/ptm/m/n/10 Retrieve top games ranked by var-i-ous met-rics in-clud-ing re
+v-enue, units sold, con-cur-rent users (CCU),
+[64]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3926--3928
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[65] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3992--3994
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[66]
+Overfull \hbox (10.68091pt too wide) in paragraph at lines 4047--4047
+ []\T1/zi4/m/n/9 comparison$conversion_rate <- comparison$percentage_player / c
+omparison$percentage_wishlist[] 
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [67]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 4097--4099
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[68] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [69]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 4214--4216
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[70]
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.ind [71] [72])
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.aux) )
+(see the transcript file for additional information)pdfTeX warning (dest): name
+{Rfn.tibble} has been referenced but does not exist, replaced by a fixed one
+
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/us
+r/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive
+/2015/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}</usr/local/texlive/20
+15/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/t
+exlive/2015/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/
+2015/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf
+-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/font
+s/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/ur
+w/times/utmri8a.pfb>
+Output written on Rd2.pdf (72 pages, 196551 bytes).
+Transcript written on Rd2.log.
+This is makeindex, version 2.15 [TeX Live 2015] (kpathsea + Thai support).
+Scanning input file Rd2.idx....done (47 entries accepted, 0 rejected).
+Sorting entries....done (265 comparisons).
+Generating output file Rd2.ind....done (53 lines written, 0 warnings).
+Output written in Rd2.ind.
+Transcript written in Rd2.ilg.
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2015/01/01>
+Babel <3.9l> and hyphenation patterns for 79 languages loaded.
+(./Rd2.tex
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/bk10.clo))
+(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ifthen.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/longtable.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/bm.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/alltt.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/tools/verbatim.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/textcomp.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1enc.def))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amsfonts.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/amssymb.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/jknapltx/mathrsfs.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/generic/iftex/iftex.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.def))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/times.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/zi4.sty
+`inconsolata-zi4' v1.05, 2014/06/22 Text macros for Inconsolata (msharpe)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/keyval.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/graphics/color.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/color.cfg)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/ltxcmds.sty)))
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty))
+(/usr/local/texlive/2015/texmf-dist/tex/generic/ifxetex/ifxetex.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/auxhook.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/kvoptions.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/latexconfig/hyperref.cfg))
+
+Package hyperref Message: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2015/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty))
+
+Package hyperref Warning: Option `hyperindex' has already been used,
+(hyperref)                setting the option has no effect on input line 394.
+
+
+Package hyperref Warning: Option `pagebackref' has already been used,
+(hyperref)                setting the option has no effect on input line 394.
+
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/makeidx.sty)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/t1enc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ot1enc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/omsenc.dfu)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1enc.dfu)))
+Writing index file Rd2.idx
+
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.aux) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/ts1cmr.fd
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1ptm.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty))
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.out)
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.out) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/t1zi4.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/jknapltx/ursfs.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/t1phv.fd)
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.toc [1{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/
+pdftex.map}]) (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+[2]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 69--71
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[3]
+Underfull \vbox (badness 10000) has occurred while \output is active [4]
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 204--206
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[5] (/usr/local/texlive/2015/texmf-dist/tex/latex/inconsolata/ts1zi4.fd)
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [6]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 323--325
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[7] [8] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 471--473
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[9] [10] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [11]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 602--604
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[12] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [13]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 720--722
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[14] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [15]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 854--856
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[16]
+Underfull \vbox (badness 10000) has occurred while \output is active [17]
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 985--987
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[18] [19] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1118--1120
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[20] [21] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1245--1247
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[22] [23] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [24]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1373--1375
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[25] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1463--1465
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[26] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1542--1544
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[27] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [28]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1629--1631
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[29] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1741--1743
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[30] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [31]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1824--1826
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1874--1876
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[32] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 1918--1920
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[33] [34] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2021--2023
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[35] [36] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2143--2145
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[37] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2212--2214
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[38] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2322--2324
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[39] [40] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2418--2420
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[41] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2518--2520
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[42] [43] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2627--2629
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[44] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [45]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2718--2720
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2781--2783
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[46]
+Overfull \hbox (52.75864pt too wide) in paragraph at lines 2789--2792
+\T1/ptm/m/n/10 late the over-all rat-ing per-cent-age from the to-tals: []\T1/z
+i4/m/n/10 rating = positiveReviewsTotal / (positiveReviewsTotal
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [47]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2859--2861
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[48] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 2929--2931
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[49] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [50]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3035--3037
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[51] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3150--3152
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[52] [53] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3248--3250
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[54] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3327--3329
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[55] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [56]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3418--3420
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[57] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [58]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3549--3551
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[59]
+Overfull \hbox (10.68091pt too wide) in paragraph at lines 3622--3622
+ []\T1/zi4/m/n/9 comparison$new_reviews <- comparison$totalReviews_today - comp
+arison$totalReviews_yesterday[] 
+
+Overfull \hbox (24.18091pt too wide) in paragraph at lines 3623--3623
+ []\T1/zi4/m/n/9 comparison$ratio_change <- comparison$positiveRatio_today - co
+mparison$positiveRatio_yesterday[] 
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [60]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3659--3661
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3712--3714
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[61] [62] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3813--3815
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[63] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (0.39732pt too wide) in paragraph at lines 3892--3894
+[]\T1/ptm/m/n/10 Retrieve top games ranked by var-i-ous met-rics in-clud-ing re
+v-enue, units sold, con-cur-rent users (CCU),
+[64]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3926--3928
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[65] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def)
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 3992--3994
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[66]
+Overfull \hbox (10.68091pt too wide) in paragraph at lines 4047--4047
+ []\T1/zi4/m/n/9 comparison$conversion_rate <- comparison$percentage_player / c
+omparison$percentage_wishlist[] 
+(/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [67]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 4097--4099
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[68] (/usr/local/texlive/2015/texmf-dist/tex/latex/base/utf8.def) [69]
+Overfull \hbox (43.97699pt too wide) in paragraph at lines 4214--4216
+[]\T1/ptm/m/n/10 Character string. Your VGI API au-then-ti-ca-tion to-ken. De-f
+aults to the VGI_AUTH_TOKEN
+[70]
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.ind [71] [72])
+(/private/var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T/RtmppDeICc/Rd2pdf171e
+f56a7c134/Rd2.aux) )
+(see the transcript file for additional information)pdfTeX warning (dest): name
+{Rfn.tibble} has been referenced but does not exist, replaced by a fixed one
+
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}{/us
+r/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/local/texlive
+/2015/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}</usr/local/texlive/20
+15/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></usr/local/t
+exlive/2015/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/
+2015/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2015/texmf
+-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/font
+s/type1/urw/times/utmr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/ur
+w/times/utmri8a.pfb>
+Output written on Rd2.pdf (72 pages, 196551 bytes).
+Transcript written on Rd2.log.
+Saving output to ‘videogameinsightsR-manual.pdf’ ...
+Done
+You may want to clean up by 'rm -Rf /var/folders/41/lwd5j_f16cj0mrsmnvwmh_9c0000gq/T//RtmppDeICc/Rd2pdf171ef56a7c134'
