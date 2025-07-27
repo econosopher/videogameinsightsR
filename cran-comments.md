@@ -31,12 +31,12 @@ There were 2 NOTEs:
   This is the first submission of this package to CRAN.
   
   Found the following (possibly) invalid URLs:
-    URL: https://github.com/pbblack/videogameinsightsR
+    URL: https://github.com/econosopher/videogameinsightsR
     From: DESCRIPTION
-    Status: 404
-    Message: Not Found
+    Status: 200
+    Message: OK
   
-  The GitHub repository will be created before CRAN submission.
+  The GitHub repository has been created and is available.
 
 * checking for future file timestamps ... NOTE
   
