@@ -8,3 +8,6 @@ inst/doc
 /Meta/
 .DS_Store
 API_SPEC.yaml
+outputs/
+.cache/
+Rplots.pdf

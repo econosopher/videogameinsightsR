@@ -17,6 +17,13 @@ if (!nzchar(Sys.getenv("VGI_AUTH_TOKEN"))) {
 cat("Testing videogameinsightsR API endpoints with Marvel Rivals vs Overwatch comparison\n")
 cat("================================================================\n\n")
 
+# Create outputs directory if it doesn't exist
+output_dir <- "outputs"
+if (!dir.exists(output_dir)) {
+  dir.create(output_dir, recursive = TRUE)
+  cat(paste("Created", output_dir, "directory\n"))
+}
+
 # Function to safely get game data with caching
 get_game_metrics <- function(game_name, steam_app_id, days = 180, cache_dir = ".cache") {
   
@@ -387,8 +394,8 @@ if (length(comparison_data) > 0) {
         columns = -game
       )
     
-    # Save GT table as PNG
-    gt_output <- "marvel_vs_overwatch_gt_comparison_api.png"
+    # Save GT table as PNG in outputs folder
+    gt_output <- file.path(output_dir, "marvel_vs_overwatch_gt_comparison_api.png")
     gtsave(comparison_table, gt_output, vwidth = 1200, vheight = 600)
     cat(paste("  - GT comparison table saved as", gt_output, "\n"))
   }
@@ -413,9 +420,10 @@ if (length(comparison_data) > 0) {
             plot.title = element_text(size = 14, face = "bold"),
             plot.subtitle = element_text(size = 12))
     
-    # Save the plot
-    ggsave("marvel_vs_overwatch_dau.png", dau_plot, width = 10, height = 6, dpi = 300)
-    cat("  - DAU comparison plot saved as 'marvel_vs_overwatch_dau.png'\n")
+    # Save the plot in outputs folder
+    dau_output <- file.path(output_dir, "marvel_vs_overwatch_dau_api.png")
+    ggsave(dau_output, dau_plot, width = 10, height = 6, dpi = 300)
+    cat(paste("  - DAU comparison plot saved as", dau_output, "\n"))
     
     # PPSU comparison plot if data available
     if (sum(!is.na(all_data$ppsu)) > 0) {
@@ -433,14 +441,16 @@ if (length(comparison_data) > 0) {
               plot.title = element_text(size = 14, face = "bold"),
               plot.subtitle = element_text(size = 12))
       
-      ggsave("marvel_vs_overwatch_ppsu.png", ppsu_plot, width = 10, height = 6, dpi = 300)
-      cat("  - PPSU comparison plot saved as 'marvel_vs_overwatch_ppsu.png'\n")
+      ppsu_output <- file.path(output_dir, "marvel_vs_overwatch_ppsu_api.png")
+      ggsave(ppsu_output, ppsu_plot, width = 10, height = 6, dpi = 300)
+      cat(paste("  - PPSU comparison plot saved as", ppsu_output, "\n"))
     }
   }
   
-  # Save the full comparison data
-  write.csv(all_data, "marvel_vs_overwatch_comparison_data.csv", row.names = FALSE)
-  cat("\n  - Full comparison data saved as 'marvel_vs_overwatch_comparison_data.csv'\n")
+  # Save the full comparison data in outputs folder
+  csv_output <- file.path(output_dir, "marvel_vs_overwatch_comparison_data.csv")
+  write.csv(all_data, csv_output, row.names = FALSE)
+  cat(paste("\n  - Full comparison data saved as", csv_output, "\n"))
   
 } else {
   cat("\nError: Could not retrieve data for comparison\n")
