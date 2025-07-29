@@ -24,3 +24,4 @@
 ^ENDPOINT_IMPLEMENTATION_STRATEGY\.md$
 ^dev$
 ^vgi-api-spec\.json$
+^tests/test_marvel_overwatch_comparison\.R$
