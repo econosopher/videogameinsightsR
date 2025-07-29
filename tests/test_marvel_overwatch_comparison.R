@@ -272,9 +272,130 @@ if (length(comparison_data) > 0) {
     cat("No recent data available\n")
   }
   
+  # Create GT table comparison
+  if (length(comparison_data) > 0) {
+    cat("\n4. Creating GT comparison table...\n")
+    
+    # Load gt package
+    if (!requireNamespace("gt", quietly = TRUE)) {
+      cat("  - Installing gt package...\n")
+      install.packages("gt")
+    }
+    library(gt)
+    
+    # Function to apply GEC theme
+    apply_gec_theme <- function(gt_table) {
+      gt_table %>%
+        tab_options(
+          table.font.names = "Arial",
+          table.font.size = px(16),
+          table.width = px(1200),
+          heading.title.font.size = px(24),
+          heading.title.font.weight = "bold",
+          heading.subtitle.font.size = px(18),
+          heading.align = "left",
+          column_labels.font.size = px(16),
+          column_labels.font.weight = "bold",
+          column_labels.background.color = "#2C3E50",
+          column_labels.font.color = "white",
+          table.font.color = "#2C3E50",
+          data_row.padding = px(8),
+          row.striping.include_table_body = TRUE,
+          row.striping.background_color = "#F8F9FA",
+          table.border.top.width = px(3),
+          table.border.top.color = "#2C3E50",
+          table.border.bottom.width = px(3),
+          table.border.bottom.color = "#2C3E50",
+          source_notes.font.size = px(12)
+        )
+    }
+    
+    # Prepare GT table data
+    gt_data <- all_data %>%
+      group_by(game) %>%
+      summarise(
+        latest_dau = tail(dau[!is.na(dau)], 1),
+        avg_dau_7d = mean(tail(dau[!is.na(dau)], 7), na.rm = TRUE),
+        avg_dau_30d = mean(tail(dau[!is.na(dau)], 30), na.rm = TRUE),
+        peak_concurrent = max(peak_concurrent, na.rm = TRUE),
+        avg_concurrent = mean(avg_concurrent, na.rm = TRUE),
+        total_units = max(units_sold, na.rm = TRUE),
+        avg_daily_units = mean(daily_units, na.rm = TRUE),
+        avg_ppsu = mean(ppsu, na.rm = TRUE),
+        .groups = "drop"
+      ) %>%
+      mutate(
+        dau_trend = ifelse(avg_dau_7d > avg_dau_30d, "↑", "↓"),
+        across(where(is.numeric), ~ifelse(is.infinite(.) | is.nan(.), NA, .))
+      )
+    
+    # Create GT table
+    comparison_table <- gt_data %>%
+      gt() %>%
+      tab_header(
+        title = "Marvel Rivals vs Overwatch 2: Performance Comparison",
+        subtitle = paste("180-day analysis | Updated:", Sys.Date())
+      ) %>%
+      cols_label(
+        game = "Game",
+        latest_dau = "Latest DAU",
+        avg_dau_7d = "7-Day Avg",
+        avg_dau_30d = "30-Day Avg",
+        dau_trend = "Trend",
+        peak_concurrent = "Peak CCU",
+        total_units = "Total Units",
+        avg_daily_units = "Daily Units",
+        avg_ppsu = "Avg PPSU"
+      ) %>%
+      fmt_number(
+        columns = c(latest_dau, avg_dau_7d, avg_dau_30d, peak_concurrent, total_units),
+        decimals = 0,
+        use_seps = TRUE
+      ) %>%
+      fmt_number(
+        columns = c(avg_daily_units),
+        decimals = 0,
+        use_seps = TRUE
+      ) %>%
+      fmt_number(
+        columns = c(avg_ppsu),
+        decimals = 4
+      ) %>%
+      tab_source_note(
+        source_note = "PPSU = Peak Players per Sold Unit (engagement efficiency metric)"
+      ) %>%
+      tab_source_note(
+        source_note = "Source: Video Game Insights API | CCU = Concurrent Users"
+      ) %>%
+      apply_gec_theme() %>%
+      tab_style(
+        style = list(
+          cell_text(weight = "bold")
+        ),
+        locations = cells_body(columns = game)
+      ) %>%
+      tab_style(
+        style = list(
+          cell_text(color = ifelse(gt_data$dau_trend == "↑", "#27AE60", "#E74C3C"),
+                   weight = "bold",
+                   size = px(20))
+        ),
+        locations = cells_body(columns = dau_trend)
+      ) %>%
+      cols_align(
+        align = "center",
+        columns = -game
+      )
+    
+    # Save GT table as PNG
+    gt_output <- "marvel_vs_overwatch_gt_comparison_api.png"
+    gtsave(comparison_table, gt_output, vwidth = 1200, vheight = 600)
+    cat(paste("  - GT comparison table saved as", gt_output, "\n"))
+  }
+  
   # Create visualizations if we have data for both games
   if (length(comparison_data) == 2 && sum(!is.na(all_data$dau)) > 0) {
-    cat("\n4. Creating comparison visualizations...\n")
+    cat("\n5. Creating additional visualizations...\n")
     
     # DAU comparison plot
     dau_plot <- ggplot(all_data %>% filter(!is.na(dau)), 
