@@ -58,7 +58,6 @@ The videogameinsightsR package provides a comprehensive R interface to the Video
 
 - `vgi_game_summary()` - Get all available metrics in one call
 - `vgi_game_summary_yoy()` - Compare metrics across multiple years
-- `vgi_plot_yoy()` - Create visualizations for year-over-year comparisons
 
 ## Usage Examples
 
@@ -105,9 +104,8 @@ yoy_comparison <- vgi_game_summary_yoy(
 # View comparison table with growth rates
 print(yoy_comparison$comparison_table)
 
-# Create visualizations
-library(ggplot2)
-vgi_plot_yoy(yoy_comparison, metric = "revenue", type = "growth")
+# Access time series data for custom visualization
+revenue_data <- yoy_comparison$time_series_comparison$revenue
 ```
 
 ## Important Notes
@@ -144,10 +142,10 @@ The API returns different field names depending on the endpoint:
 
 ### Version 0.0.3 (2025-08-01)
 - Added `vgi_game_summary_yoy()` for year-over-year comparisons
-- Added `vgi_plot_yoy()` for creating YoY visualizations
 - Support for flexible date specification (months or explicit dates)
 - Automatic calculation of year-over-year growth percentages
 - Support for periods that cross year boundaries (e.g., holiday season)
+- Returns comparison tables and normalized time series data
 
 ### Version 0.0.2 (2025-08-01)
 - Added support for multiple Steam App IDs in all data retrieval functions

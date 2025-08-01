@@ -2,7 +2,6 @@
 # This script demonstrates how to use the YoY comparison functionality
 
 library(videogameinsightsR)
-library(ggplot2)
 library(dplyr)
 
 # Ensure API token is set
@@ -35,13 +34,6 @@ yoy_changes <- q1_comparison$comparison_table %>%
 
 print(yoy_changes)
 
-# Create visualizations
-p1 <- vgi_plot_yoy(q1_comparison, metric = "ccu", type = "line")
-ggsave("q1_ccu_comparison.png", p1, width = 12, height = 8)
-
-p2 <- vgi_plot_yoy(q1_comparison, metric = "revenue", type = "bar")
-ggsave("q1_revenue_comparison.png", p2, width = 10, height = 6)
-
 # Example 2: Holiday season comparison
 cat("\n\nExample 2: Holiday Season Comparison\n")
 cat("====================================\n")
@@ -56,10 +48,14 @@ holiday_comparison <- vgi_game_summary_yoy(
 )
 
 cat("Holiday period:", holiday_comparison$period, "\n")
+cat("Note: This period crosses year boundaries\n\n")
 
-# Example 3: Monthly comparison with growth visualization
-cat("\n\nExample 3: July Performance with Growth Rates\n")
-cat("============================================\n")
+# Display comparison
+print(holiday_comparison$comparison_table)
+
+# Example 3: Monthly comparison
+cat("\n\nExample 3: July Performance Analysis\n")
+cat("===================================\n")
 
 july_comparison <- vgi_game_summary_yoy(
   steam_app_ids = c(892970, 1145360, 1517290),
@@ -68,18 +64,21 @@ july_comparison <- vgi_game_summary_yoy(
   end_month = "July"
 )
 
-# Plot growth rates
-if (length(july_comparison$years) > 1) {
-  p3 <- vgi_plot_yoy(july_comparison, metric = "revenue", type = "growth")
-  ggsave("july_revenue_growth.png", p3, width = 10, height = 8)
-  cat("Growth visualization saved to july_revenue_growth.png\n")
-}
+# Show growth trends
+growth_data <- july_comparison$comparison_table %>%
+  filter(!is.na(total_revenue_yoy_growth)) %>%
+  select(name, year, total_revenue, total_revenue_yoy_growth,
+         total_units, total_units_yoy_growth) %>%
+  arrange(name, year)
 
-# Example 4: Custom analysis with the data
-cat("\n\nExample 4: Custom Analysis\n")
-cat("=========================\n")
+cat("\nYear-over-Year Growth Trends:\n")
+print(growth_data)
 
-# Access the raw time series data for custom analysis
+# Example 4: Working with the time series data
+cat("\n\nExample 4: Analyzing Time Series Data\n")
+cat("====================================\n")
+
+# Access the normalized time series data
 if (!is.null(july_comparison$time_series_comparison$concurrent)) {
   ccu_data <- july_comparison$time_series_comparison$concurrent
   
@@ -89,11 +88,37 @@ if (!is.null(july_comparison$time_series_comparison$concurrent)) {
     summarise(
       avg_peak = mean(peakConcurrent, na.rm = TRUE),
       max_peak = max(peakConcurrent, na.rm = TRUE),
+      min_peak = min(peakConcurrent, na.rm = TRUE),
       .groups = "drop"
-    )
+    ) %>%
+    arrange(steamAppId, year)
   
-  cat("\nAverage Peak CCU by Year:\n")
+  cat("\nConcurrent User Statistics by Year:\n")
   print(avg_ccu_summary)
 }
 
+# Example 5: Full year comparison
+cat("\n\nExample 5: Full Year Comparison\n")
+cat("===============================\n")
+
+# Compare full years
+full_year <- vgi_game_summary_yoy(
+  steam_app_ids = 892970,  # Valheim
+  years = c(2023, 2024),
+  start_month = "January",
+  end_month = "December"
+)
+
+cat("Period analyzed:", full_year$period, "\n")
+cat("Total API calls made:", full_year$api_calls, "\n\n")
+
+# Show summary
+summary_data <- full_year$comparison_table %>%
+  select(year, avg_peak_ccu, total_revenue, total_units,
+         avg_peak_ccu_yoy_growth, total_revenue_yoy_growth)
+
+print(summary_data)
+
 cat("\n✅ Year-over-Year comparison examples completed!\n")
+cat("\nNote: You can use the returned data with your preferred visualization library\n")
+cat("(ggplot2, plotly, etc.) to create custom charts and graphs.\n")
