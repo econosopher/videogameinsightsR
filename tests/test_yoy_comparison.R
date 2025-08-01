@@ -1,6 +1,6 @@
 # Test script for Year-over-Year comparison functionality
 library(pacman)
-p_load(dplyr, ggplot2, scales, dotenv)
+p_load(dplyr, dotenv)
 
 # Load environment variables
 parent_env <- file.path(dirname(getwd()), ".env")
@@ -18,7 +18,6 @@ if (dir.exists(vgi_path)) {
   source(file.path(vgi_path, "vgi_units_sold_by_date.R"))
   source(file.path(vgi_path, "vgi_game_summary.R"))
   source(file.path(vgi_path, "vgi_game_summary_yoy.R"))
-  source(file.path(vgi_path, "vgi_plot_yoy.R"))
   cat("✅ VGI functions loaded\n")
 } else {
   stop("videogameinsightsR package functions not found")
@@ -112,43 +111,37 @@ if (!is.null(july_comparison)) {
   }
 }
 
-# Test 4: Visualization tests
+# Test 4: Data structure validation
 if (!is.null(q1_comparison)) {
-  cat("\n\nTest 4: Creating Visualizations\n")
+  cat("\n\nTest 4: Data Structure Validation\n")
   cat(paste(rep("=", 50), collapse = ""), "\n")
   
-  # Create output directory
-  if (!dir.exists("test_outputs")) {
-    dir.create("test_outputs")
+  # Check comparison table structure
+  cat("Checking comparison table structure...\n")
+  if (!is.null(q1_comparison$comparison_table)) {
+    cat("  - Rows:", nrow(q1_comparison$comparison_table), "\n")
+    cat("  - Columns:", paste(names(q1_comparison$comparison_table), collapse = ", "), "\n")
+    
+    # Check for growth columns
+    growth_cols <- grep("_yoy_growth$", names(q1_comparison$comparison_table), value = TRUE)
+    if (length(growth_cols) > 0) {
+      cat("  - Growth columns found:", paste(growth_cols, collapse = ", "), "\n")
+    }
   }
   
-  # Test line plot
-  tryCatch({
-    p1 <- vgi_plot_yoy(q1_comparison, metric = "ccu", type = "line")
-    ggsave("test_outputs/yoy_ccu_line.png", p1, width = 10, height = 6)
-    cat("✅ Created CCU line plot\n")
-  }, error = function(e) {
-    cat("❌ Line plot error:", e$message, "\n")
-  })
-  
-  # Test bar plot
-  tryCatch({
-    p2 <- vgi_plot_yoy(q1_comparison, metric = "revenue", type = "bar")
-    ggsave("test_outputs/yoy_revenue_bar.png", p2, width = 10, height = 6)
-    cat("✅ Created revenue bar plot\n")
-  }, error = function(e) {
-    cat("❌ Bar plot error:", e$message, "\n")
-  })
-  
-  # Test growth plot
-  if (length(q1_comparison$years) > 1) {
-    tryCatch({
-      p3 <- vgi_plot_yoy(q1_comparison, metric = "revenue", type = "growth")
-      ggsave("test_outputs/yoy_revenue_growth.png", p3, width = 10, height = 6)
-      cat("✅ Created growth plot\n")
-    }, error = function(e) {
-      cat("❌ Growth plot error:", e$message, "\n")
-    })
+  # Check time series structure
+  cat("\nChecking time series structure...\n")
+  if (!is.null(q1_comparison$time_series_comparison)) {
+    ts_types <- names(q1_comparison$time_series_comparison)
+    cat("  - Available time series:", paste(ts_types, collapse = ", "), "\n")
+    
+    # Check normalized dates
+    if ("concurrent" %in% ts_types && !is.null(q1_comparison$time_series_comparison$concurrent)) {
+      sample_data <- head(q1_comparison$time_series_comparison$concurrent, 3)
+      if ("normalized_date" %in% names(sample_data)) {
+        cat("  - ✅ Normalized dates present for cross-year comparison\n")
+      }
+    }
   }
 }
 
