@@ -13,7 +13,9 @@ vgi_game_summary_yoy(
   end_date = NULL,
   metrics = c("concurrent", "revenue", "units"),
   include_growth = TRUE,
-  auth_token = Sys.getenv("VGI_AUTH_TOKEN")
+  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+  batch_size = NULL,
+  batch_delay = NULL
 )
 }
 \arguments{
@@ -41,6 +43,12 @@ percentages. Defaults to TRUE.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
+
+\item{batch_size}{Integer. Number of API calls per batch before pausing.
+Defaults to automatic calculation based on date range.}
+
+\item{batch_delay}{Numeric. Seconds to pause between batches.
+Defaults to value from VGI_BATCH_DELAY environment variable or 1 second.}
 }
 \value{
 A list containing:
