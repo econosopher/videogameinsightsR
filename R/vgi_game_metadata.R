@@ -41,8 +41,51 @@ vgi_game_metadata <- function(steam_app_id,
     headers = headers
   )
   
-  # Process response
-  result <- process_api_response(response)
+  # Handle the response directly since it contains nested structures
+  if (is.null(response) || length(response) == 0) {
+    return(data.frame())
+  }
+  
+  # Convert to data frame, handling nested lists
+  result <- data.frame(
+    steamAppId = as.integer(response$steamAppId %||% steam_app_id),
+    name = response$name %||% NA_character_,
+    price = as.numeric(response$price %||% NA),
+    releaseDate = response$releaseDate %||% NA_character_,
+    fullReleaseDate = response$fullReleaseDate %||% NA_character_,
+    genres = response$genres %||% NA_character_,
+    subgenres = response$subgenres %||% NA_character_,
+    languages = response$languages %||% NA_character_,
+    publisherClassification = response$publisherClassification %||% NA_character_,
+    vgiUrl = response$vgiUrl %||% NA_character_,
+    steamUrl = response$steamUrl %||% NA_character_,
+    publishingType = response$publishingType %||% NA_character_,
+    stringsAsFactors = FALSE
+  )
+  
+  # Add publisher info if available
+  if (!is.null(response$publishers)) {
+    if (is.data.frame(response$publishers) && nrow(response$publishers) > 0) {
+      result$publisherId <- response$publishers$companyId[1] %||% NA_integer_
+      result$publisherName <- response$publishers$companyName[1] %||% NA_character_
+    } else if (is.list(response$publishers) && length(response$publishers) > 0) {
+      pub <- response$publishers[[1]]
+      result$publisherId <- pub$companyId %||% NA_integer_
+      result$publisherName <- pub$companyName %||% NA_character_
+    }
+  }
+  
+  # Add developer info if available
+  if (!is.null(response$developers)) {
+    if (is.data.frame(response$developers) && nrow(response$developers) > 0) {
+      result$developerId <- response$developers$companyId[1] %||% NA_integer_
+      result$developerName <- response$developers$companyName[1] %||% NA_character_
+    } else if (is.list(response$developers) && length(response$developers) > 0) {
+      dev <- response$developers[[1]]
+      result$developerId <- dev$companyId %||% NA_integer_
+      result$developerName <- dev$companyName %||% NA_character_
+    }
+  }
   
   return(result)
 }

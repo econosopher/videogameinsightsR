@@ -1,12 +1,16 @@
 # videogameinsightsR
 
-R package for interfacing with the Video Game Insights API to fetch comprehensive gaming analytics data across multiple platforms.
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/econosopher/videogameinsightsR/workflows/R-CMD-check/badge.svg)](https://github.com/econosopher/videogameinsightsR/actions)
+<!-- badges: end -->
+
+R package for interfacing with the Video Game Insights API to fetch comprehensive gaming analytics data for Steam games.
 
 ## Installation
 
 ```r
-# Install from GitHub (once available)
-# devtools::install_github("yourusername/videogameinsightsR")
+# Install from GitHub
+devtools::install_github("econosopher/videogameinsightsR")
 ```
 
 ## Authentication
@@ -14,109 +18,125 @@ R package for interfacing with the Video Game Insights API to fetch comprehensiv
 Store your Video Game Insights API token as an environment variable:
 
 ```r
-# Edit your R environment file
+# Set in your R session
+Sys.setenv(VGI_AUTH_TOKEN = "your_token_here")
+
+# Or add to .Renviron for persistent storage
 usethis::edit_r_environ()
-
-# Add this line (replace with your actual token):
-# VGI_AUTH_TOKEN="YOUR_SECRET_TOKEN_HERE"
-
-# Restart R session for changes to take effect
+# Add: VGI_AUTH_TOKEN="YOUR_SECRET_TOKEN_HERE"
 ```
 
 ## Overview
 
 The videogameinsightsR package provides a comprehensive R interface to the Video Game Insights API, enabling:
 
-- Game performance metrics across Steam, PlayStation, Xbox, and Nintendo platforms
-- Player statistics and concurrent user data
-- Market trends and competitive intelligence
-- Revenue and unit sales estimates
-- User reviews and sentiment analysis
-- Platform-specific achievements and trophies data
+- Concurrent player statistics (CCU)
+- Daily and Monthly Active Users (DAU/MAU)
+- Revenue and units sold data
+- Game metadata including publishers and developers
+- Game search functionality
+- Comprehensive summary reports
 
 ## Core Functions
 
 ### Game Information
 
-- `vgi_game_metadata()` - Get detailed metadata for a single game
-- `vgi_game_metadata_batch()` - Get metadata for multiple games in one request
 - `vgi_search_games()` - Search for games by title
+- `vgi_game_metadata()` - Get detailed metadata for a single game
 
-### Rankings and Analytics
+### Player Metrics
 
-- `vgi_top_games()` - Get top games ranked by various metrics (revenue, units, CCU, DAU, followers)
+- `vgi_concurrent_players_by_date()` - Get concurrent player statistics (supports multiple IDs)
+- `vgi_active_players_by_date()` - Get DAU/MAU data (supports multiple IDs)
+
+### Revenue & Sales
+
+- `vgi_revenue_by_date()` - Get revenue data (supports multiple IDs)
+- `vgi_units_sold_by_date()` - Get units sold information (supports multiple IDs)
+
+### Comprehensive Summary
+
+- `vgi_game_summary()` - Get all available metrics in one call
 
 ## Usage Examples
 
 ```r
 library(videogameinsightsR)
 
-# Get metadata for a single game
-valheim <- vgi_game_metadata(892970)
-
-# Get metadata for multiple games
-game_ids <- c(892970, 1245620, 105600)  # Valheim, Elden Ring, Terraria
-games <- vgi_game_metadata_batch(game_ids)
-
 # Search for games
-rpg_games <- vgi_search_games("rpg", limit = 20)
+valheim_results <- vgi_search_games("Valheim")
 
-# Get top games by revenue
-top_revenue <- vgi_top_games("revenue", limit = 10)
+# Get game metadata
+valheim_metadata <- vgi_game_metadata(892970)
 
-# Get top Steam games by concurrent users
-top_steam_ccu <- vgi_top_games(
-  metric = "ccu",
-  platform = "steam",
-  limit = 25
+# Get concurrent players for multiple games
+battlefield_ids <- c(1517290, 1238810, 1238860, 1238840, 24960)
+ccu_data <- vgi_concurrent_players_by_date(
+  steam_app_ids = battlefield_ids,
+  start_date = "2024-07-01",
+  end_date = "2024-07-07"
+)
+
+# Get comprehensive summary
+game_summary <- vgi_game_summary(
+  steam_app_ids = battlefield_ids,
+  start_date = "2024-07-01",
+  end_date = "2024-07-31",
+  metrics = c("concurrent", "active", "revenue", "units")  # Optional
+)
+
+# Access summary table with averages
+print(game_summary$summary_table)
+
+# Access time series data
+print(game_summary$time_series$concurrent)
+print(game_summary$time_series$revenue)
+```
+
+## Important Notes
+
+### Steam App IDs Required
+
+The Video Game Insights API requires explicit Steam App ID filtering to access production data. Without the `steamAppIds` parameter, endpoints return only demo data.
+
+```r
+# ❌ INCORRECT - Returns demo data
+ccu_data <- vgi_concurrent_players_by_date("2024-07-01")
+
+# ✅ CORRECT - Returns actual data
+ccu_data <- vgi_concurrent_players_by_date(
+  steam_app_ids = c(892970, 1145360),
+  start_date = "2024-07-01"
 )
 ```
 
-## Example Visualizations
+### Date Availability
 
-The package includes example scripts to generate various charts and tables using real API data.
+- **Daily Active Users (DAU)**: Available from 2024-03-18 onwards
+- **Monthly Active Users (MAU)**: Available from 2024-03-23 onwards
+- Functions handle these restrictions gracefully and return available data
 
-### Generated Examples
+### Response Format
 
-Here are visualizations created with actual Video Game Insights API data:
+The API returns different field names depending on the endpoint:
+- Revenue: `revenueTotal` (total) and `revenueChange` (daily change)
+- Units: `unitsSoldTotal` (total) and `unitsSoldChange` (daily change)
+- CCU: `peakConcurrent` and `avgConcurrent`
 
-#### Game Prices Comparison
-![Game Prices](examples/outputs/game_prices_comparison_api.png)
-*Bar chart showing game prices from the Steam catalog*
+## Recent Updates (Version 0.0.2)
 
-#### Genre Distribution
-![Genre Distribution](examples/outputs/genre_distribution_api.png)
-*Lollipop chart displaying the most common game genres*
+- Added support for multiple Steam App IDs in all data retrieval functions
+- Fixed field mapping for revenue and units sold endpoints
+- Added comprehensive `vgi_game_summary()` function
+- Improved error handling for date availability constraints
+- Fixed metadata endpoint to use correct URL structure
+- Enhanced API response handling with automatic data frame conversion
+- Fixed date handling in loops to prevent numeric conversion
 
-#### Game Details Table
-![Game Details Table](examples/outputs/game_details_table_api.png)
-*GT table with GEC-style formatting showing game information*
+## Development
 
-### Generating Your Own Visualizations
+This package is under active development. If you encounter any issues or have suggestions, please file an issue on [GitHub](https://github.com/econosopher/videogameinsightsR).
 
-To create these visualizations with your own API token:
+## License
 
-```r
-# Set your API token
-Sys.setenv(VGI_AUTH_TOKEN = "your_token_here")
-
-# Run the simplified visualization script
-source("examples/generate_simple_charts.R")
-```
-
-The script will generate:
-- Price comparison charts
-- Genre distribution analysis
-- Formatted data tables
-- Publisher analytics (when available)
-
-All outputs are saved as PNG files in `examples/outputs/` with the `_api` suffix.
-
-## Requirements
-
-- Valid Video Game Insights API token (required)
-- R packages: ggplot2, dplyr, gt, scales
-
-## Status
-
-Core functionality is implemented. Additional insights endpoints (CCU history, revenue data, reviews analysis) are planned for future releases.
+MIT License

@@ -5,6 +5,8 @@
 #'
 #' @param date Character string or Date. The date for which to retrieve data
 #'   in "YYYY-MM-DD" format.
+#' @param steam_app_ids Numeric vector. Optional. Steam App IDs to filter results.
+#'   If not provided, returns data for all available games.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
@@ -99,28 +101,57 @@
 #' print(fastest_growing[, c("steamAppId", "revenue_now", "yoy_growth")])
 #' }
 vgi_revenue_by_date <- function(date,
+                               steam_app_ids = NULL,
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                headers = list()) {
   
   # Validate and format date
   formatted_date <- format_date(date)
   
+  # Build query parameters if steam_app_ids provided
+  query_params <- list()
+  if (!is.null(steam_app_ids)) {
+    # Ensure numeric and convert to comma-separated string
+    steam_app_ids <- as.numeric(steam_app_ids)
+    ids_string <- paste(steam_app_ids, collapse = ",")
+    query_params$steamAppIds <- ids_string
+  }
+  
   # Make API request
   result <- make_api_request(
     endpoint = paste0("commercial-performance/revenue/", formatted_date),
+    query_params = query_params,
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
   
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
+  # Handle response - it may already be a data frame
+  if (is.data.frame(result)) {
+    # Response is already a data frame from jsonlite
+    df <- data.frame(
+      steamAppId = as.integer(result$steamAppId),
+      date = formatted_date,
+      revenue = as.numeric(result$revenueTotal),
+      dailyRevenue = as.numeric(result$revenueChange),
+      stringsAsFactors = FALSE
+    )
+    
+    # Sort by revenue descending and add rank
+    df <- df[order(-df$revenue), ]
+    df$revenueRank <- seq_len(nrow(df))
+    
+    return(df)
+  } else if (is.list(result) && length(result) > 0) {
+    # Handle list response (old format)
     df <- do.call(rbind, lapply(result, function(x) {
+      # Handle different response formats
+      # API returns revenueTotal and revenueChange fields
       data.frame(
         steamAppId = as.integer(x$steamAppId),
         date = formatted_date,
-        revenue = as.numeric(x$revenue %||% 0),
-        dailyRevenue = as.numeric(x$dailyRevenue %||% NA),
+        revenue = as.numeric(x$revenueTotal %||% x$revenue %||% 0),
+        dailyRevenue = as.numeric(x$revenueChange %||% x$dailyRevenue %||% NA),
         stringsAsFactors = FALSE
       )
     }))

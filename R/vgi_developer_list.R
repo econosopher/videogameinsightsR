@@ -1,7 +1,11 @@
-#' Get Complete Developer List
+#' Get Developer List with Filtering
 #'
-#' Retrieve a list of all game developers in the Video Game Insights database.
+#' Retrieve a filtered list of game developers from the Video Game Insights database.
+#' At least one filtering parameter is required to avoid retrieving the entire database.
 #'
+#' @param search Character string. Search term to filter developers by name. Optional.
+#' @param limit Integer. Maximum number of results to return. Optional.
+#' @param min_games Integer. Minimum number of games published. Optional.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
@@ -15,47 +19,83 @@
 #' @details
 #' This endpoint is useful for:
 #' \itemize{
-#'   \item Discovering all tracked developers
+#'   \item Discovering developers matching specific criteria
 #'   \item Building developer selection interfaces
 #'   \item Finding developer IDs for further queries
 #'   \item Analyzing the developer ecosystem
 #' }
+#' 
+#' Note: At least one filtering parameter must be provided to prevent
+#' accidentally retrieving thousands of developers.
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get all developers
-#' all_devs <- vgi_developer_list()
-#' cat("Total developers:", nrow(all_devs), "\n")
-#' 
 #' # Search for developers by name
-#' valve_devs <- all_devs[grep("Valve", all_devs$name, ignore.case = TRUE), ]
+#' valve_devs <- vgi_developer_list(search = "Valve")
 #' print(valve_devs)
 #' 
-#' # Find developer ID by exact name
-#' dev_id <- all_devs$id[all_devs$name == "Valve Corporation"]
-#' if (length(dev_id) > 0) {
-#'   cat("Valve Corporation ID:", dev_id, "\n")
-#'   
-#'   # Get more info about this developer
-#'   valve_info <- vgi_developer_info(dev_id)
+#' # Get top developers (limit results)
+#' top_devs <- vgi_developer_list(limit = 100)
+#' cat("Retrieved", nrow(top_devs), "developers\n")
+#' 
+#' # Find prolific developers
+#' prolific_devs <- vgi_developer_list(min_games = 10, limit = 50)
+#' print(prolific_devs)
+#' 
+#' # Search for studios
+#' studios <- vgi_developer_list(search = "Studios", limit = 200)
+#' cat("Found", nrow(studios), "studios\n")
+#' 
+#' # Get developer info for a specific developer
+#' dev <- vgi_developer_list(search = "Valve Corporation", limit = 1)
+#' if (nrow(dev) > 0) {
+#'   valve_info <- vgi_developer_info(dev$id[1])
 #'   print(valve_info)
 #' }
-#' 
-#' # Analyze developer names
-#' # Find developers with "Studios" in name
-#' studios <- all_devs[grep("Studios", all_devs$name), ]
-#' cat("Developers with 'Studios':", nrow(studios), "\n")
-#' 
-#' # Find indie developers (often individual names or small teams)
-#' short_names <- all_devs[nchar(all_devs$name) < 15, ]
-#' cat("Developers with short names:", nrow(short_names), "\n")
 #' }
-vgi_developer_list <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), headers = list()) {
+vgi_developer_list <- function(search = NULL,
+                              limit = NULL,
+                              min_games = NULL,
+                              auth_token = Sys.getenv("VGI_AUTH_TOKEN"), 
+                              headers = list()) {
+  
+  # Require the search parameter as the primary criterion
+  if (is.null(search)) {
+    stop("The 'search' parameter is required. You must specify a developer name or search term to find developers. The 'min_games' and 'limit' parameters are optional filters.")
+  }
+  
+  # Prevent abuse of limit parameter
+  if (!is.null(limit) && limit > 1000) {
+    warning("Large limit values defeat the purpose of filtering. Consider using more specific search criteria. Limit capped at 1000.")
+    limit <- 1000
+  }
+  
+  # Validate inputs
+  if (!is.null(limit)) {
+    validate_numeric(limit, "limit", min_val = 1, max_val = 10000)
+  }
+  
+  if (!is.null(min_games)) {
+    validate_numeric(min_games, "min_games", min_val = 1)
+  }
+  
+  # Build query parameters
+  query_params <- list()
+  if (!is.null(search)) {
+    query_params$search <- search
+  }
+  if (!is.null(limit)) {
+    query_params$limit <- limit
+  }
+  if (!is.null(min_games)) {
+    query_params$min_games <- min_games
+  }
   
   # Make API request
   result <- make_api_request(
     endpoint = "developers/developer-list",
+    query_params = query_params,
     auth_token = auth_token,
     method = "GET",
     headers = headers

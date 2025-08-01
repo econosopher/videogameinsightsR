@@ -23,17 +23,10 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 }
 \value{
 A \link[tibble:tibble]{tibble} containing search results with game
-information including Steam App ID and name.
+information including steamAppId and name.
 }
 \description{
 Search for games by title using the Video Game Insights database.
-Since the new API doesn't have a dedicated search endpoint, this function
-fetches the game list and performs client-side filtering.
-}
-\details{
-This function now uses the \verb{/games/game-list} endpoint and filters results
-locally. For better performance with large datasets, consider caching the
-game list.
 }
 \examples{
 \dontrun{
