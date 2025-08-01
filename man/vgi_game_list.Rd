@@ -20,43 +20,50 @@ A data frame with columns:
 }
 }
 \description{
-Retrieve a list of all games available in the Video Game Insights database.
-This is a lightweight endpoint that returns game IDs and names only.
+Retrieve the complete list of games from the Video Game Insights database.
+Note: This endpoint returns ALL games and does not support filtering parameters.
 }
 \details{
-This endpoint is useful for:
-\itemize{
-\item Getting a complete inventory of tracked games
-\item Building game selection interfaces
-\item Caching game names for ID lookups
-\item Validating game IDs before making other API calls
-}
+This endpoint returns the complete game list from the API. According to the
+API specification, no filtering parameters are supported. The API will return
+all games in its database.
 
-Note: This endpoint may return thousands of games. Consider caching
-the results locally to avoid repeated API calls.
+WARNING: This may return a very large dataset (potentially 100,000+ games).
+Consider caching the results locally to avoid repeated API calls.
+
+For filtering games, you'll need to:
+\enumerate{
+\item Fetch the complete list with this function
+\item Filter the results locally in R
+\item Cache the filtered results for future use
+}
 }
 \examples{
 \dontrun{
-# Get all games
+# Get all games (WARNING: Large dataset)
 all_games <- vgi_game_list()
 cat("Total games in database:", nrow(all_games), "\n")
 
-# Search for games by name
-cs_games <- all_games[grep("Counter-Strike", all_games$name, ignore.case = TRUE), ]
+# Filter locally for shooter games
+# (Requires fetching metadata for each game to get genre)
+
+# Search for games by name locally
+cs_games <- all_games[grepl("Counter-Strike", all_games$name, ignore.case = TRUE), ]
 print(cs_games)
 
-# Find game ID by exact name
-game_id <- all_games$id[all_games$name == "Counter-Strike 2"]
-if (length(game_id) > 0) {
-  cat("Counter-Strike 2 ID:", game_id, "\n")
+# Cache the complete list for future use
+saveRDS(all_games, "vgi_all_games_cache.rds")
+
+# Later, load from cache instead of API
+if (file.exists("vgi_all_games_cache.rds")) {
+  all_games <- readRDS("vgi_all_games_cache.rds")
+} else {
+  all_games <- vgi_game_list()
+  saveRDS(all_games, "vgi_all_games_cache.rds")
 }
 
-# Get random sample of games for analysis
+# Get a sample of games
 sample_games <- all_games[sample(nrow(all_games), 10), ]
 print(sample_games)
-
-# Cache results for future use
-saveRDS(all_games, "vgi_game_list_cache.rds")
-# Later: all_games <- readRDS("vgi_game_list_cache.rds")
 }
 }

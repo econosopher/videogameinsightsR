@@ -1,8 +1,11 @@
 #' Get Game Rankings
 #'
-#' Retrieve rankings for all games across various metrics including reviews, revenue,
+#' Retrieve rankings for games across various metrics including reviews, revenue,
 #' units sold, followers, and playtime.
 #'
+#' @param offset Integer. The number of records to skip for pagination. Optional.
+#' @param limit Integer. Maximum number of results to return. Without specifying 
+#'   limit you will receive 5 results. The maximum limit is 1000. Optional.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
@@ -32,14 +35,24 @@
 #'   \item Use multiple metrics to get a balanced view of game success
 #'   \item Recent sales rankings help identify trending games
 #' }
+#' 
+#' Note: The API currently returns a limited set of games. Filtering by genre,
+#' platform, or date is not supported by the API endpoint.
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get all game rankings
+#' # Get default rankings (5 games)
 #' rankings <- vgi_game_rankings()
 #' 
+#' # Get top 100 games
+#' rankings <- vgi_game_rankings(limit = 100)
+#' 
+#' # Get games starting from offset 50
+#' rankings <- vgi_game_rankings(offset = 50, limit = 20)
+#' 
 #' # Find top 10 games by revenue
+#' rankings <- vgi_game_rankings(limit = 100)
 #' top_revenue <- head(rankings[order(rankings$totalRevenueRank), ], 10)
 #' print(top_revenue[, c("steamAppId", "totalRevenueRank", "totalRevenuePrct")])
 #' 
@@ -69,11 +82,33 @@
 #' ]
 #' print(paste("Hidden gems found:", nrow(hidden_gems)))
 #' }
-vgi_game_rankings <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), headers = list()) {
+vgi_game_rankings <- function(offset = NULL,
+                             limit = NULL,
+                             auth_token = Sys.getenv("VGI_AUTH_TOKEN"), 
+                             headers = list()) {
+  
+  # Validate inputs
+  if (!is.null(offset)) {
+    validate_numeric(offset, "offset", min_val = 0)
+  }
+  
+  if (!is.null(limit)) {
+    validate_numeric(limit, "limit", min_val = 1, max_val = 1000)
+  }
+  
+  # Build query parameters - only offset and limit are supported by the API
+  query_params <- list()
+  if (!is.null(offset)) {
+    query_params$offset <- offset
+  }
+  if (!is.null(limit)) {
+    query_params$limit <- limit
+  }
   
   # Make API request
   result <- make_api_request(
     endpoint = "games/rankings",
+    query_params = query_params,
     auth_token = auth_token,
     method = "GET",
     headers = headers
@@ -105,6 +140,11 @@ vgi_game_rankings <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), headers
     
     # Sort by total revenue rank by default (handle NAs)
     rankings_df <- rankings_df[order(rankings_df$totalRevenueRank, na.last = TRUE), ]
+    
+    # Add warning if only old games are returned
+    if (all(rankings_df$steamAppId < 1000, na.rm = TRUE)) {
+      warning("API returned only old games (Steam IDs < 1000). This may indicate stale data.")
+    }
     
     return(rankings_df)
   } else {

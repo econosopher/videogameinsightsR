@@ -18,6 +18,13 @@
 
 # --- API Configuration ---
 
+# Define %||% operator if not available from rlang
+if (!exists("%||%")) {
+  `%||%` <- function(x, y) {
+    if (is.null(x)) y else x
+  }
+}
+
 # Base URL for the Video Game Insights API
 get_base_url <- function() {
   "https://vginsights.com/api/v3"
@@ -165,6 +172,25 @@ validate_date <- function(date, param_name = "date") {
   }
   
   return(as.character(date))
+}
+
+# Format date for API calls
+format_date <- function(date) {
+  if (is.null(date)) {
+    stop("Date parameter is required")
+  }
+  
+  # If already a character, try to parse it
+  if (is.character(date)) {
+    date <- as.Date(date)
+  }
+  
+  # If it's a Date object, format it
+  if (inherits(date, "Date")) {
+    return(format(date, "%Y-%m-%d"))
+  }
+  
+  stop("Date must be a Date object or valid date string in YYYY-MM-DD format")
 }
 
 # Validate numeric parameters

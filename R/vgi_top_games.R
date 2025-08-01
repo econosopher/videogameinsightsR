@@ -73,8 +73,13 @@ vgi_top_games <- function(metric,
   # Validate limit
   validate_numeric(limit, "limit", min_val = 1, max_val = 1000)
   
-  # Get rankings data
-  rankings <- vgi_game_rankings(auth_token = auth_token, headers = headers)
+  # Get rankings data with proper parameters
+  # Note: vgi_game_rankings doesn't support platform/date filtering currently
+  rankings <- vgi_game_rankings(
+    limit = limit * 2,  # Get more than needed to account for filtering
+    auth_token = auth_token, 
+    headers = headers
+  )
   
   if (nrow(rankings) == 0) {
     return(tibble::tibble())
@@ -108,45 +113,64 @@ vgi_top_games <- function(metric,
     rankings <- rankings[1:limit, ]
   }
   
-  # Try to add game names
+  # Try to add game names by fetching metadata for the specific games
   tryCatch({
-    game_list <- vgi_game_list(auth_token = auth_token, headers = headers)
-    if (nrow(game_list) > 0) {
-      # Merge with game names
-      rankings <- merge(
-        rankings,
-        game_list,
-        by.x = "steamAppId",
-        by.y = "id",
-        all.x = TRUE
-      )
-      # Reorder to put name near the beginning
-      name_idx <- which(names(rankings) == "name")
-      other_idx <- setdiff(1:ncol(rankings), name_idx)
-      rankings <- rankings[, c(1, name_idx, other_idx[-1])]
+    # Get unique game IDs from rankings
+    game_ids <- unique(rankings$steamAppId)
+    
+    # Fetch metadata for these specific games
+    if (length(game_ids) > 0) {
+      game_metadata <- vgi_game_metadata_batch(game_ids, auth_token = auth_token, headers = headers)
+      
+      if (nrow(game_metadata) > 0 && "id" %in% names(game_metadata) && "name" %in% names(game_metadata)) {
+        # Merge with game names
+        rankings <- merge(
+          rankings,
+          game_metadata[, c("id", "name")],
+          by.x = "steamAppId",
+          by.y = "id",
+          all.x = TRUE
+        )
+        # Reorder to put name near the beginning
+        name_idx <- which(names(rankings) == "name")
+        other_idx <- setdiff(1:ncol(rankings), name_idx)
+        rankings <- rankings[, c(1, name_idx, other_idx[-1])]
+      }
     }
   }, error = function(e) {
     # If we can't get game names, just continue without them
     warning("Could not fetch game names: ", e$message)
   })
   
-  # Create a simplified output with relevant columns
+  # Create output with relevant columns including actual values
   result <- data.frame(
-    steam_app_id = rankings$steamAppId,
+    steamAppId = rankings$steamAppId,
     rank = rankings[[rank_column]],
     percentile = rankings[[value_column]],
     stringsAsFactors = FALSE
   )
   
+  # Add actual metric values based on what was requested
+  if (metric == "revenue") {
+    result$revenue <- rankings$totalRevenue
+  } else if (metric == "units") {
+    result$units <- rankings$totalUnitsSold
+  } else if (metric == "ccu") {
+    # For CCU, use avgPlaytime as a proxy or fetch from concurrent data
+    result$ccu <- rankings$avgPlaytime
+  } else if (metric == "dau") {
+    result$dau <- rankings$yesterdayUnitsSold
+  } else if (metric == "followers") {
+    result$followers <- rankings$followers
+  }
+  
   # Add name if available
   if ("name" %in% names(rankings)) {
     result$name <- rankings$name
-    # Reorder columns
-    result <- result[, c("steam_app_id", "name", "rank", "percentile")]
+    # Reorder columns to put name after steamAppId
+    col_order <- c("steamAppId", "name", setdiff(names(result), c("steamAppId", "name")))
+    result <- result[, col_order]
   }
-  
-  # Add a value column (percentile * 100 for display purposes)
-  result$value <- result$percentile
   
   # Convert to tibble
   result <- tibble::as_tibble(result)

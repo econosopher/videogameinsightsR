@@ -6,6 +6,9 @@
 \usage{
 vgi_active_players_by_date(
   date,
+  steam_app_ids = NULL,
+  offset = NULL,
+  limit = NULL,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   headers = list()
 )
@@ -13,6 +16,14 @@ vgi_active_players_by_date(
 \arguments{
 \item{date}{Character string or Date. The date for which to retrieve data
 in "YYYY-MM-DD" format.}
+
+\item{steam_app_ids}{Numeric vector. Optional Steam App IDs to filter results.
+If not provided, returns data for all available games.}
+
+\item{offset}{Integer. How many results to skip over. Minimum is 0. Optional.}
+
+\item{limit}{Integer. Maximum number of results to return. Minimum is 1,
+maximum is 1000. Optional.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}

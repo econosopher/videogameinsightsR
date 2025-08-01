@@ -4,9 +4,19 @@
 \alias{vgi_game_rankings}
 \title{Get Game Rankings}
 \usage{
-vgi_game_rankings(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), headers = list())
+vgi_game_rankings(
+  offset = NULL,
+  limit = NULL,
+  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+  headers = list()
+)
 }
 \arguments{
+\item{offset}{Integer. The number of records to skip for pagination. Optional.}
+
+\item{limit}{Integer. Maximum number of results to return. Without specifying
+limit you will receive 5 results. The maximum limit is 1000. Optional.}
+
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
@@ -31,7 +41,7 @@ A data frame containing rankings for each game with columns:
 }
 }
 \description{
-Retrieve rankings for all games across various metrics including reviews, revenue,
+Retrieve rankings for games across various metrics including reviews, revenue,
 units sold, followers, and playtime.
 }
 \details{
@@ -42,13 +52,23 @@ Rankings provide a comprehensive view of game performance across metrics:
 \item Use multiple metrics to get a balanced view of game success
 \item Recent sales rankings help identify trending games
 }
+
+Note: The API currently returns a limited set of games. Filtering by genre,
+platform, or date is not supported by the API endpoint.
 }
 \examples{
 \dontrun{
-# Get all game rankings
+# Get default rankings (5 games)
 rankings <- vgi_game_rankings()
 
+# Get top 100 games
+rankings <- vgi_game_rankings(limit = 100)
+
+# Get games starting from offset 50
+rankings <- vgi_game_rankings(offset = 50, limit = 20)
+
 # Find top 10 games by revenue
+rankings <- vgi_game_rankings(limit = 100)
 top_revenue <- head(rankings[order(rankings$totalRevenueRank), ], 10)
 print(top_revenue[, c("steamAppId", "totalRevenueRank", "totalRevenuePrct")])
 

@@ -5,6 +5,8 @@
 #'
 #' @param date Character string or Date. The date for which to retrieve data
 #'   in "YYYY-MM-DD" format.
+#' @param steam_app_ids Numeric vector. Optional. Steam App IDs to filter results.
+#'   If not provided, returns data for all available games.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
@@ -87,15 +89,26 @@
 #'         col = "skyblue")
 #' }
 vgi_followers_by_date <- function(date,
+                                 steam_app_ids = NULL,
                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                  headers = list()) {
   
   # Validate and format date
   formatted_date <- format_date(date)
   
+  # Build query parameters if steam_app_ids provided
+  query_params <- list()
+  if (!is.null(steam_app_ids)) {
+    # Ensure numeric and convert to comma-separated string
+    steam_app_ids <- as.numeric(steam_app_ids)
+    ids_string <- paste(steam_app_ids, collapse = ",")
+    query_params$steamAppIds <- ids_string
+  }
+  
   # Make API request
   result <- make_api_request(
     endpoint = paste0("interest-level/followers/", formatted_date),
+    query_params = query_params,
     auth_token = auth_token,
     method = "GET",
     headers = headers

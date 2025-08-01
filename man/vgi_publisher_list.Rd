@@ -2,11 +2,23 @@
 % Please edit documentation in R/vgi_publisher_list.R
 \name{vgi_publisher_list}
 \alias{vgi_publisher_list}
-\title{Get Complete Publisher List}
+\title{Get Publisher List with Filtering}
 \usage{
-vgi_publisher_list(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), headers = list())
+vgi_publisher_list(
+  search = NULL,
+  limit = NULL,
+  min_games = NULL,
+  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+  headers = list()
+)
 }
 \arguments{
+\item{search}{Character string. Search term to filter publishers by name. Optional.}
+
+\item{limit}{Integer. Maximum number of results to return. Optional.}
+
+\item{min_games}{Integer. Minimum number of games published. Optional.}
+
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
@@ -20,48 +32,49 @@ A data frame with columns:
 }
 }
 \description{
-Retrieve a list of all game publishers in the Video Game Insights database.
+Retrieve a filtered list of game publishers from the Video Game Insights database.
+At least one filtering parameter is required to avoid retrieving the entire database.
 }
 \details{
 This endpoint is useful for:
 \itemize{
-\item Discovering all tracked publishers
+\item Discovering publishers matching specific criteria
 \item Building publisher selection interfaces
 \item Finding publisher IDs for further queries
 \item Analyzing the publishing landscape
 }
+
+Note: At least one filtering parameter must be provided to prevent
+accidentally retrieving thousands of publishers.
 }
 \examples{
 \dontrun{
-# Get all publishers
-all_pubs <- vgi_publisher_list()
-cat("Total publishers:", nrow(all_pubs), "\n")
-
 # Search for major publishers
-ea_pubs <- all_pubs[grep("Electronic Arts", all_pubs$name, ignore.case = TRUE), ]
+ea_pubs <- vgi_publisher_list(search = "Electronic Arts")
 print(ea_pubs)
 
-# Find publisher ID by exact name
-pub_id <- all_pubs$id[all_pubs$name == "Ubisoft"]
-if (length(pub_id) > 0) {
-  cat("Ubisoft ID:", pub_id, "\n")
-  
+# Get top publishers (limit results)
+top_pubs <- vgi_publisher_list(limit = 100)
+cat("Retrieved", nrow(top_pubs), "publishers\n")
+
+# Find major publishers with many games
+major_pubs <- vgi_publisher_list(min_games = 20, limit = 50)
+print(major_pubs)
+
+# Search for specific publisher
+ubi <- vgi_publisher_list(search = "Ubisoft", limit = 1)
+if (nrow(ubi) > 0) {
   # Get more info about this publisher
-  ubi_info <- vgi_publisher_info(pub_id)
+  ubi_info <- vgi_publisher_info(ubi$id[1])
   print(ubi_info)
 }
 
-# Analyze publisher ecosystem
-# Find self-published developers
-all_devs <- vgi_developer_list()
-self_published <- intersect(all_pubs$name, all_devs$name)
-cat("Companies that both develop and publish:", length(self_published), "\n")
-
 # Find publishers with "Games" in name
-games_pubs <- all_pubs[grep("Games", all_pubs$name), ]
+games_pubs <- vgi_publisher_list(search = "Games", limit = 200)
 cat("Publishers with 'Games' in name:", nrow(games_pubs), "\n")
 
 # Export for analysis
-write.csv(all_pubs, "vgi_publishers.csv", row.names = FALSE)
+top_100 <- vgi_publisher_list(limit = 100)
+write.csv(top_100, "vgi_top_publishers.csv", row.names = FALSE)
 }
 }

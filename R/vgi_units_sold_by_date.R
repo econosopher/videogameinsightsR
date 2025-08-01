@@ -5,6 +5,8 @@
 #'
 #' @param date Character string or Date. The date for which to retrieve data
 #'   in "YYYY-MM-DD" format.
+#' @param steam_app_ids Numeric vector. Optional. Steam App IDs to filter results.
+#'   If not provided, returns data for all available games.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
@@ -85,28 +87,55 @@
 #' cat("Premium games (>$40) with >50k sales:", nrow(premium_games), "\n")
 #' }
 vgi_units_sold_by_date <- function(date,
+                                  steam_app_ids = NULL,
                                   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                   headers = list()) {
   
   # Validate and format date
   formatted_date <- format_date(date)
   
+  # Build query parameters if steam_app_ids provided
+  query_params <- list()
+  if (!is.null(steam_app_ids)) {
+    # Ensure numeric and convert to comma-separated string
+    steam_app_ids <- as.numeric(steam_app_ids)
+    ids_string <- paste(steam_app_ids, collapse = ",")
+    query_params$steamAppIds <- ids_string
+  }
+  
   # Make API request
   result <- make_api_request(
     endpoint = paste0("commercial-performance/units-sold/", formatted_date),
+    query_params = query_params,
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
   
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
+  # Handle response - it may already be a data frame
+  if (is.data.frame(result)) {
+    # Response is already a data frame from jsonlite
+    df <- data.frame(
+      steamAppId = as.integer(result$steamAppId),
+      date = formatted_date,
+      unitsSold = as.integer(result$unitsSoldTotal),
+      dailyUnits = as.integer(result$unitsSoldChange),
+      stringsAsFactors = FALSE
+    )
+    
+    # Sort by units sold descending and add rank
+    df <- df[order(-df$unitsSold), ]
+    df$salesRank <- seq_len(nrow(df))
+    
+    return(df)
+  } else if (is.list(result) && length(result) > 0) {
+    # Handle list response (old format)
     df <- do.call(rbind, lapply(result, function(x) {
       data.frame(
         steamAppId = as.integer(x$steamAppId),
         date = formatted_date,
-        unitsSold = as.integer(x$unitsSold %||% 0),
-        dailyUnits = as.integer(x$dailyUnits %||% NA),
+        unitsSold = as.integer(x$unitsSoldTotal %||% x$unitsSold %||% 0),
+        dailyUnits = as.integer(x$unitsSoldChange %||% x$dailyUnits %||% NA),
         stringsAsFactors = FALSE
       )
     }))

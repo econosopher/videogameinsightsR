@@ -1,8 +1,6 @@
 #' Search Games in Video Game Insights
 #'
 #' Search for games by title using the Video Game Insights database.
-#' Since the new API doesn't have a dedicated search endpoint, this function
-#' fetches the game list and performs client-side filtering.
 #'
 #' @param query Character string. The search query (game title).
 #' @param limit Integer. Maximum number of results to return. Defaults to 10.
@@ -11,12 +9,7 @@
 #' @param headers List. Optional custom headers to include in the API request.
 #'
 #' @return A [tibble][tibble::tibble] containing search results with game
-#'   information including Steam App ID and name.
-#'
-#' @details
-#' This function now uses the `/games/game-list` endpoint and filters results
-#' locally. For better performance with large datasets, consider caching the
-#' game list.
+#'   information including steamAppId and name.
 #'
 #' @examples
 #' \dontrun{
@@ -43,43 +36,35 @@ vgi_search_games <- function(query,
   }
   
   # Validate limit
-  validate_numeric(limit, "limit", min_val = 1, max_val = 1000)
+  if (!is.numeric(limit) || limit < 1 || limit > 1000) {
+    stop("limit must be between 1 and 1000")
+  }
   
-  # Get the full game list
-  response <- make_api_request(
+  # Make API request to games endpoint with search parameter
+  result <- make_api_request(
     endpoint = "games/game-list",
+    query_params = list(
+      search = query,
+      limit = limit
+    ),
     auth_token = auth_token,
     headers = headers
   )
   
-  # Process response
-  game_list <- process_api_response(response)
-  
-  # Check if we got a valid response
-  if (is.null(game_list) || nrow(game_list) == 0) {
-    return(tibble::tibble())
+  # Convert to data frame if needed
+  if (!is.null(result) && length(result) > 0) {
+    if (is.list(result) && !is.data.frame(result)) {
+      # Handle list of games
+      df <- do.call(rbind, lapply(result, function(x) {
+        data.frame(
+          steamAppId = as.integer(x$id %||% x$steamAppId %||% NA),
+          name = x$name %||% NA_character_,
+          stringsAsFactors = FALSE
+        )
+      }))
+      return(df)
+    }
   }
   
-  # Ensure we have the expected columns
-  if (!all(c("id", "name") %in% names(game_list))) {
-    stop("Unexpected response format from game-list endpoint")
-  }
-  
-  # Rename id to steam_app_id for consistency
-  game_list <- dplyr::rename(game_list, steam_app_id = "id")
-  
-  # Perform case-insensitive search
-  query_lower <- tolower(query)
-  filtered_games <- game_list[grepl(query_lower, tolower(game_list$name), fixed = FALSE), ]
-  
-  # Limit results
-  if (nrow(filtered_games) > limit) {
-    filtered_games <- utils::head(filtered_games, limit)
-  }
-  
-  # Sort by relevance (games that start with the query come first)
-  starts_with <- grepl(paste0("^", query_lower), tolower(filtered_games$name))
-  filtered_games <- filtered_games[order(!starts_with), ]
-  
-  return(filtered_games)
+  return(result)
 }

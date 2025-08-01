@@ -5,6 +5,11 @@
 #'
 #' @param date Character string or Date. The date for which to retrieve data
 #'   in "YYYY-MM-DD" format.
+#' @param steam_app_ids Numeric vector. Optional Steam App IDs to filter results.
+#'   If not provided, returns data for all available games.
+#' @param offset Integer. How many results to skip over. Minimum is 0. Optional.
+#' @param limit Integer. Maximum number of results to return. Minimum is 1, 
+#'   maximum is 1000. Optional.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
@@ -104,15 +109,54 @@
 #'            c("steamAppId", "mau_prev", "mau_now", "mau_growth")]))
 #' }
 vgi_active_players_by_date <- function(date,
+                                      steam_app_ids = NULL,
+                                      offset = NULL,
+                                      limit = NULL,
                                       auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                       headers = list()) {
   
   # Validate and format date
   formatted_date <- format_date(date)
+  requested_date <- as.Date(formatted_date)
+  
+  # Check DAU/MAU availability dates
+  dau_start_date <- as.Date("2024-03-18")
+  mau_start_date <- as.Date("2024-03-23")
+  
+  # If requested date is before DAU availability, adjust and warn
+  if (requested_date < dau_start_date) {
+    warning(paste0("DAU data is only available from 2024-03-18. ",
+                   "Fetching data for the earliest available date instead."))
+    formatted_date <- "2024-03-18"
+  }
+  
+  # Validate inputs
+  if (!is.null(offset)) {
+    validate_numeric(offset, "offset", min_val = 0)
+  }
+  
+  if (!is.null(limit)) {
+    validate_numeric(limit, "limit", min_val = 1, max_val = 1000)
+  }
+  
+  # Build query parameters
+  query_params <- list()
+  if (!is.null(steam_app_ids)) {
+    # Convert to comma-separated string
+    ids_string <- paste(steam_app_ids, collapse = ",")
+    query_params$steamAppIds <- ids_string
+  }
+  if (!is.null(offset)) {
+    query_params$offset <- offset
+  }
+  if (!is.null(limit)) {
+    query_params$limit <- limit
+  }
   
   # Make API request
   result <- make_api_request(
     endpoint = paste0("engagement/active-players/", formatted_date),
+    query_params = query_params,
     auth_token = auth_token,
     method = "GET",
     headers = headers
@@ -138,10 +182,25 @@ vgi_active_players_by_date <- function(date,
     df <- df[order(-df$dau), ]
     df$activeRank <- seq_len(nrow(df))
     
+    # Add metadata about the actual date returned
+    attr(df, "requested_date") <- date
+    attr(df, "actual_date") <- formatted_date
+    
+    # If date was adjusted, note that MAU might be limited
+    if (requested_date < mau_start_date && requested_date >= dau_start_date) {
+      attr(df, "mau_limited") <- TRUE
+      message("Note: MAU data is only available from 2024-03-23. MAU values may be incomplete.")
+    }
+    
+    # Add warning if only old games are returned
+    if (all(df$steamAppId < 1000, na.rm = TRUE)) {
+      warning("API returned only old games (Steam IDs < 1000). This may indicate stale data.")
+    }
+    
     return(df)
   } else {
     # Return empty data frame with correct structure
-    return(data.frame(
+    empty_df <- data.frame(
       steamAppId = integer(),
       date = character(),
       dau = integer(),
@@ -149,6 +208,12 @@ vgi_active_players_by_date <- function(date,
       dauMauRatio = numeric(),
       activeRank = integer(),
       stringsAsFactors = FALSE
-    ))
+    )
+    
+    # Add metadata even for empty results
+    attr(empty_df, "requested_date") <- date
+    attr(empty_df, "actual_date") <- formatted_date
+    
+    return(empty_df)
   }
 }
