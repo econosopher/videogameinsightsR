@@ -1,6 +1,6 @@
 Package: videogameinsightsR
 Title: Interface to 'Video Game Insights' API for Gaming Market Analytics
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: 
     person("Phillip", "Black",
            email = "pblack@gameeconomistconsulting.com",
