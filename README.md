@@ -138,6 +138,26 @@ The API returns different field names depending on the endpoint:
 - Units: `unitsSoldTotal` (total) and `unitsSoldChange` (daily change)
 - CCU: `peakConcurrent` and `avgConcurrent`
 
+## Rate Limiting and Batching
+
+To reduce stress on the API, the package supports configurable rate limiting:
+
+```r
+# Set rate limiting via environment variables
+Sys.setenv(VGI_BATCH_SIZE = "10")   # API calls per batch
+Sys.setenv(VGI_BATCH_DELAY = "1.5") # Seconds between batches
+
+# Or use the rate limiter directly
+limiter <- create_rate_limiter(calls_per_batch = 5, delay_seconds = 2)
+for (date in dates) {
+  data <- vgi_concurrent_players_by_date(date)
+  limiter$increment()  # Applies delay when threshold reached
+}
+```
+
+Functions that make many sequential API calls (like `vgi_game_summary`) automatically
+apply intelligent batching based on the request size.
+
 ## Recent Updates
 
 ### Version 0.0.3 (2025-08-01)
@@ -146,6 +166,7 @@ The API returns different field names depending on the endpoint:
 - Automatic calculation of year-over-year growth percentages
 - Support for periods that cross year boundaries (e.g., holiday season)
 - Returns comparison tables and normalized time series data
+- Added rate limiting utilities to reduce API stress
 
 ### Version 0.0.2 (2025-08-01)
 - Added support for multiple Steam App IDs in all data retrieval functions

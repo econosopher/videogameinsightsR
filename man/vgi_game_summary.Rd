@@ -10,7 +10,9 @@ vgi_game_summary(
   end_date = NULL,
   metrics = c("concurrent", "active", "revenue", "units"),
   game_names = NULL,
-  auth_token = Sys.getenv("VGI_AUTH_TOKEN")
+  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+  batch_size = NULL,
+  batch_delay = NULL
 )
 }
 \arguments{
@@ -30,6 +32,12 @@ steam_app_ids. If not provided, names will be fetched from metadata.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
+
+\item{batch_size}{Integer. Number of API calls per batch before pausing.
+Defaults to automatic calculation based on date range.}
+
+\item{batch_delay}{Numeric. Seconds to pause between batches.
+Defaults to 1 second. Set to 0 to disable rate limiting.}
 }
 \value{
 A list containing:

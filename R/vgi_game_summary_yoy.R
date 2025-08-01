@@ -19,6 +19,10 @@
 #'   percentages. Defaults to TRUE.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
+#' @param batch_size Integer. Number of API calls per batch before pausing.
+#'   Defaults to automatic calculation based on date range.
+#' @param batch_delay Numeric. Seconds to pause between batches.
+#'   Defaults to value from VGI_BATCH_DELAY environment variable or 1 second.
 #'
 #' @return A list containing:
 #' \describe{
@@ -75,7 +79,9 @@ vgi_game_summary_yoy <- function(steam_app_ids,
                                 end_date = NULL,
                                 metrics = c("concurrent", "revenue", "units"),
                                 include_growth = TRUE,
-                                auth_token = Sys.getenv("VGI_AUTH_TOKEN")) {
+                                auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                batch_size = NULL,
+                                batch_delay = NULL) {
   
   # Validate inputs
   if (missing(steam_app_ids) || length(steam_app_ids) == 0) {
@@ -116,7 +122,9 @@ vgi_game_summary_yoy <- function(steam_app_ids,
       start_date = dates$start,
       end_date = dates$end,
       metrics = metrics,
-      auth_token = auth_token
+      auth_token = auth_token,
+      batch_size = batch_size,
+      batch_delay = batch_delay
     )
     
     # Store the summary with year label

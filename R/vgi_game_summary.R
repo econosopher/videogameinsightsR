@@ -15,6 +15,10 @@
 #'   steam_app_ids. If not provided, names will be fetched from metadata.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
+#' @param batch_size Integer. Number of API calls per batch before pausing.
+#'   Defaults to automatic calculation based on date range.
+#' @param batch_delay Numeric. Seconds to pause between batches.
+#'   Defaults to 1 second. Set to 0 to disable rate limiting.
 #'
 #' @return A list containing:
 #' \describe{
@@ -65,7 +69,9 @@ vgi_game_summary <- function(steam_app_ids,
                            end_date = NULL,
                            metrics = c("concurrent", "active", "revenue", "units"),
                            game_names = NULL,
-                           auth_token = Sys.getenv("VGI_AUTH_TOKEN")) {
+                           auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                           batch_size = NULL,
+                           batch_delay = NULL) {
   
   # Initialize tracking
   results <- list(
@@ -109,6 +115,23 @@ vgi_game_summary <- function(steam_app_ids,
   
   message(sprintf("Expected API calls: ~%d (for %d metrics over %d days)", 
                   expected_calls, length(metrics), n_days))
+  
+  # Configure batching
+  if (is.null(batch_size)) {
+    batch_size <- calculate_optimal_batch_size(n_days, length(metrics))
+  }
+  if (is.null(batch_delay)) {
+    batch_delay <- get_batch_config()$delay_seconds
+  }
+  
+  # Show batching info if applicable
+  if (batch_delay > 0 && n_days > batch_size) {
+    estimated_delays <- floor(expected_calls / batch_size) * batch_delay
+    message(sprintf("Using batch processing: %d calls per batch with %g second delay",
+                   batch_size, batch_delay))
+    message(sprintf("Estimated additional time from rate limiting: ~%d seconds", 
+                   estimated_delays))
+  }
   
   # 1. CONCURRENT PLAYERS
   if ("concurrent" %in% metrics) {
