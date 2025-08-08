@@ -271,5 +271,5 @@ if (length(validation_report$warnings) > 0) {
 }
 
 # Save report
-saveRDS(validation_report, "endpoint_validation_report.rds")
+saveRDS(validation_report, file.path(tempdir(), "endpoint_validation_report.rds"))
 cat("Detailed report saved to: endpoint_validation_report.rds\n")

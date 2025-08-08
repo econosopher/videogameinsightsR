@@ -25,6 +25,7 @@ Imports:
     dplyr,
     httr2,
     jsonlite,
+    digest,
     rappdirs,
     rlang,
     tibble,

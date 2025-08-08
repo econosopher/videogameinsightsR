@@ -334,13 +334,13 @@ if (error_404_count > 0) {
   )
 }
 
-# Write report
-report_path <- here::here("tests", "api_endpoint_test_report.md")
+# Write report to a temp location to avoid polluting repo
+report_path <- file.path(tempdir(), "api_endpoint_test_report.md")
 writeLines(md_content, report_path)
 cat(paste0("\nReport saved to: ", report_path, "\n"))
 
 # Also save raw results for debugging
-results_path <- here::here("tests", "api_test_results.rds")
+results_path <- file.path(tempdir(), "api_test_results.rds")
 saveRDS(test_results, results_path)
 cat(paste0("Raw results saved to: ", results_path, "\n"))
 

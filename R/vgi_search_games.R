@@ -37,34 +37,30 @@ vgi_search_games <- function(query,
   
   # Validate limit
   if (!is.numeric(limit) || limit < 1 || limit > 1000) {
+    if (is.numeric(limit) && limit < 1) stop("limit must be at least 1")
     stop("limit must be between 1 and 1000")
   }
   
-  # Make API request to games endpoint with search parameter
-  result <- make_api_request(
-    endpoint = "games/game-list",
-    query_params = list(
-      search = query,
-      limit = limit
-    ),
-    auth_token = auth_token,
-    headers = headers
+  # NOTE: The API does not reliably filter on the server. Fetch full list and filter locally.
+  all_games <- tryCatch(
+    vgi_game_list(auth_token = auth_token, headers = headers),
+    error = function(e) tibble::tibble(steamAppId = integer(), name = character(), id = integer())
   )
-  
-  # Convert to data frame if needed
-  if (!is.null(result) && length(result) > 0) {
-    if (is.list(result) && !is.data.frame(result)) {
-      # Handle list of games
-      df <- do.call(rbind, lapply(result, function(x) {
-        data.frame(
-          steamAppId = as.integer(x$id %||% x$steamAppId %||% NA),
-          name = x$name %||% NA_character_,
-          stringsAsFactors = FALSE
-        )
-      }))
-      return(df)
-    }
+
+  if (!is.data.frame(all_games) || nrow(all_games) == 0) {
+    return(tibble::tibble(steamAppId = integer(), name = character(), id = integer()))
   }
-  
-  return(result)
+
+  # Ensure columns present
+  if (!"name" %in% names(all_games)) all_games$name <- NA_character_
+  if (!"steamAppId" %in% names(all_games) && "id" %in% names(all_games)) all_games$steamAppId <- as.integer(all_games$id)
+  if (!"id" %in% names(all_games) && "steamAppId" %in% names(all_games)) all_games$id <- all_games$steamAppId
+
+  # Local filter and limit
+  name_col <- all_games$name
+  name_col[is.na(name_col)] <- ""
+  matches <- grepl(query, name_col, ignore.case = TRUE)
+  filtered <- all_games[matches, c("steamAppId", "name", "id")]
+  if (nrow(filtered) > limit) filtered <- filtered[seq_len(limit), ]
+  tibble::as_tibble(filtered)
 }

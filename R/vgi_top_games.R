@@ -44,6 +44,12 @@
 #' )
 #' }
 #'
+#' @details
+#' Note: The API does not currently provide server-side filtering by platform
+#' or direct CCU/DAU top lists. This function constructs top lists from the
+#' rankings endpoint, which may not perfectly reflect CCU/DAU. Treat these as
+#' approximate until the API supports direct metrics.
+#'
 #' @export
 vgi_top_games <- function(metric,
                          platform = "all",
@@ -73,8 +79,7 @@ vgi_top_games <- function(metric,
   # Validate limit
   validate_numeric(limit, "limit", min_val = 1, max_val = 1000)
   
-  # Get rankings data with proper parameters
-  # Note: vgi_game_rankings doesn't support platform/date filtering currently
+  # Get rankings data (no platform/date filtering available in the API)
   rankings <- vgi_game_rankings(
     limit = limit * 2,  # Get more than needed to account for filtering
     auth_token = auth_token, 
@@ -89,8 +94,8 @@ vgi_top_games <- function(metric,
   rank_column <- switch(metric,
     revenue = "totalRevenueRank",
     units = "totalUnitsSoldRank",
-    ccu = "avgPlaytimeRank",  # Using playtime as proxy for CCU
-    dau = "yesterdayUnitsSoldRank",  # Using yesterday's units as proxy for DAU
+    ccu = "avgPlaytimeRank",  # proxy until API provides CCU ranking
+    dau = "yesterdayUnitsSoldRank",  # proxy until API provides DAU ranking
     followers = "followersRank"
   )
   
@@ -133,7 +138,7 @@ vgi_top_games <- function(metric,
         )
         # Reorder to put name near the beginning
         name_idx <- which(names(rankings) == "name")
-        other_idx <- setdiff(1:ncol(rankings), name_idx)
+        other_idx <- setdiff(seq_len(ncol(rankings)), name_idx)
         rankings <- rankings[, c(1, name_idx, other_idx[-1])]
       }
     }
@@ -150,13 +155,13 @@ vgi_top_games <- function(metric,
     stringsAsFactors = FALSE
   )
   
-  # Add actual metric values based on what was requested
+  # Add actual metric values based on what was requested (best-effort proxies)
   if (metric == "revenue") {
     result$revenue <- rankings$totalRevenue
   } else if (metric == "units") {
     result$units <- rankings$totalUnitsSold
   } else if (metric == "ccu") {
-    # For CCU, use avgPlaytime as a proxy or fetch from concurrent data
+    # For CCU, use avgPlaytime as a proxy
     result$ccu <- rankings$avgPlaytime
   } else if (metric == "dau") {
     result$dau <- rankings$yesterdayUnitsSold

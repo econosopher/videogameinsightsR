@@ -158,6 +158,19 @@ for (date in dates) {
 Functions that make many sequential API calls (like `vgi_game_summary`) automatically
 apply intelligent batching based on the request size.
 
+### Configuration
+
+You can control behavior via options or environment variables:
+
+- Base URL: set `options(vgi.base_url = "https://vginsights.com/api/v3")` or `VGI_BASE_URL`
+- Timeouts: `options(vgi.timeout = 30)`
+- Retries: `options(vgi.retry_max_tries = 4)`
+- Request cache TTL (seconds, GET only): `options(vgi.request_cache_ttl = 3600)` or `VGI_REQUEST_CACHE_TTL_SECONDS`
+- Auto rate limiting (global): `options(vgi.auto_rate_limit = TRUE)`
+- Calls per batch: `options(vgi.calls_per_batch = 10)` or `VGI_BATCH_SIZE`
+- Delay seconds: `options(vgi.batch_delay = 1)` or `VGI_BATCH_DELAY`
+- Verbose request logging: `options(vgi.verbose = TRUE)`
+
 ## Recent Updates
 
 ### Version 0.0.3 (2025-08-01)

@@ -7,9 +7,9 @@
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
 #'
-#' @return A data frame with columns:
+#' @return A tibble with columns:
 #' \describe{
-#'   \item{id}{Integer. The Steam App ID}
+#'   \item{steamAppId}{Integer. The Steam App ID}
 #'   \item{name}{Character. The game name}
 #' }
 #'
@@ -72,30 +72,37 @@ vgi_game_list <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   
   # Result is already a data frame from jsonlite
   if (is.data.frame(result) && nrow(result) > 0) {
-    # Ensure column types are correct
+    # Ensure column types are correct and standardize column names
     df <- result
-    if ("id" %in% names(df)) {
-      df$id <- as.integer(df$id)
+    if ("id" %in% names(df) && !"steamAppId" %in% names(df)) {
+      df$steamAppId <- as.integer(df$id)
+      df$id <- NULL
+    } else if ("steamAppId" %in% names(df)) {
+      df$steamAppId <- as.integer(df$steamAppId)
     }
     if ("name" %in% names(df)) {
       df$name <- as.character(df$name)
     }
-    
-    # Sort by ID for consistency
-    df <- df[order(df$id), ]
-    
-    # Add warning if only old games are returned
-    if ("id" %in% names(df) && all(df$id < 1000, na.rm = TRUE)) {
-      warning("API returned only old games (Steam IDs < 1000). This may indicate stale data.")
+
+    # Sort by steamAppId for consistency
+    sort_col <- if ("steamAppId" %in% names(df)) "steamAppId" else NULL
+    if (!is.null(sort_col)) {
+      df <- df[order(df[[sort_col]]), ]
+      warn_if_stale_ids(df[[sort_col]])
     }
-    
-    return(df)
+
+    # Backward-compatibility: keep an 'id' column mirroring steamAppId
+    if ("steamAppId" %in% names(df) && !"id" %in% names(df)) {
+      df$id <- df$steamAppId
+    }
+
+    # Return tibble for consistency across the package
+    return(tibble::as_tibble(df))
   } else {
     # Return empty data frame with correct structure
-    return(data.frame(
-      id = integer(),
-      name = character(),
-      stringsAsFactors = FALSE
+    return(tibble::tibble(
+      steamAppId = integer(),
+      name = character()
     ))
   }
 }
