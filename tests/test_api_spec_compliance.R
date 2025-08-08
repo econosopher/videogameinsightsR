@@ -49,7 +49,7 @@ capture_api_call <- function(func, ...) {
   
   # Execute function
   tryCatch({
-    result <- func(...)
+    invisible(func(...))
   }, error = function(e) {
     # Ignore errors - we're testing parameter passing, not functionality
   })
@@ -218,6 +218,7 @@ compliant_functions <- sum(sapply(report, function(x)
 cat(sprintf("\nSUMMARY: %d/%d functions fully compliant with API specification\n",
             compliant_functions, total_functions))
 
-# Export detailed report
-saveRDS(report, "api_compliance_report.rds")
-cat("\nDetailed report saved to: api_compliance_report.rds\n")
+# Export detailed report to a temp location to avoid polluting repo
+report_path <- file.path(tempdir(), "api_compliance_report.rds")
+saveRDS(report, report_path)
+cat("\nDetailed report saved to:", report_path, "\n")

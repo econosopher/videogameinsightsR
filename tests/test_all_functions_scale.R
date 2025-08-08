@@ -295,5 +295,8 @@ cat("3. Single game insights endpoints cannot be batched\n")
 cat("4. Scale testing shows API handles multiple IDs well\n")
 
 # Save results
-saveRDS(test_results, "validation/api_endpoint_scale_test_results.rds")
-cat("\n\nDetailed results saved to validation/api_endpoint_scale_test_results.rds\n")
+out_dir <- file.path(tempdir(), "vgi_validation")
+if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
+out_path <- file.path(out_dir, "api_endpoint_scale_test_results.rds")
+saveRDS(test_results, out_path)
+cat("\n\nDetailed results saved to ", out_path, "\n", sep = "")

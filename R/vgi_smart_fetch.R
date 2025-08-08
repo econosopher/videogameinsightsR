@@ -18,12 +18,21 @@ vgi_fetch_all_games <- function(cache_results = TRUE,
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN")) {
   
   if (cache_results) {
-    cache_file <- file.path(tempdir(), "vgi_all_games_temp.rds")
-    if (file.exists(cache_file)) {
-      cache_age <- difftime(Sys.time(), file.info(cache_file)$mtime, units = "hours")
+    # Prefer persistent cache; fall back to temp cache for backwards compatibility
+    persistent_cache_file <- file.path(rappdirs::user_cache_dir("videogameinsightsR"), "vgi_all_games_cache.rds")
+    temp_cache_file <- file.path(tempdir(), "vgi_all_games_temp.rds")
+
+    if (file.exists(persistent_cache_file)) {
+      cache_age <- difftime(Sys.time(), file.info(persistent_cache_file)$mtime, units = "hours")
+      if (cache_age < 24) {
+        if (verbose) message("Using cached game list from persistent cache (less than 24 hours old)")
+        return(readRDS(persistent_cache_file))
+      }
+    } else if (file.exists(temp_cache_file)) {
+      cache_age <- difftime(Sys.time(), file.info(temp_cache_file)$mtime, units = "hours")
       if (cache_age < 24) {
         if (verbose) message("Using cached game list (less than 24 hours old)")
-        return(readRDS(cache_file))
+        return(readRDS(temp_cache_file))
       }
     }
   }
@@ -61,8 +70,11 @@ vgi_fetch_all_games <- function(cache_results = TRUE,
   all_games_df <- do.call(rbind, all_games)
   
   if (cache_results && nrow(all_games_df) > 0) {
-    saveRDS(all_games_df, cache_file)
-    if (verbose) message(sprintf("Cached %d games to temp file", nrow(all_games_df)))
+    # Move caching into persistent cache directory for consistency
+    persistent_cache_file <- file.path(rappdirs::user_cache_dir("videogameinsightsR"), "vgi_all_games_cache.rds")
+    if (!dir.exists(dirname(persistent_cache_file))) dir.create(dirname(persistent_cache_file), recursive = TRUE)
+    saveRDS(all_games_df, persistent_cache_file)
+    if (verbose) message(sprintf("Cached %d games to %s", nrow(all_games_df), persistent_cache_file))
   }
   
   return(all_games_df)

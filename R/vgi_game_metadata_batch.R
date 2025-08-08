@@ -50,7 +50,16 @@ vgi_game_metadata_batch <- function(steam_app_ids,
         auth_token = auth_token,
         headers = headers
       )
-      process_api_response(response)
+      res <- process_api_response(response)
+      # Ensure steamAppId exists
+      if (!"steamAppId" %in% names(res)) {
+        sid <- NA_integer_
+        if (is.list(response) && !is.null(response$steamAppId)) sid <- as.integer(response$steamAppId)
+        res$steamAppId <- sid %||% as.integer(app_id)
+      }
+      # Backward-compatible id column
+      if (!"id" %in% names(res)) res$id <- res$steamAppId
+      tibble::as_tibble(res)
     }, error = function(e) {
       warning(sprintf("Failed to fetch metadata for game %s: %s", app_id, e$message))
       NULL
@@ -66,7 +75,7 @@ vgi_game_metadata_batch <- function(steam_app_ids,
   }
   
   # Combine results into a single tibble
-  result <- dplyr::bind_rows(results)
+  result <- suppressWarnings(dplyr::bind_rows(results))
   
   return(result)
 }
