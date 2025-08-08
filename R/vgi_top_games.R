@@ -177,6 +177,11 @@ vgi_top_games <- function(metric,
     result <- result[, col_order]
   }
   
+  # Backwards-compatibility: 'value' mirrors 'percentile'
+  if (!"value" %in% names(result) && "percentile" %in% names(result)) {
+    result$value <- result$percentile
+  }
+  
   # Convert to tibble
   result <- tibble::as_tibble(result)
   
