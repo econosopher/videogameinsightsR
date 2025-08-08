@@ -1,0 +1,64 @@
+{
+    "steamAppId": 730,
+    "name": "Counter-Strike 2",
+    "price": 0,
+    "releaseDate": "2012-08-21",
+    "fullReleaseDate": null,
+    "genres": "Action, Free to Play",
+    "subgenres": "FPS, Shooter, Tactical",
+    "languages": "Brazilian, Bulgarian, Czech, Danish, Dutch, English, Finnish, French, German, Greek, Hungarian, indonesian, Italian, Japanese, Korean, Latam, Norwegian, Polish, Portuguese, Romanian, Russian, Simplified Chinese, Spanish, Swedish, Thai, Traditional Chinese, Turkish, Ukrainian, Vietnamese",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/730",
+    "steamUrl": "https://store.steampowered.com/app/730",
+    "themes": [
+        "Fast-Paced",
+        "PvP",
+        "Difficult"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": [
+        "Realistic"
+    ],
+    "steamTags": [
+        "Strategy",
+        "Action",
+        "FPS",
+        "Fast-Paced",
+        "PvP",
+        "Multiplayer",
+        "Competitive",
+        "Difficult",
+        "Shooter",
+        "Realistic",
+        "Co-op",
+        "First-Person",
+        "Moddable",
+        "Online Co-Op",
+        "Tactical",
+        "War",
+        "Military",
+        "Team-Based",
+        "eSports",
+        "Trading"
+    ],
+    "gameModes": [
+        "Multi-player"
+    ],
+    "publishingType": "Self-Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/developer/12/valve"
+        }
+    ]
+}

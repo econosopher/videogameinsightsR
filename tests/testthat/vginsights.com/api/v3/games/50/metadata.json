@@ -1,0 +1,66 @@
+{
+    "steamAppId": 50,
+    "name": "Half-Life: Opposing Force",
+    "price": 4.99,
+    "releaseDate": "1999-11-01",
+    "fullReleaseDate": null,
+    "genres": "Action",
+    "subgenres": "FPS, Puzzle, Shooter",
+    "languages": "English, French, German, Korean",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/50",
+    "steamUrl": "https://store.steampowered.com/app/50",
+    "themes": [
+        "Great Soundtrack",
+        "Sci-fi",
+        "Retro",
+        "Story Rich",
+        "Gore",
+        "Atmospheric"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": null,
+    "steamTags": [
+        "Action",
+        "Adventure",
+        "FPS",
+        "Great Soundtrack",
+        "Sci-fi",
+        "Retro",
+        "Singleplayer",
+        "Puzzle",
+        "Story Rich",
+        "Gore",
+        "Atmospheric",
+        "Aliens",
+        "Shooter",
+        "Silent Protagonist",
+        "Classic",
+        "Co-op",
+        "First-Person",
+        "Moddable",
+        "Military",
+        "1990's"
+    ],
+    "gameModes": [
+        "Single-player",
+        "Multi-player"
+    ],
+    "publishingType": "3rd Party Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 147,
+            "companyName": "Gearbox Software",
+            "vgiUrl": "https://vginsights.com/developer/147/gearbox-software"
+        }
+    ]
+}

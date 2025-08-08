@@ -1,0 +1,67 @@
+{
+    "steamAppId": 70,
+    "name": "Half-Life",
+    "price": 9.99,
+    "releaseDate": "1998-11-19",
+    "fullReleaseDate": null,
+    "genres": "Action",
+    "subgenres": "FPS, Shooter",
+    "languages": "English, French, German, Italian, Korean, Simplified Chinese, Spanish, Traditional Chinese",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/70",
+    "steamUrl": "https://store.steampowered.com/app/70",
+    "themes": [
+        "Sci-fi",
+        "Retro",
+        "PvP",
+        "Difficult",
+        "Story Rich",
+        "Gore",
+        "Atmospheric"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": null,
+    "steamTags": [
+        "Action",
+        "Adventure",
+        "FPS",
+        "Sci-fi",
+        "Retro",
+        "Singleplayer",
+        "PvP",
+        "Multiplayer",
+        "Difficult",
+        "Story Rich",
+        "Gore",
+        "Atmospheric",
+        "Aliens",
+        "Shooter",
+        "Silent Protagonist",
+        "Action-Adventure",
+        "Classic",
+        "First-Person",
+        "Moddable",
+        "1990's"
+    ],
+    "gameModes": [
+        "Single-player",
+        "Multi-player"
+    ],
+    "publishingType": "Self-Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/developer/12/valve"
+        }
+    ]
+}

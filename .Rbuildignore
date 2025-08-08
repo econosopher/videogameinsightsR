@@ -16,6 +16,7 @@
 ^inst/images$
 ^scripts$
 ^tests/testthat/fixtures$
+^tests/testthat/vginsights\.com$
 ^API_SPEC\.yaml$
 ^\.claude$
 ^API_MIGRATION\.md$

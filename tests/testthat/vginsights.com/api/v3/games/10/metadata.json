@@ -1,0 +1,60 @@
+{
+    "steamAppId": 10,
+    "name": "Counter-Strike",
+    "price": 9.99,
+    "releaseDate": "2000-11-01",
+    "fullReleaseDate": null,
+    "genres": "Action",
+    "subgenres": "FPS, Shooter, Survival, Tactical",
+    "languages": "English, French, German, Italian, Korean, Simplified Chinese, Spanish, Traditional Chinese",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/10",
+    "steamUrl": "https://store.steampowered.com/app/10",
+    "themes": [
+        "PvP"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": null,
+    "steamTags": [
+        "Strategy",
+        "Action",
+        "Survival",
+        "FPS",
+        "Old School",
+        "PvP",
+        "Multiplayer",
+        "Competitive",
+        "Score Attack",
+        "Shooter",
+        "Assassin",
+        "Classic",
+        "1980s",
+        "First-Person",
+        "Tactical",
+        "Military",
+        "Team-Based",
+        "eSports",
+        "1990's",
+        "Nostalgia"
+    ],
+    "gameModes": [
+        "Multi-player"
+    ],
+    "publishingType": "Self-Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/developer/12/valve"
+        }
+    ]
+}
