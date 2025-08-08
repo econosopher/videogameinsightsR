@@ -4,7 +4,7 @@
 test_that("make_api_request handles successful responses", {
   httptest2::with_mock_api({
     result <- tryCatch(
-      vgi_game_list(auth_token = Sys.getenv("VGI_AUTH_TOKEN")),
+      vgi_game_list(auth_token = "test"),
       error = function(e) NULL
     )
     if (!is.null(result)) {
@@ -25,7 +25,7 @@ test_that("make_api_request handles error responses correctly", {
 test_that("API functions handle empty results gracefully", {
   httptest2::with_mock_api({
     result <- tryCatch(
-      vgi_search_games("xyzxyzxyz123456789", auth_token = Sys.getenv("VGI_AUTH_TOKEN")),
+      vgi_search_games("xyzxyzxyz123456789", auth_token = "test"),
       error = function(e) NULL
     )
     if (!is.null(result)) {
@@ -40,7 +40,7 @@ test_that("Batch operations handle mixed results", {
     result <- tryCatch(
       vgi_game_metadata_batch(
         c(730, 99999999),
-        auth_token = Sys.getenv("VGI_AUTH_TOKEN")
+        auth_token = "test"
       ),
       error = function(e) NULL
     )
