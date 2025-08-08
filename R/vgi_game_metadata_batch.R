@@ -42,24 +42,13 @@ vgi_game_metadata_batch <- function(steam_app_ids,
     stop("steam_app_ids contains invalid values")
   }
   
-  # Make individual requests for each game
+  # Make individual requests for each game using the normalized single-game function
   results <- lapply(steam_app_ids, function(app_id) {
     tryCatch({
-      response <- make_api_request(
-        endpoint = paste0("games/", app_id, "/metadata"),
-        auth_token = auth_token,
-        headers = headers
-      )
-      res <- process_api_response(response)
-      # Ensure steamAppId exists
-      if (!"steamAppId" %in% names(res)) {
-        sid <- NA_integer_
-        if (is.list(response) && !is.null(response$steamAppId)) sid <- as.integer(response$steamAppId)
-        res$steamAppId <- sid %||% as.integer(app_id)
-      }
-      # Backward-compatible id column
-      if (!"id" %in% names(res)) res$id <- res$steamAppId
-      tibble::as_tibble(res)
+      row <- vgi_game_metadata(app_id, auth_token = auth_token, headers = headers)
+      # Ensure id column for backward compatibility
+      if (!"id" %in% names(row) && "steamAppId" %in% names(row)) row$id <- row$steamAppId
+      tibble::as_tibble(row)
     }, error = function(e) {
       warning(sprintf("Failed to fetch metadata for game %s: %s", app_id, e$message))
       NULL

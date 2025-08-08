@@ -138,6 +138,16 @@ The API returns different field names depending on the endpoint:
 - Units: `unitsSoldTotal` (total) and `unitsSoldChange` (daily change)
 - CCU: `peakConcurrent` and `avgConcurrent`
 
+### Known API Limitations (as of current release)
+
+- Rankings and some list endpoints often return only very old Steam App IDs (<1000), limiting “modern” coverage. Functions include warnings when results look stale.
+- Game metadata responses can be irregularly shaped; batch metadata calls fall back to per‑ID fetching with robust parsing.
+- Direct “top by CCU/DAU” endpoints are not available; `vgi_top_games()` uses proxy columns from rankings and best‑effort enrichment.
+- Server‑side search filters are unreliable; `vgi_search_games()` performs local filtering over the full game list.
+- Some analytics endpoints in older docs are absent or return 404; the package avoids calling non‑existent routes.
+
+If you encounter issues, set `options(vgi.verbose = TRUE)` to log requests, and consider enabling a GET cache via `options(vgi.request_cache_ttl = 3600)`.
+
 ## Rate Limiting and Batching
 
 To reduce stress on the API, the package supports configurable rate limiting:
