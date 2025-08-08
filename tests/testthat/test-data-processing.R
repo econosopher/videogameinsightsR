@@ -39,7 +39,7 @@ test_that("process_api_response ensures expected fields", {
 test_that("Rankings data is processed correctly", {
   httptest2::with_mock_api({
     result <- tryCatch(
-      vgi_game_rankings(auth_token = Sys.getenv("VGI_AUTH_TOKEN")),
+      vgi_game_rankings(auth_token = "test"),
       error = function(e) NULL
     )
     if (!is.null(result)) {
@@ -61,7 +61,7 @@ test_that("Rankings data is processed correctly", {
 test_that("Top games data includes names when available", {
   httptest2::with_mock_api({
     result <- tryCatch(
-      vgi_top_games("revenue", limit = 5, auth_token = Sys.getenv("VGI_AUTH_TOKEN")),
+      vgi_top_games("revenue", limit = 5, auth_token = "test"),
       error = function(e) NULL
     )
     if (!is.null(result)) {
@@ -95,7 +95,7 @@ test_that("Metadata batch processing handles large inputs", {
   httptest2::with_mock_api({
     ids <- c(730, 570, 440, 10, 20, 30, 40, 50, 60, 70, 80, 90)
     result <- tryCatch(
-      vgi_game_metadata_batch(ids, auth_token = Sys.getenv("VGI_AUTH_TOKEN")),
+      vgi_game_metadata_batch(ids, auth_token = "test"),
       error = function(e) NULL
     )
     if (!is.null(result)) {
