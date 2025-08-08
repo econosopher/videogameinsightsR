@@ -38,6 +38,7 @@ vgi_search_games <- function(query,
   # Validate limit
   if (!is.numeric(limit) || limit < 1 || limit > 1000) {
     if (is.numeric(limit) && limit < 1) stop("limit must be at least 1")
+    if (is.numeric(limit) && limit > 1000) stop("limit must be at most 1000")
     stop("limit must be between 1 and 1000")
   }
   
