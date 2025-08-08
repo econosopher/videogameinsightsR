@@ -302,12 +302,12 @@ test_that("vgi_insights_followers validates inputs correctly", {
 
 # Game Rankings Tests
 test_that("vgi_game_rankings returns data frame", {
-  # Function should work without parameters
-  # (but will fail without auth token)
-  expect_error(
-    vgi_game_rankings(auth_token = ""),
-    "Authentication token is required"
-  )
+  httptest2::with_mock_api({
+    expect_error(
+      vgi_game_rankings(auth_token = ""),
+      "Authentication token is required"
+    )
+  })
 })
 
 # Player Overlap Tests
@@ -338,12 +338,12 @@ test_that("vgi_player_overlap validates inputs correctly", {
 
 # Steam Market Data Tests
 test_that("vgi_steam_market_data works correctly", {
-  # Function should work without parameters
-  # (but will fail without auth token)
-  expect_error(
-    vgi_steam_market_data(auth_token = ""),
-    "Authentication token is required"
-  )
+  httptest2::with_mock_api({
+    expect_error(
+      vgi_steam_market_data(auth_token = ""),
+      "Authentication token is required"
+    )
+  })
 })
 
 # Historical Data Tests
@@ -418,12 +418,12 @@ test_that("new vgi_publisher_games validates inputs correctly", {
 
 # Game List Tests
 test_that("vgi_game_list works correctly", {
-  # Function should work without parameters
-  # (but will fail without auth token)
-  expect_error(
-    vgi_game_list(auth_token = ""),
-    "Authentication token is required"
-  )
+  httptest2::with_mock_api({
+    expect_error(
+      vgi_game_list(auth_token = ""),
+      "Authentication token is required"
+    )
+  })
 })
 
 # Developer List Tests

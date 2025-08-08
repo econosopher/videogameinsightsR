@@ -33,6 +33,7 @@ Imports:
 Suggests: 
     ggplot2,
     gt,
+    httptest2,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
