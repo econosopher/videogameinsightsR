@@ -98,8 +98,13 @@ get_user_agent <- function() {
 
 # Get authentication token
 get_auth_token <- function(auth_token = NULL) {
-  if (!is.null(auth_token) && auth_token != "") {
-    return(auth_token)
+  # If explicitly provided, empty string is treated as missing and errors
+  if (!is.null(auth_token)) {
+    if (nzchar(auth_token)) return(auth_token)
+    stop(
+      "Authentication token is required. ",
+      "Set VGI_AUTH_TOKEN environment variable or pass auth_token parameter."
+    )
   }
   
   token <- Sys.getenv("VGI_AUTH_TOKEN")
