@@ -1,0 +1,63 @@
+{
+    "steamAppId": 20,
+    "name": "Team Fortress Classic",
+    "price": 4.99,
+    "releaseDate": "1999-04-01",
+    "fullReleaseDate": null,
+    "genres": "Action",
+    "subgenres": "FPS, Shooter",
+    "languages": "English, French, German, Italian, Korean, Russian, Simplified Chinese, Spanish, Traditional Chinese",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/20",
+    "steamUrl": "https://store.steampowered.com/app/20",
+    "themes": [
+        "Retro",
+        "Fast-Paced",
+        "Violent",
+        "Funny"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": null,
+    "steamTags": [
+        "Action",
+        "FPS",
+        "Old School",
+        "Retro",
+        "Fast-Paced",
+        "Multiplayer",
+        "Competitive",
+        "Violent",
+        "Funny",
+        "Shooter",
+        "Classic",
+        "Co-op",
+        "First-Person",
+        "Online Co-Op",
+        "Remake",
+        "Team-Based",
+        "1990's",
+        "Mod",
+        "Hero Shooter",
+        "Class-Based"
+    ],
+    "gameModes": [
+        "Multi-player"
+    ],
+    "publishingType": "Self-Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/developer/12/valve"
+        }
+    ]
+}

@@ -1,0 +1,61 @@
+{
+    "steamAppId": 570,
+    "name": "Dota 2",
+    "price": 0,
+    "releaseDate": "2013-07-09",
+    "fullReleaseDate": null,
+    "genres": "Action, Strategy, Free to Play",
+    "subgenres": "Action RPG, RTS, Tower Defense",
+    "languages": "Brazilian, Bulgarian, Czech, Danish, Dutch, English, Finnish, French, German, Greek, Hungarian, Italian, Japanese, Korean, Latam, Norwegian, Polish, Portuguese, Romanian, Russian, Simplified Chinese, Spanish, Swedish, Thai, Traditional Chinese, Turkish, Ukrainian, Vietnamese",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/570",
+    "steamUrl": "https://store.steampowered.com/app/570",
+    "themes": [
+        "Fantasy",
+        "PvP",
+        "Difficult",
+        "Replay Value"
+    ],
+    "character": null,
+    "artStyles": null,
+    "steamTags": [
+        "Strategy",
+        "Action",
+        "Simulation",
+        "Free to Play",
+        "RPG",
+        "Fantasy",
+        "PvP",
+        "Multiplayer",
+        "Competitive",
+        "Difficult",
+        "Replay Value",
+        "RTS",
+        "Action RPG",
+        "Co-op",
+        "MOBA",
+        "Online Co-Op",
+        "Character Customization",
+        "Tower Defense",
+        "Team-Based",
+        "eSports"
+    ],
+    "gameModes": [
+        "Multi-player"
+    ],
+    "publishingType": "Self-Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/developer/12/valve"
+        }
+    ]
+}

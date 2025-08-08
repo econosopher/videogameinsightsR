@@ -1,0 +1,66 @@
+{
+    "steamAppId": 60,
+    "name": "Ricochet",
+    "price": 4.99,
+    "releaseDate": "2000-11-01",
+    "fullReleaseDate": null,
+    "genres": "Action",
+    "subgenres": "FPS, Platformer, Shooter",
+    "languages": "English, French, German, Italian, Korean, Russian, Simplified Chinese, Spanish, Traditional Chinese",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/60",
+    "steamUrl": "https://store.steampowered.com/app/60",
+    "themes": [
+        "Space",
+        "Great Soundtrack",
+        "Sci-fi",
+        "Retro",
+        "Psychological Horror"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": [
+        "3D"
+    ],
+    "steamTags": [
+        "Action",
+        "FPS",
+        "Space",
+        "Great Soundtrack",
+        "Old School",
+        "Sci-fi",
+        "Retro",
+        "Multiplayer",
+        "Competitive",
+        "Platformer",
+        "Sports",
+        "3D",
+        "Shooter",
+        "Classic",
+        "Psychological Horror",
+        "Memes",
+        "First-Person",
+        "Cyberpunk",
+        "Conspiracy",
+        "Cult Classic"
+    ],
+    "gameModes": [
+        "Multi-player"
+    ],
+    "publishingType": "Self-Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/developer/12/valve"
+        }
+    ]
+}

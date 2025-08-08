@@ -1,0 +1,61 @@
+{
+    "steamAppId": 40,
+    "name": "Deathmatch Classic",
+    "price": 4.99,
+    "releaseDate": "2001-06-01",
+    "fullReleaseDate": null,
+    "genres": "Action",
+    "subgenres": "FPS, Shooter",
+    "languages": "English, French, German, Italian, Korean, Russian, Simplified Chinese, Spanish, Traditional Chinese",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/40",
+    "steamUrl": "https://store.steampowered.com/app/40",
+    "themes": [
+        "Sci-fi",
+        "Retro",
+        "Fast-Paced",
+        "Difficult",
+        "Gore"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": null,
+    "steamTags": [
+        "Action",
+        "FPS",
+        "Old School",
+        "Sci-fi",
+        "Retro",
+        "Singleplayer",
+        "Fast-Paced",
+        "Multiplayer",
+        "Competitive",
+        "Difficult",
+        "Gore",
+        "Shooter",
+        "Classic",
+        "Co-op",
+        "First-Person",
+        "Arena Shooter",
+        "1990's"
+    ],
+    "gameModes": [
+        "Multi-player"
+    ],
+    "publishingType": "Self-Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/developer/12/valve"
+        }
+    ]
+}
