@@ -57,6 +57,13 @@ try({
   invisible(vgi_game_metadata(steam_app_id = 730, auth_token = token))
 }, silent = TRUE)
 
+# Also capture metadata for IDs used in tests
+for (id in c(570, 440, 10, 20, 30, 40, 50, 60, 70, 80, 90, 130)) {
+  try({
+    invisible(vgi_game_metadata(steam_app_id = id, auth_token = token))
+  }, silent = TRUE)
+}
+
 # 4) Batch metadata with a mix of valid/invalid IDs
 try({
   invisible(vgi_game_metadata_batch(c(730, 99999999), auth_token = token))

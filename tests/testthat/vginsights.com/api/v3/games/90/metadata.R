@@ -1,0 +1,13 @@
+structure(list(method = "GET", url = "https://vginsights.com/api/v3/games/90/metadata", 
+    status_code = 404L, headers = structure(list(date = "Fri, 08 Aug 2025 02:03:41 GMT", 
+        `content-type` = "application/json; charset=utf-8", server = "cloudflare", 
+        vary = "Accept-Encoding", vary = "Origin, Accept-Encoding", 
+        `access-control-allow-credentials` = "true", `x-ratelimit-limit` = "25", 
+        `x-ratelimit-remaining` = "20", `x-ratelimit-reset` = "1754618623", 
+        etag = "W/\"5c-tpAYXwL88VIJAovmLDp3lPuhGyw\"", `content-encoding` = "gzip", 
+        `cf-cache-status` = "DYNAMIC", nel = "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}", 
+        `report-to` = "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=5dK%2B3AZ1Q%2Fp4hOLVeCbafvTDzsoTZYmcsD2J%2BQMMGG96DjTQjP5x1mBDviSM1APkEogfO%2BR6knzQlUCcU97DkUzEMBehRWW81j2j83zh\"}]}", 
+        `cf-ray` = "96bb70530885b79a-ARN", `alt-svc` = "h3=\":443\"; ma=86400"), class = "httr2_headers"), 
+    body = charToRaw("{\"message\":\"Game not found\",\"details\":{\"reason\":\"Game with Steam app ID 90 was not found.\"}}"), 
+    timing = c(redirect = 0, namelookup = 0, connect = 0, pretransfer = 9.9e-05, 
+    starttransfer = 0.050798, total = 0.050894), cache = new.env(parent = emptyenv())), class = "httr2_response")

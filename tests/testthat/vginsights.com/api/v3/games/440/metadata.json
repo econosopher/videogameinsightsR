@@ -1,0 +1,64 @@
+{
+    "steamAppId": 440,
+    "name": "Team Fortress 2",
+    "price": 0,
+    "releaseDate": "2007-10-10",
+    "fullReleaseDate": null,
+    "genres": "Action, Free to Play",
+    "subgenres": "Crafting, FPS, Shooter, Tactical",
+    "languages": "Brazilian, Bulgarian, Czech, Danish, Dutch, English, Finnish, French, German, Greek, Hungarian, Italian, Japanese, Korean, Latam, Norwegian, Polish, Portuguese, Romanian, Russian, Simplified Chinese, Spanish, Swedish, Thai, Traditional Chinese, Turkish, Ukrainian",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/440",
+    "steamUrl": "https://store.steampowered.com/app/440",
+    "themes": [
+        "Comedy",
+        "Funny"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": [
+        "Cartoony",
+        "Cartoon"
+    ],
+    "steamTags": [
+        "Action",
+        "FPS",
+        "Comedy",
+        "Free to Play",
+        "Multiplayer",
+        "Competitive",
+        "Robots",
+        "Funny",
+        "Cartoony",
+        "Shooter",
+        "Co-op",
+        "First-Person",
+        "Crafting",
+        "Cartoon",
+        "Online Co-Op",
+        "Tactical",
+        "Team-Based",
+        "Trading",
+        "Hero Shooter",
+        "Class-Based"
+    ],
+    "gameModes": [
+        "Multi-player"
+    ],
+    "publishingType": "Self-Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/developer/12/valve"
+        }
+    ]
+}

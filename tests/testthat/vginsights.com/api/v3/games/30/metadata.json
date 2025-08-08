@@ -1,0 +1,62 @@
+{
+    "steamAppId": 30,
+    "name": "Day of Defeat",
+    "price": 4.99,
+    "releaseDate": "2003-05-01",
+    "fullReleaseDate": null,
+    "genres": "Action",
+    "subgenres": "FPS, Shooter, Tactical",
+    "languages": "English, French, German, Italian, Spanish",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/30",
+    "steamUrl": "https://store.steampowered.com/app/30",
+    "themes": [
+        "Retro",
+        "Difficult",
+        "Violent"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": null,
+    "steamTags": [
+        "Strategy",
+        "Action",
+        "FPS",
+        "Old School",
+        "Retro",
+        "Singleplayer",
+        "Multiplayer",
+        "Difficult",
+        "Violent",
+        "Shooter",
+        "Classic",
+        "Co-op",
+        "First-Person",
+        "Tactical",
+        "World War II",
+        "War",
+        "Historical",
+        "Military",
+        "Team-Based",
+        "Class-Based"
+    ],
+    "gameModes": [
+        "Multi-player"
+    ],
+    "publishingType": "Self-Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/developer/12/valve"
+        }
+    ]
+}
