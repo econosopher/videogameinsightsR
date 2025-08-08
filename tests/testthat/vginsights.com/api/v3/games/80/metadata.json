@@ -1,0 +1,63 @@
+{
+    "steamAppId": 80,
+    "name": "Counter-Strike: Condition Zero",
+    "price": 9.99,
+    "releaseDate": "2004-03-01",
+    "fullReleaseDate": null,
+    "genres": "Action",
+    "subgenres": "FPS, Shooter, Survival, Tactical",
+    "languages": "English, French, German, Italian, Korean, Simplified Chinese, Spanish, Traditional Chinese",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/80",
+    "steamUrl": "https://store.steampowered.com/app/80",
+    "themes": [
+        "Atmospheric",
+        "Open World",
+        "Dark"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": null,
+    "steamTags": [
+        "Strategy",
+        "Action",
+        "Adventure",
+        "Simulation",
+        "Survival",
+        "FPS",
+        "Old School",
+        "Singleplayer",
+        "Multiplayer",
+        "Competitive",
+        "Atmospheric",
+        "Shooter",
+        "Open World",
+        "Classic",
+        "First-Person",
+        "Dark",
+        "Online Co-Op",
+        "Tactical",
+        "Military",
+        "Team-Based"
+    ],
+    "gameModes": [
+        "Single-player",
+        "Multi-player"
+    ],
+    "publishingType": "Self-Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/developer/12/valve"
+        }
+    ]
+}

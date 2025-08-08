@@ -204,6 +204,12 @@ You can control behavior via options or environment variables:
 
 This package is under active development. If you encounter any issues or have suggestions, please file an issue on [GitHub](https://github.com/econosopher/videogameinsightsR).
 
+## Tests and Fixtures
+
+- Deterministic tests use `httptest2` fixtures recorded under `tests/testthat/vginsights.com/`.
+- To re-record fixtures, run `Rscript dev/record_fixtures.R` with a valid `VGI_AUTH_TOKEN` available.
+- Do not commit secrets; fixtures only contain request/response bodies and normalized URLs.
+
 ## License
 
 MIT License

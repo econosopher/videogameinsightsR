@@ -1,0 +1,67 @@
+{
+    "steamAppId": 130,
+    "name": "Half-Life: Blue Shift",
+    "price": 4.99,
+    "releaseDate": "2001-06-01",
+    "fullReleaseDate": null,
+    "genres": "Action",
+    "subgenres": "FPS, Puzzle, Shooter",
+    "languages": "English, French, German",
+    "publisherClassification": "AAA",
+    "vgiUrl": "https://vginsights.com/game/130",
+    "steamUrl": "https://store.steampowered.com/app/130",
+    "themes": [
+        "Great Soundtrack",
+        "Sci-fi",
+        "Retro",
+        "Story Rich",
+        "Violent",
+        "Atmospheric",
+        "Short",
+        "Zombies"
+    ],
+    "character": [
+        "First-Person"
+    ],
+    "artStyles": null,
+    "steamTags": [
+        "Action",
+        "Adventure",
+        "FPS",
+        "Great Soundtrack",
+        "Sci-fi",
+        "Retro",
+        "Singleplayer",
+        "Puzzle",
+        "Story Rich",
+        "Violent",
+        "Atmospheric",
+        "Aliens",
+        "Shooter",
+        "Silent Protagonist",
+        "Classic",
+        "Short",
+        "First-Person",
+        "Zombies",
+        "Moddable",
+        "1990's"
+    ],
+    "gameModes": [
+        "Single-player"
+    ],
+    "publishingType": "3rd Party Published",
+    "publishers": [
+        {
+            "companyId": 12,
+            "companyName": "Valve",
+            "vgiUrl": "https://vginsights.com/publisher/12/valve"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 147,
+            "companyName": "Gearbox Software",
+            "vgiUrl": "https://vginsights.com/developer/147/gearbox-software"
+        }
+    ]
+}
