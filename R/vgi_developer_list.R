@@ -60,6 +60,9 @@ vgi_developer_list <- function(search = NULL,
                               auth_token = Sys.getenv("VGI_AUTH_TOKEN"), 
                               headers = list()) {
   
+  # Validate authentication early to satisfy test expectations
+  get_auth_token(auth_token)
+
   # Require the search parameter as the primary criterion
   if (is.null(search)) {
     stop("The 'search' parameter is required. You must specify a developer name or search term to find developers. The 'min_games' and 'limit' parameters are optional filters.")

@@ -86,21 +86,67 @@ vgi_insights_dau_mau <- function(steam_app_id,
   )
   
   # Process the playerHistory array if it exists
-  if (!is.null(result$playerHistory) && length(result$playerHistory) > 0) {
-    # Convert to data frame
-    data_df <- do.call(rbind, lapply(result$playerHistory, function(x) {
-      data.frame(
-        date = as.Date(x$date),
-        dau = as.integer(x$dau %||% NA),
-        mau = as.integer(x$mau %||% NA),
+  ph <- result$playerHistory
+  if (!is.null(ph) && length(ph) > 0) {
+    data_df <- NULL
+    # Case 1: already a data.frame or tibble
+    if (is.data.frame(ph)) {
+      df <- ph
+      # Normalize column names if needed
+      if (!"date" %in% names(df) && "day" %in% names(df)) df$date <- df$day
+      if (!"dau" %in% names(df)) df$dau <- df$dau %||% NA
+      if (!"mau" %in% names(df)) df$mau <- df$mau %||% NA
+      # Coerce types
+      df$date <- tryCatch(as.Date(df$date), error = function(e) as.Date(character()))
+      df$dau <- suppressWarnings(as.integer(df$dau))
+      df$mau <- suppressWarnings(as.integer(df$mau))
+      data_df <- df[, c("date", "dau", "mau")]
+    } else if (is.list(ph)) {
+      # Case 2: list of entries; each entry may be a list or atomic
+      rows <- lapply(ph, function(x) {
+        if (is.list(x)) {
+          date_val <- x$date %||% x$day %||% NA
+          data.frame(
+            date = tryCatch(as.Date(date_val), error = function(e) as.Date(NA_character_)),
+            dau = suppressWarnings(as.integer(x$dau %||% NA)),
+            mau = suppressWarnings(as.integer(x$mau %||% NA)),
+            stringsAsFactors = FALSE
+          )
+        } else if (is.atomic(x)) {
+          # If atomic, assume it's a date; DAU/MAU unknown
+          data.frame(
+            date = tryCatch(as.Date(x), error = function(e) as.Date(NA_character_)),
+            dau = as.integer(NA),
+            mau = as.integer(NA),
+            stringsAsFactors = FALSE
+          )
+        } else {
+          NULL
+        }
+      })
+      rows <- rows[!sapply(rows, is.null)]
+      if (length(rows) > 0) data_df <- do.call(rbind, rows)
+    } else if (is.atomic(ph)) {
+      # Case 3: atomic vector of dates
+      data_df <- data.frame(
+        date = tryCatch(as.Date(ph), error = function(e) as.Date(character())),
+        dau = as.integer(NA),
+        mau = as.integer(NA),
         stringsAsFactors = FALSE
       )
-    }))
-    
-    # Sort by date
-    data_df <- data_df[order(data_df$date), ]
-    
-    result$playerHistory <- data_df
+    }
+
+    if (!is.null(data_df)) {
+      data_df <- data_df[order(data_df$date), ]
+      result$playerHistory <- data_df
+    } else {
+      result$playerHistory <- data.frame(
+        date = as.Date(character()),
+        dau = integer(),
+        mau = integer(),
+        stringsAsFactors = FALSE
+      )
+    }
   } else {
     # Return empty data frame with correct structure
     result$playerHistory <- data.frame(
