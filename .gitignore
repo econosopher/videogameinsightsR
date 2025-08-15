@@ -11,3 +11,6 @@ API_SPEC.yaml
 outputs/
 .cache/
 Rplots.pdf
+# Claude configuration
+CLAUDE.md
+.claude/
