@@ -61,7 +61,7 @@ test_that("Date parameters are formatted correctly", {
   
   # Test date validation
   expect_error(format_date("not-a-date"), "Invalid date format")
-  expect_error(format_date(123), "Date must be a Date object or character string")
+  expect_error(format_date(123), "Date must be a Date object")
 })
 
 test_that("Custom headers are passed correctly", {

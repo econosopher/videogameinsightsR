@@ -68,42 +68,24 @@ vgi_insights_wishlists <- function(steam_app_id,
                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                  headers = list()) {
   
-  # Validate inputs
   validate_numeric(steam_app_id, "steam_app_id")
   
-  # Make API request
-  result <- make_api_request(
-    endpoint = paste0("interest-level/wishlists/games/", steam_app_id),
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
-  )
+  hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
   
-  # Process the wishlistChanges array if it exists
-  if (!is.null(result$wishlistChanges) && length(result$wishlistChanges) > 0) {
-    # Convert to data frame
-    changes_df <- do.call(rbind, lapply(result$wishlistChanges, function(x) {
-      data.frame(
-        date = as.Date(x$date),
-        wishlistsTotal = as.integer(x$wishlistsTotal %||% NA),
-        wishlistsChange = as.integer(x$wishlistsChange %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by date
-    changes_df <- changes_df[order(changes_df$date), ]
-    
-    result$wishlistChanges <- changes_df
+  wl <- hist$wishlists
+  if (is.null(wl) || nrow(wl) == 0) {
+    changes_df <- data.frame(
+      date = as.Date(character()), wishlistsTotal = integer(),
+      wishlistsChange = integer(), stringsAsFactors = FALSE
+    )
   } else {
-    # Return empty data frame with correct structure
-    result$wishlistChanges <- data.frame(
-      date = as.Date(character()),
-      wishlistsTotal = integer(),
-      wishlistsChange = integer(),
+    changes_df <- data.frame(
+      date = as.Date(wl$date),
+      wishlistsTotal = as.integer(wl$wishlists),
+      wishlistsChange = c(NA_integer_, diff(as.integer(wl$wishlists))),
       stringsAsFactors = FALSE
     )
   }
   
-  return(result)
+  list(steamAppId = as.integer(steam_app_id), wishlistChanges = changes_df)
 }

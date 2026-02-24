@@ -81,18 +81,19 @@ vgi_top_countries <- function(steam_app_id,
   )
 
   rows <- .vgi_unwrap_results(result)
+  empty_countries <- data.frame(
+    country = character(), countryName = character(),
+    playerCount = integer(), percentage = numeric(), rank = integer(),
+    stringsAsFactors = FALSE
+  )
   if (!is.data.frame(rows) || nrow(rows) == 0 || !"topCountries" %in% names(rows)) {
-    return(data.frame(
-      country = character(),
-      countryName = character(),
-      playerCount = integer(),
-      percentage = numeric(),
-      rank = integer(),
-      stringsAsFactors = FALSE
-    ))
+    return(empty_countries)
   }
 
-  top_countries <- rows$topCountries[[1]]
+  row <- .vgi_steam_row(rows, steam_app_id)
+  if (is.null(row) || !"topCountries" %in% names(row)) return(empty_countries)
+
+  top_countries <- row$topCountries[[1]]
   if (!is.data.frame(top_countries) || nrow(top_countries) == 0) {
     return(data.frame(
       country = character(),

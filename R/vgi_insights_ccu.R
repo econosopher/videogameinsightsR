@@ -41,44 +41,26 @@ vgi_insights_ccu <- function(steam_app_id,
                            auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                            headers = list()) {
   
-  # Validate inputs
   validate_numeric(steam_app_id, "steam_app_id")
   
-  # Make API request
-  result <- make_api_request(
-    endpoint = paste0("engagement/concurrent-players/games/", steam_app_id),
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
-  )
+  hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
   
-  # Process the playerHistory array if it exists
-  if (!is.null(result$playerHistory) && length(result$playerHistory) > 0) {
-    # Convert to data frame
-    history_df <- do.call(rbind, lapply(result$playerHistory, function(x) {
-      data.frame(
-        date = as.Date(x$date),
-        avg = as.numeric(x$avg %||% NA),
-        median = as.numeric(x$median %||% NA),
-        max = as.numeric(x$max %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by date
-    history_df <- history_df[order(history_df$date), ]
-    
-    result$playerHistory <- history_df
+  ccu <- hist$concurrentPlayers
+  if (is.null(ccu) || nrow(ccu) == 0) {
+    history_df <- data.frame(
+      date = as.Date(character()), avg = numeric(),
+      median = numeric(), max = numeric(),
+      stringsAsFactors = FALSE
+    )
   } else {
-    # Return empty data frame with correct structure
-    result$playerHistory <- data.frame(
-      date = as.Date(character()),
-      avg = numeric(),
-      median = numeric(),
-      max = numeric(),
+    history_df <- data.frame(
+      date = as.Date(ccu$date),
+      avg = as.numeric(ccu$ccuAvg),
+      median = as.numeric(ccu$ccuMedian),
+      max = as.numeric(ccu$ccuMax),
       stringsAsFactors = FALSE
     )
   }
   
-  return(result)
+  list(steamAppId = as.integer(steam_app_id), playerHistory = history_df)
 }

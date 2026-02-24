@@ -90,10 +90,9 @@ vgi_player_overlap <- function(steam_app_id,
   validate_numeric(limit, "limit", min_val = 1)
   validate_numeric(offset, "offset", min_val = 0)
   
-  # Build query parameters
   query_params <- list(
-    limit = limit,
-    steamAppId = as.character(steam_app_id)
+    limit = 1,
+    steamAppIds = as.character(steam_app_id)
   )
   if (!is.null(offset) && offset > 0) query_params$cursor <- as.integer(offset)
   
@@ -126,7 +125,10 @@ vgi_player_overlap <- function(steam_app_id,
     return(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps))
   }
 
-  row <- rows[1, , drop = FALSE]
+  row <- .vgi_steam_row(rows, steam_app_id)
+  if (is.null(row) || !"playerOverlaps" %in% names(row)) {
+    return(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps))
+  }
   overlaps <- row$playerOverlaps[[1]]
   if (!is.data.frame(overlaps) || nrow(overlaps) == 0) {
     return(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps))
@@ -147,6 +149,10 @@ vgi_player_overlap <- function(steam_app_id,
     stringsAsFactors = FALSE
   )
   overlaps_df <- overlaps_df[order(-overlaps_df$unitsSoldOverlapPercentage), , drop = FALSE]
+  
+  if (!is.null(limit) && nrow(overlaps_df) > limit) {
+    overlaps_df <- overlaps_df[seq_len(limit), , drop = FALSE]
+  }
 
   list(
     steamAppId = as.integer(steam_app_id),

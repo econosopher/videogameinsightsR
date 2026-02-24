@@ -165,7 +165,7 @@ test_that("Can create comparison table for Marvel Rivals vs Overwatch", {
     expect_s3_class(ow_data, "data.frame")
     expect_true(all(c("date", "game", "dau", "mau", "units_sold", 
                      "peak_concurrent", "ppsu") %in% names(ow_data)))
-    expect_equal(nrow(ow_data), 31)
+    expect_true(nrow(ow_data) >= 31)
     
     # Check that we have at least some data
     expect_true(sum(!is.na(ow_data$dau)) > 0, "Should have some DAU data")

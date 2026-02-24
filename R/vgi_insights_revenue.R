@@ -37,28 +37,30 @@ vgi_insights_revenue <- function(steam_app_id,
                                 auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                 headers = list()) {
   
-  # Validate inputs
   if (is.null(steam_app_id) || steam_app_id == "") {
     stop("steam_app_id is required")
   }
   
-  # Convert to character if numeric
   steam_app_id <- as.character(steam_app_id)
+  validate_numeric(steam_app_id, "steam_app_id")
   
-  # Make API request to the new endpoint
-  response <- make_api_request(
-    endpoint = paste0("commercial-performance/revenue/games/", steam_app_id),
-    auth_token = auth_token,
-    headers = headers
-  )
+  hist <- vgi_historical_data(as.integer(steam_app_id),
+                               auth_token = auth_token, headers = headers)
   
-  # Process response
-  result <- process_api_response(response)
-  
-  # Convert date strings to Date objects if present
-  if (!is.null(result) && "date" %in% names(result)) {
-    result$date <- as.Date(result$date)
+  rev <- hist$revenue
+  if (is.null(rev) || nrow(rev) == 0) {
+    return(data.frame(
+      steamAppId = integer(), date = as.Date(character()),
+      revenueChange = numeric(), revenueTotal = numeric(),
+      stringsAsFactors = FALSE
+    ))
   }
   
-  return(result)
+  data.frame(
+    steamAppId = as.integer(steam_app_id),
+    date = as.Date(rev$date),
+    revenueChange = as.numeric(rev$dailyRevenue),
+    revenueTotal = as.numeric(rev$revenue),
+    stringsAsFactors = FALSE
+  )
 }

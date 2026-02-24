@@ -315,12 +315,14 @@ format_date <- function(date) {
     stop("Date parameter is required")
   }
   
-  # If already a character, try to parse it
   if (is.character(date)) {
-    date <- as.Date(date)
+    parsed <- tryCatch(as.Date(date), error = function(e) NA)
+    if (is.na(parsed)) {
+      stop("Invalid date format. Please use YYYY-MM-DD format.")
+    }
+    return(format(parsed, "%Y-%m-%d"))
   }
   
-  # If it's a Date object, format it
   if (inherits(date, "Date")) {
     return(format(date, "%Y-%m-%d"))
   }
@@ -391,6 +393,19 @@ warn_if_stale_ids <- function(steam_app_ids) {
     return(result$results)
   }
   result
+}
+
+#' Filter unwrapped multi-platform results to the steam row matching a
+#' given Steam App ID. Returns a single-row data frame or NULL.
+#' @noRd
+.vgi_steam_row <- function(rows, steam_app_id) {
+  if (!is.data.frame(rows) || nrow(rows) == 0) return(NULL)
+  if ("platform" %in% names(rows) && "externalId" %in% names(rows)) {
+    rows <- rows[rows$platform == "steam" &
+                   as.integer(rows$externalId) == as.integer(steam_app_id), , drop = FALSE]
+  }
+  if (nrow(rows) == 0) return(NULL)
+  rows[1, , drop = FALSE]
 }
 
 .vgi_to_csv_ids <- function(ids) {

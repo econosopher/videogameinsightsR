@@ -74,56 +74,26 @@ vgi_insights_dau_mau <- function(steam_app_id,
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                headers = list()) {
   
-  # Validate inputs
   validate_numeric(steam_app_id, "steam_app_id")
 
-  # v4 no longer has per-game DAU history endpoint; derive latest available
-  # snapshot from historical-data while keeping a backwards-compatible shape.
-  candidate_dates <- as.character(Sys.Date() - c(7:14, 6:1))
-  snapshot <- NULL
-
-  for (d in candidate_dates) {
-    rows <- tryCatch(
-      .vgi_historical_results(
-        date = d,
-        steam_app_ids = as.integer(steam_app_id),
-        limit = 20,
-        auth_token = auth_token,
-        headers = headers
-      ),
-      error = function(e) NULL
-    )
-    if (!is.data.frame(rows) || nrow(rows) == 0) next
-
-    steam_rows <- rows
-    if ("platform" %in% names(steam_rows)) {
-      steam_rows <- steam_rows[steam_rows$platform == "steam", , drop = FALSE]
-    }
-    if ("externalId" %in% names(steam_rows)) {
-      steam_rows <- steam_rows[as.integer(steam_rows$externalId) == as.integer(steam_app_id), , drop = FALSE]
-    }
-    if (nrow(steam_rows) == 0) next
-
-    snapshot <- steam_rows[1, , drop = FALSE]
-    break
-  }
-
-  if (is.null(snapshot)) {
+  hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
+  
+  ap <- hist$activePlayers
+  if (is.null(ap) || nrow(ap) == 0) {
     player_history <- data.frame(
-      date = as.Date(character()),
-      dau = integer(),
-      mau = integer(),
+      date = as.Date(character()), dau = integer(), mau = integer(),
       stringsAsFactors = FALSE
     )
   } else {
     player_history <- data.frame(
-      date = as.Date(snapshot$date %||% NA_character_),
-      dau = as.integer(snapshot$dau %||% NA),
-      mau = as.integer(snapshot$mau %||% NA),
+      date = as.Date(ap$date),
+      dau = as.integer(ap$dau),
+      mau = as.integer(ap$mau),
       stringsAsFactors = FALSE
     )
+    player_history <- player_history[order(player_history$date), , drop = FALSE]
   }
-
+  
   list(
     steamAppId = as.integer(steam_app_id),
     playerHistory = player_history

@@ -43,46 +43,24 @@ vgi_insights_units <- function(steam_app_id,
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                headers = list()) {
   
-  # Validate inputs
   validate_numeric(steam_app_id, "steam_app_id")
   
-  # Make API request to the new endpoint
-  result <- make_api_request(
-    endpoint = paste0("commercial-performance/units-sold/games/", steam_app_id),
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
+  hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
+  
+  us <- hist$unitsSold
+  if (is.null(us) || nrow(us) == 0) {
+    return(data.frame(
+      steamAppId = integer(), date = as.Date(character()),
+      unitsSoldChange = integer(), unitsSoldTotal = integer(),
+      stringsAsFactors = FALSE
+    ))
+  }
+  
+  data.frame(
+    steamAppId = as.integer(steam_app_id),
+    date = as.Date(us$date),
+    unitsSoldChange = as.integer(us$dailyUnits),
+    unitsSoldTotal = as.integer(us$unitsSold),
+    stringsAsFactors = FALSE
   )
-  
-  # Convert date strings to Date objects if present
-  if (!is.null(result) && length(result) > 0 && is.data.frame(result)) {
-    if ("date" %in% names(result)) {
-      result$date <- as.Date(result$date)
-    }
-  }
-  
-  return(result)
-}
-
-#' Format date for API
-#' 
-#' @param date Date or character string to format
-#' @return Character string in YYYY-MM-DD format
-#' @keywords internal
-format_date <- function(date) {
-  if (is.character(date)) {
-    # Try to parse the date
-    parsed <- tryCatch(
-      as.Date(date),
-      error = function(e) NA
-    )
-    if (is.na(parsed)) {
-      stop("Invalid date format. Please use YYYY-MM-DD format.")
-    }
-    return(format(parsed, "%Y-%m-%d"))
-  } else if (inherits(date, "Date")) {
-    return(format(date, "%Y-%m-%d"))
-  } else {
-    stop("Date must be a Date object or character string in YYYY-MM-DD format.")
-  }
 }

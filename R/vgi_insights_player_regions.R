@@ -80,19 +80,21 @@ vgi_insights_player_regions <- function(steam_app_id,
   )
 
   rows <- .vgi_unwrap_results(result)
+  empty_regions <- list(
+    steamAppId = as.integer(steam_app_id),
+    regions = data.frame(
+      regionName = character(), rank = integer(), percentage = numeric(),
+      stringsAsFactors = FALSE
+    )
+  )
   if (!is.data.frame(rows) || nrow(rows) == 0 || !"topRegions" %in% names(rows)) {
-    return(list(
-      steamAppId = as.integer(steam_app_id),
-      regions = data.frame(
-        regionName = character(),
-        rank = integer(),
-        percentage = numeric(),
-        stringsAsFactors = FALSE
-      )
-    ))
+    return(empty_regions)
   }
 
-  regions_df <- rows$topRegions[[1]]
+  row <- .vgi_steam_row(rows, steam_app_id)
+  if (is.null(row) || !"topRegions" %in% names(row)) return(empty_regions)
+
+  regions_df <- row$topRegions[[1]]
   if (!is.data.frame(regions_df) || nrow(regions_df) == 0) {
     regions_df <- data.frame(
       regionName = character(),

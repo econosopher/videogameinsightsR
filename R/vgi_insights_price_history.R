@@ -63,83 +63,69 @@ vgi_insights_price_history <- function(steam_app_id,
                                      auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                      headers = list()) {
   
-  # Validate inputs
   validate_numeric(steam_app_id, "steam_app_id")
-  
-  # Build endpoint based on whether currency is specified
-  if (!is.null(currency)) {
-    if (!is.character(currency) || nchar(currency) == 0) {
-      stop("currency must be a non-empty character string")
-    }
-    endpoint <- paste0("commercial-performance/price-history/games/", 
-                       steam_app_id, "/", currency)
-  } else {
-    endpoint <- paste0("commercial-performance/price-history/games/", 
-                       steam_app_id)
+  if (!is.null(currency) && (!is.character(currency) || nchar(currency) == 0)) {
+    stop("currency must be a non-empty character string")
   }
   
-  # Make API request
-  result <- make_api_request(
-    endpoint = endpoint,
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
+  hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
+  
+  empty_changes <- data.frame(
+    priceInitial = numeric(), priceFinal = numeric(),
+    firstDate = as.Date(character()), lastDate = as.Date(character()),
+    stringsAsFactors = FALSE
   )
   
-  # Process the response based on the endpoint type
-  if (!is.null(currency)) {
-    # Single currency response - process priceChanges array
-    if (!is.null(result$priceChanges) && length(result$priceChanges) > 0) {
-      # Convert to data frame
-      price_df <- do.call(rbind, lapply(result$priceChanges, function(x) {
-        data.frame(
-          priceInitial = as.numeric(x$priceInitial),
-          priceFinal = as.numeric(x$priceFinal),
-          firstDate = as.Date(x$firstDate),
-          lastDate = if(!is.null(x$lastDate)) as.Date(x$lastDate) else NA,
-          stringsAsFactors = FALSE
-        )
-      }))
-      
-      # Sort by firstDate descending (most recent first)
-      price_df <- price_df[order(price_df$firstDate, decreasing = TRUE), ]
-      
-      result$priceChanges <- price_df
-    } else {
-      # Return empty data frame with correct structure
-      result$priceChanges <- data.frame(
-        priceInitial = numeric(),
-        priceFinal = numeric(),
-        firstDate = as.Date(character()),
-        lastDate = as.Date(character()),
-        stringsAsFactors = FALSE
-      )
-    }
-  } else {
-    # All currencies response - process each currency's priceChanges
-    if (!is.null(result$price) && length(result$price) > 0) {
-      result$price <- lapply(result$price, function(curr_data) {
-        if (!is.null(curr_data$priceChanges) && length(curr_data$priceChanges) > 0) {
-          # Convert to data frame
-          price_df <- do.call(rbind, lapply(curr_data$priceChanges, function(x) {
-            data.frame(
-              priceInitial = as.numeric(x$priceInitial),
-              priceFinal = as.numeric(x$priceFinal),
-              firstDate = as.Date(x$firstDate),
-              lastDate = if(!is.null(x$lastDate)) as.Date(x$lastDate) else NA,
-              stringsAsFactors = FALSE
-            )
-          }))
-          
-          # Sort by firstDate descending
-          price_df <- price_df[order(price_df$firstDate, decreasing = TRUE), ]
-          
-          curr_data$priceChanges <- price_df
-        }
-        curr_data
-      })
-    }
+  price_ts <- hist$priceHistory
+  if (is.null(price_ts) || nrow(price_ts) == 0) {
+    return(list(
+      steamAppId = as.integer(steam_app_id),
+      currency = currency %||% "ALL",
+      priceChanges = empty_changes
+    ))
   }
   
-  return(result)
+  # Build price-change periods from daily snapshots
+  build_changes <- function(df) {
+    df <- df[order(df$date), , drop = FALSE]
+    df <- df[!is.na(df$priceInitial) | !is.na(df$priceFinal), , drop = FALSE]
+    if (nrow(df) == 0) return(empty_changes)
+    
+    changes <- list()
+    cur_init <- df$priceInitial[1]
+    cur_final <- df$priceFinal[1]
+    first_date <- df$date[1]
+    
+    for (i in seq_len(nrow(df))) {
+      pi <- df$priceInitial[i]
+      pf <- df$priceFinal[i]
+      if (!identical(pi, cur_init) || !identical(pf, cur_final)) {
+        changes[[length(changes) + 1]] <- data.frame(
+          priceInitial = cur_init, priceFinal = cur_final,
+          firstDate = as.Date(first_date),
+          lastDate = as.Date(df$date[i - 1]),
+          stringsAsFactors = FALSE
+        )
+        cur_init <- pi
+        cur_final <- pf
+        first_date <- df$date[i]
+      }
+    }
+    changes[[length(changes) + 1]] <- data.frame(
+      priceInitial = cur_init, priceFinal = cur_final,
+      firstDate = as.Date(first_date), lastDate = as.Date(NA),
+      stringsAsFactors = FALSE
+    )
+    
+    result <- do.call(rbind, changes)
+    result[order(result$firstDate, decreasing = TRUE), , drop = FALSE]
+  }
+  
+  price_changes <- build_changes(price_ts)
+  
+  list(
+    steamAppId = as.integer(steam_app_id),
+    currency = currency %||% "USD",
+    priceChanges = price_changes
+  )
 }

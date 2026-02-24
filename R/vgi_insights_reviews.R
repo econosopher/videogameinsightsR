@@ -52,23 +52,27 @@ vgi_insights_reviews <- function(steam_app_id,
                                 auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                 headers = list()) {
   
-  # Validate inputs
   validate_numeric(steam_app_id, "steam_app_id")
   
-  # Make API request to the new endpoint
-  result <- make_api_request(
-    endpoint = paste0("reception/reviews/games/", steam_app_id),
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
-  )
+  hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
   
-  # Convert date strings to Date objects if present
-  if (!is.null(result) && length(result) > 0 && is.data.frame(result)) {
-    if ("date" %in% names(result)) {
-      result$date <- as.Date(result$date)
-    }
+  rv <- hist$reviews
+  if (is.null(rv) || nrow(rv) == 0) {
+    return(data.frame(
+      steamAppId = integer(), date = as.Date(character()),
+      positive = integer(), negative = integer(), total = integer(),
+      positiveRatio = numeric(), stringsAsFactors = FALSE
+    ))
   }
   
-  return(result)
+  total <- as.integer(rv$positive) + as.integer(rv$negative)
+  data.frame(
+    steamAppId = as.integer(steam_app_id),
+    date = as.Date(rv$date),
+    positive = as.integer(rv$positive),
+    negative = as.integer(rv$negative),
+    total = total,
+    positiveRatio = ifelse(total > 0, as.integer(rv$positive) / total, NA_real_),
+    stringsAsFactors = FALSE
+  )
 }

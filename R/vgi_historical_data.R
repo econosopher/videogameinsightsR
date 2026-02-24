@@ -94,109 +94,84 @@ vgi_historical_data <- function(steam_app_id,
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                headers = list()) {
   
-  # Validate inputs
   validate_numeric(steam_app_id, "steam_app_id")
   
-  # Make API request
-  result <- make_api_request(
-    endpoint = paste0("historical-data/games/", steam_app_id),
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
+  all_rows <- data.frame()
+  cursor <- NULL
+  
+  repeat {
+    qp <- list(steamAppIds = as.character(steam_app_id), limit = 1000)
+    if (!is.null(cursor)) qp$cursor <- cursor
+    
+    raw <- make_api_request(
+      endpoint = "historical-data",
+      query_params = qp,
+      auth_token = auth_token,
+      method = "GET",
+      headers = headers
+    )
+    
+    batch <- .vgi_unwrap_results(raw)
+    if (!is.data.frame(batch) || nrow(batch) == 0) break
+    
+    all_rows <- rbind(all_rows, batch)
+    
+    next_cur <- raw$nextCursor
+    if (is.null(next_cur) || identical(next_cur, cursor)) break
+    cursor <- next_cur
+  }
+  
+  if (nrow(all_rows) == 0) {
+    return(list(
+      steamAppId = as.integer(steam_app_id),
+      revenue = NULL, unitsSold = NULL, concurrentPlayers = NULL,
+      activePlayers = NULL, reviews = NULL, wishlists = NULL,
+      followers = NULL, priceHistory = NULL
+    ))
+  }
+  
+  # Filter to steam platform rows matching the requested ID
+  if ("platform" %in% names(all_rows)) {
+    all_rows <- all_rows[all_rows$platform == "steam", , drop = FALSE]
+  }
+  if ("externalId" %in% names(all_rows)) {
+    all_rows <- all_rows[as.integer(all_rows$externalId) == as.integer(steam_app_id), , drop = FALSE]
+  }
+  
+  safe_col <- function(df, col) {
+    if (col %in% names(df)) df[[col]] else rep(NA, nrow(df))
+  }
+  
+  make_ts <- function(cols) {
+    out <- data.frame(date = as.character(all_rows$date), stringsAsFactors = FALSE)
+    for (nm in names(cols)) {
+      out[[nm]] <- as.numeric(safe_col(all_rows, cols[[nm]]))
+    }
+    out <- out[!is.na(out$date), , drop = FALSE]
+    out[order(out$date), , drop = FALSE]
+  }
+  
+  revenue_df <- make_ts(list(revenue = "revenueTotal", dailyRevenue = "revenueChange"))
+  units_df <- make_ts(list(unitsSold = "unitsSoldTotal", dailyUnits = "unitsSoldChange"))
+  ccu_df <- make_ts(list(ccuAvg = "ccuAvg", ccuMedian = "ccuMedian",
+                          ccuMax = "ccuMax", ccuMin = "ccuMin"))
+  active_df <- make_ts(list(dau = "dau", mau = "mau"))
+  reviews_df <- make_ts(list(positive = "positiveReviewsTotal", negative = "negativeReviewsTotal"))
+  wishlists_df <- make_ts(list(wishlists = "wishlistsTotal"))
+  followers_df <- make_ts(list(followers = "followersTotal"))
+  price_df <- make_ts(list(priceInitial = "priceInitial", priceFinal = "priceFinal"))
+  
+  null_if_empty <- function(df) if (nrow(df) == 0 || all(is.na(df[, -1, drop = FALSE]))) NULL else df
+  
+  list(
+    steamAppId = as.integer(steam_app_id),
+    revenue = null_if_empty(revenue_df),
+    unitsSold = null_if_empty(units_df),
+    concurrentPlayers = null_if_empty(ccu_df),
+    activePlayers = null_if_empty(active_df),
+    reviews = null_if_empty(reviews_df),
+    wishlists = null_if_empty(wishlists_df),
+    followers = null_if_empty(followers_df),
+    priceHistory = null_if_empty(price_df)
   )
-  
-  # Process each data type into data frames
-  
-  # Revenue data
-  if (!is.null(result$revenue) && length(result$revenue) > 0) {
-    result$revenue <- do.call(rbind, lapply(result$revenue, function(x) {
-      data.frame(
-        date = as.character(x$date %||% NA),
-        revenue = as.numeric(x$revenue %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  # Units sold data
-  if (!is.null(result$unitsSold) && length(result$unitsSold) > 0) {
-    result$unitsSold <- do.call(rbind, lapply(result$unitsSold, function(x) {
-      data.frame(
-        date = as.character(x$date %||% NA),
-        unitsSold = as.numeric(x$unitsSold %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  # Concurrent players data
-  if (!is.null(result$concurrentPlayers) && length(result$concurrentPlayers) > 0) {
-    result$concurrentPlayers <- do.call(rbind, lapply(result$concurrentPlayers, function(x) {
-      data.frame(
-        date = as.character(x$date %||% NA),
-        concurrentPlayers = as.numeric(x$concurrentPlayers %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  # Active players (DAU/MAU) data
-  if (!is.null(result$activePlayers) && length(result$activePlayers) > 0) {
-    result$activePlayers <- do.call(rbind, lapply(result$activePlayers, function(x) {
-      data.frame(
-        date = as.character(x$date %||% NA),
-        dau = as.numeric(x$dau %||% NA),
-        mau = as.numeric(x$mau %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  # Reviews data
-  if (!is.null(result$reviews) && length(result$reviews) > 0) {
-    result$reviews <- do.call(rbind, lapply(result$reviews, function(x) {
-      data.frame(
-        date = as.character(x$date %||% NA),
-        positive = as.numeric(x$positive %||% NA),
-        negative = as.numeric(x$negative %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  # Wishlists data
-  if (!is.null(result$wishlists) && length(result$wishlists) > 0) {
-    result$wishlists <- do.call(rbind, lapply(result$wishlists, function(x) {
-      data.frame(
-        date = as.character(x$date %||% NA),
-        wishlists = as.numeric(x$wishlists %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  # Followers data
-  if (!is.null(result$followers) && length(result$followers) > 0) {
-    result$followers <- do.call(rbind, lapply(result$followers, function(x) {
-      data.frame(
-        date = as.character(x$date %||% NA),
-        followers = as.numeric(x$followers %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  # Price history data
-  if (!is.null(result$priceHistory) && length(result$priceHistory) > 0) {
-    result$priceHistory <- do.call(rbind, lapply(result$priceHistory, function(x) {
-      data.frame(
-        date = as.character(x$date %||% NA),
-        currency = as.character(x$currency %||% NA),
-        price = as.numeric(x$price %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  return(result)
 }

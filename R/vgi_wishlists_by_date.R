@@ -93,51 +93,41 @@ vgi_wishlists_by_date <- function(date,
                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                  headers = list()) {
   
-  # Validate and format date
   formatted_date <- format_date(date)
   
-  # Build query parameters if steam_app_ids provided
-  query_params <- list()
-  if (!is.null(steam_app_ids)) {
-    # Ensure numeric and convert to comma-separated string
-    steam_app_ids <- as.numeric(steam_app_ids)
-    ids_string <- paste(steam_app_ids, collapse = ",")
-    query_params$steamAppIds <- ids_string
-  }
+  steam_app_ids <- if (is.null(steam_app_ids)) NULL else as.numeric(steam_app_ids)
+  fetch_limit <- if (is.null(steam_app_ids)) 2000 else max(50, length(steam_app_ids) * 5)
   
-  # Make API request
-  result <- make_api_request(
-    endpoint = paste0("interest-level/wishlists/", formatted_date),
-    query_params = query_params,
+  result <- .vgi_historical_results(
+    date = formatted_date,
+    steam_app_ids = steam_app_ids,
+    limit = fetch_limit,
     auth_token = auth_token,
-    method = "GET",
     headers = headers
   )
   
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
-    df <- do.call(rbind, lapply(result, function(x) {
-      data.frame(
-        steamAppId = as.integer(x$steamAppId),
-        date = formatted_date,
-        wishlistCount = as.integer(x$wishlistCount %||% 0),
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by wishlist count descending and add rank
-    df <- df[order(-df$wishlistCount), ]
-    df$wishlistRank <- seq_len(nrow(df))
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
-    return(data.frame(
-      steamAppId = integer(),
-      date = character(),
-      wishlistCount = integer(),
-      wishlistRank = integer(),
-      stringsAsFactors = FALSE
-    ))
+  empty_df <- data.frame(
+    steamAppId = integer(), date = character(),
+    wishlistCount = integer(), wishlistRank = integer(),
+    stringsAsFactors = FALSE
+  )
+  
+  if (!is.data.frame(result) || nrow(result) == 0) return(empty_df)
+  
+  if ("platform" %in% names(result)) {
+    result <- result[result$platform == "steam", , drop = FALSE]
   }
+  
+  df <- data.frame(
+    steamAppId = as.integer(result$externalId %||% NA),
+    date = formatted_date,
+    wishlistCount = as.integer(result$wishlistsTotal %||% NA),
+    stringsAsFactors = FALSE
+  )
+  df <- df[!is.na(df$steamAppId), , drop = FALSE]
+  if (nrow(df) == 0) return(empty_df)
+  
+  df <- df[order(-df$wishlistCount), , drop = FALSE]
+  df$wishlistRank <- seq_len(nrow(df))
+  df
 }

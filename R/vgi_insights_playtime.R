@@ -87,18 +87,18 @@ vgi_insights_playtime <- function(steam_app_id,
   )
 
   rows <- .vgi_unwrap_results(result)
-  if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(list(
-      steamAppId = as.integer(steam_app_id),
-      avgPlaytime = NA_real_,
-      medianPlaytime = NA_real_,
-      avgPlaytimeRank = NA_integer_,
-      avgPlaytimePrct = NA_real_,
-      playtimeRanges = data.frame(range = character(), percentage = numeric(), stringsAsFactors = FALSE)
-    ))
-  }
+  empty_result <- list(
+    steamAppId = as.integer(steam_app_id),
+    avgPlaytime = NA_real_,
+    medianPlaytime = NA_real_,
+    avgPlaytimeRank = NA_integer_,
+    avgPlaytimePrct = NA_real_,
+    playtimeRanges = data.frame(range = character(), percentage = numeric(), stringsAsFactors = FALSE)
+  )
+  if (!is.data.frame(rows) || nrow(rows) == 0) return(empty_result)
 
-  row <- rows[1, , drop = FALSE]
+  row <- .vgi_steam_row(rows, steam_app_id)
+  if (is.null(row)) return(empty_result)
   ranges <- if ("playtime" %in% names(row)) row$playtime[[1]] else NULL
   if (!is.data.frame(ranges) || nrow(ranges) == 0) {
     ranges_df <- data.frame(range = character(), percentage = numeric(), stringsAsFactors = FALSE)

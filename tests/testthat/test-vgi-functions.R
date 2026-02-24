@@ -204,7 +204,7 @@ test_that("format_date works correctly", {
   expect_error(format_date("not-a-date-at-all"), "Invalid date format")
   
   # Test non-date input
-  expect_error(format_date(123), "Date must be a Date object or character string")
+  expect_error(format_date(123), "Date must be a Date object")
 })
 
 # Price History Tests
@@ -484,7 +484,7 @@ test_that("vgi_reviews_by_date validates inputs correctly", {
   
   expect_error(
     vgi_reviews_by_date(123),
-    "Date must be a Date object or character string"
+    "Date must be a Date object"
   )
 })
 
@@ -498,7 +498,7 @@ test_that("vgi_wishlists_by_date validates inputs correctly", {
   
   expect_error(
     vgi_wishlists_by_date(123),
-    "Date must be a Date object or character string"
+    "Date must be a Date object"
   )
 })
 
@@ -512,7 +512,7 @@ test_that("vgi_followers_by_date validates inputs correctly", {
   
   expect_error(
     vgi_followers_by_date(123),
-    "Date must be a Date object or character string"
+    "Date must be a Date object"
   )
 })
 
@@ -526,7 +526,7 @@ test_that("vgi_concurrent_players_by_date validates inputs correctly", {
   
   expect_error(
     vgi_concurrent_players_by_date(123),
-    "Date must be a Date object or character string"
+    "Date must be a Date object"
   )
 })
 
@@ -540,6 +540,6 @@ test_that("vgi_active_players_by_date validates inputs correctly", {
   
   expect_error(
     vgi_active_players_by_date(123),
-    "Date must be a Date object or character string"
+    "Date must be a Date object"
   )
 })

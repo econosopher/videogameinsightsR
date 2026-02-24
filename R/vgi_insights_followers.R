@@ -65,42 +65,24 @@ vgi_insights_followers <- function(steam_app_id,
                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                  headers = list()) {
   
-  # Validate inputs
   validate_numeric(steam_app_id, "steam_app_id")
   
-  # Make API request
-  result <- make_api_request(
-    endpoint = paste0("interest-level/followers/games/", steam_app_id),
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
-  )
+  hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
   
-  # Process the followersChange array if it exists
-  if (!is.null(result$followersChange) && length(result$followersChange) > 0) {
-    # Convert to data frame
-    changes_df <- do.call(rbind, lapply(result$followersChange, function(x) {
-      data.frame(
-        date = as.Date(x$date),
-        followersTotal = as.integer(x$followersTotal %||% NA),
-        followersChange = as.integer(x$followersChange %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by date
-    changes_df <- changes_df[order(changes_df$date), ]
-    
-    result$followersChange <- changes_df
+  fol <- hist$followers
+  if (is.null(fol) || nrow(fol) == 0) {
+    changes_df <- data.frame(
+      date = as.Date(character()), followersTotal = integer(),
+      followersChange = integer(), stringsAsFactors = FALSE
+    )
   } else {
-    # Return empty data frame with correct structure
-    result$followersChange <- data.frame(
-      date = as.Date(character()),
-      followersTotal = integer(),
-      followersChange = integer(),
+    changes_df <- data.frame(
+      date = as.Date(fol$date),
+      followersTotal = as.integer(fol$followers),
+      followersChange = c(NA_integer_, diff(as.integer(fol$followers))),
       stringsAsFactors = FALSE
     )
   }
   
-  return(result)
+  list(steamAppId = as.integer(steam_app_id), followersChange = changes_df)
 }
