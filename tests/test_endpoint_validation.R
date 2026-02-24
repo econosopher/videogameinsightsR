@@ -14,7 +14,7 @@ context("Endpoint Response Validation")
 
 # Helper to make direct API calls
 make_test_request <- function(endpoint, query_params = list()) {
-  base_url <- "https://vginsights.com/api/v3"
+  base_url <- "https://vginsights.com/api/v4"
   
   request(base_url) %>%
     req_url_path_append(endpoint) %>%

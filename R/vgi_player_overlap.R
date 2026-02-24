@@ -93,59 +93,63 @@ vgi_player_overlap <- function(steam_app_id,
   # Build query parameters
   query_params <- list(
     limit = limit,
-    offset = offset
+    steamAppId = as.character(steam_app_id)
   )
+  if (!is.null(offset) && offset > 0) query_params$cursor <- as.integer(offset)
   
   # Make API request
   result <- make_api_request(
-    endpoint = paste0("player-insights/games/", steam_app_id, "/player-overlap"),
+    endpoint = "player-overlap",
     query_params = query_params,
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # Process the playerOverlaps array if it exists
-  if (!is.null(result$playerOverlaps) && length(result$playerOverlaps) > 0) {
-    # Convert to data frame
-    overlaps_df <- do.call(rbind, lapply(result$playerOverlaps, function(x) {
-      data.frame(
-        steamAppId = as.integer(x$steamAppId),
-        medianPlaytime = as.numeric(x$medianPlaytime %||% NA),
-        unitsSoldOverlap = as.numeric(x$unitsSoldOverlap %||% NA),
-        unitsSoldOverlapPercentage = as.numeric(x$unitsSoldOverlapPercentage %||% NA),
-        unitsSoldOverlapIndex = as.numeric(x$unitsSoldOverlapIndex %||% NA),
-        mauOverlap = as.numeric(x$mauOverlap %||% NA),
-        mauOverlapPercentage = as.numeric(x$mauOverlapPercentage %||% NA),
-        mauOverlapIndex = as.numeric(x$mauOverlapIndex %||% NA),
-        wishlistOverlap = as.numeric(x$wishlistOverlap %||% NA),
-        wishlistOverlapPercentage = as.numeric(x$wishlistOverlapPercentage %||% NA),
-        wishlistOverlapIndex = as.numeric(x$wishlistOverlapIndex %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by units sold overlap percentage (most relevant first)
-    overlaps_df <- overlaps_df[order(-overlaps_df$unitsSoldOverlapPercentage), ]
-    
-    result$playerOverlaps <- overlaps_df
-  } else {
-    # Return empty data frame with correct structure
-    result$playerOverlaps <- data.frame(
-      steamAppId = integer(),
-      medianPlaytime = numeric(),
-      unitsSoldOverlap = numeric(),
-      unitsSoldOverlapPercentage = numeric(),
-      unitsSoldOverlapIndex = numeric(),
-      mauOverlap = numeric(),
-      mauOverlapPercentage = numeric(),
-      mauOverlapIndex = numeric(),
-      wishlistOverlap = numeric(),
-      wishlistOverlapPercentage = numeric(),
-      wishlistOverlapIndex = numeric(),
-      stringsAsFactors = FALSE
-    )
+
+  rows <- .vgi_unwrap_results(result)
+  empty_overlaps <- data.frame(
+    steamAppId = integer(),
+    medianPlaytime = numeric(),
+    unitsSoldOverlap = numeric(),
+    unitsSoldOverlapPercentage = numeric(),
+    unitsSoldOverlapIndex = numeric(),
+    mauOverlap = numeric(),
+    mauOverlapPercentage = numeric(),
+    mauOverlapIndex = numeric(),
+    wishlistOverlap = numeric(),
+    wishlistOverlapPercentage = numeric(),
+    wishlistOverlapIndex = numeric(),
+    stringsAsFactors = FALSE
+  )
+
+  if (!is.data.frame(rows) || nrow(rows) == 0 || !"playerOverlaps" %in% names(rows)) {
+    return(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps))
   }
-  
-  return(result)
+
+  row <- rows[1, , drop = FALSE]
+  overlaps <- row$playerOverlaps[[1]]
+  if (!is.data.frame(overlaps) || nrow(overlaps) == 0) {
+    return(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps))
+  }
+
+  overlaps_df <- data.frame(
+    steamAppId = as.integer(overlaps$externalId %||% NA),
+    medianPlaytime = as.numeric(overlaps$medianPlaytime %||% NA),
+    unitsSoldOverlap = as.numeric(overlaps$unitsSoldOverlap %||% NA),
+    unitsSoldOverlapPercentage = as.numeric(overlaps$unitsSoldOverlapPercentage %||% NA),
+    unitsSoldOverlapIndex = as.numeric(overlaps$unitsSoldOverlapIndex %||% NA),
+    mauOverlap = as.numeric(overlaps$mauOverlap %||% NA),
+    mauOverlapPercentage = as.numeric(overlaps$mauOverlapPercentage %||% NA),
+    mauOverlapIndex = as.numeric(overlaps$mauOverlapIndex %||% NA),
+    wishlistOverlap = as.numeric(overlaps$wishlistOverlap %||% NA),
+    wishlistOverlapPercentage = as.numeric(overlaps$wishlistOverlapPercentage %||% NA),
+    wishlistOverlapIndex = as.numeric(overlaps$wishlistOverlapIndex %||% NA),
+    stringsAsFactors = FALSE
+  )
+  overlaps_df <- overlaps_df[order(-overlaps_df$unitsSoldOverlapPercentage), , drop = FALSE]
+
+  list(
+    steamAppId = as.integer(steam_app_id),
+    playerOverlaps = overlaps_df
+  )
 }

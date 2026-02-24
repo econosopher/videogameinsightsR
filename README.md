@@ -172,7 +172,7 @@ apply intelligent batching based on the request size.
 
 You can control behavior via options or environment variables:
 
-- Base URL: set `options(vgi.base_url = "https://vginsights.com/api/v3")` or `VGI_BASE_URL`
+- Base URL: set `options(vgi.base_url = "https://vginsights.com/api/v4")` or `VGI_BASE_URL`
 - Timeouts: `options(vgi.timeout = 30)`
 - Retries: `options(vgi.retry_max_tries = 4)`
 - Request cache TTL (seconds, GET only): `options(vgi.request_cache_ttl = 3600)` or `VGI_REQUEST_CACHE_TTL_SECONDS`
@@ -182,6 +182,13 @@ You can control behavior via options or environment variables:
 - Verbose request logging: `options(vgi.verbose = TRUE)`
 
 ## Recent Updates
+
+### Version 0.0.4 (2026-02-24)
+- Migrated package core to use VGI API v4 (`https://vginsights.com/api/v4`).
+- Added `vgi_publishers_overview()` and `vgi_developers_overview()` for rich company data.
+- Added `vgi_top_regions()` for easy access to regional performance data.
+- Search functions are now significantly faster and rely on local caches before falling back to full-DB endpoints.
+- Re-architected data endpoints to use `historical-data` snapshot polling under the hood, ensuring cleaner rate-limit usage and handling API v4 shape changes gracefully.
 
 ### Version 0.0.3 (2025-08-01)
 - Added `vgi_game_summary_yoy()` for year-over-year comparisons

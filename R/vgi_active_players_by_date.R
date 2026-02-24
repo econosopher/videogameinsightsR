@@ -119,17 +119,6 @@ vgi_active_players_by_date <- function(date,
   formatted_date <- format_date(date)
   requested_date <- as.Date(formatted_date)
   
-  # Check DAU/MAU availability dates
-  dau_start_date <- as.Date("2024-03-18")
-  mau_start_date <- as.Date("2024-03-23")
-  
-  # If requested date is before DAU availability, adjust and warn
-  if (requested_date < dau_start_date) {
-    warning(paste0("DAU data is only available from 2024-03-18. ",
-                   "Fetching data for the earliest available date instead."))
-    formatted_date <- "2024-03-18"
-  }
-  
   # Validate inputs
   if (!is.null(offset)) {
     validate_numeric(offset, "offset", min_val = 0)
@@ -139,67 +128,24 @@ vgi_active_players_by_date <- function(date,
     validate_numeric(limit, "limit", min_val = 1, max_val = 1000)
   }
   
-  # Build query parameters
-  query_params <- list()
-  if (!is.null(steam_app_ids)) {
-    # Convert to comma-separated string
-    ids_string <- paste(steam_app_ids, collapse = ",")
-    query_params$steamAppIds <- ids_string
+  steam_app_ids <- if (is.null(steam_app_ids)) NULL else as.numeric(steam_app_ids)
+  fetch_limit <- if (!is.null(limit)) {
+    as.integer(limit + (offset %||% 0))
+  } else if (!is.null(steam_app_ids)) {
+    max(50, length(steam_app_ids) * 5)
+  } else {
+    2000
   }
-  if (!is.null(offset)) {
-    query_params$offset <- offset
-  }
-  if (!is.null(limit)) {
-    query_params$limit <- limit
-  }
-  
-  # Make API request
-  result <- make_api_request(
-    endpoint = paste0("engagement/active-players/", formatted_date),
-    query_params = query_params,
+
+  result <- .vgi_historical_results(
+    date = formatted_date,
+    steam_app_ids = steam_app_ids,
+    limit = fetch_limit,
     auth_token = auth_token,
-    method = "GET",
     headers = headers
   )
-  
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
-    df <- do.call(rbind, lapply(result, function(x) {
-      dau <- as.integer(x$dau %||% 0)
-      mau <- as.integer(x$mau %||% 0)
-      
-      data.frame(
-        steamAppId = as.integer(x$steamAppId),
-        date = formatted_date,
-        dau = dau,
-        mau = mau,
-        dauMauRatio = if (mau > 0) dau / mau else NA,
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by DAU descending and add rank
-    df <- df[order(-df$dau), ]
-    df$activeRank <- seq_len(nrow(df))
-    
-    # Add metadata about the actual date returned
-    attr(df, "requested_date") <- date
-    attr(df, "actual_date") <- formatted_date
-    
-    # If date was adjusted, note that MAU might be limited
-    if (requested_date < mau_start_date && requested_date >= dau_start_date) {
-      attr(df, "mau_limited") <- TRUE
-      message("Note: MAU data is only available from 2024-03-23. MAU values may be incomplete.")
-    }
-    
-    # Add warning if only old games are returned
-    if (all(df$steamAppId < 1000, na.rm = TRUE)) {
-      warning("API returned only old games (Steam IDs < 1000). This may indicate stale data.")
-    }
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
+
+  if (!is.data.frame(result) || nrow(result) == 0) {
     empty_df <- data.frame(
       steamAppId = integer(),
       date = character(),
@@ -209,11 +155,53 @@ vgi_active_players_by_date <- function(date,
       activeRank = integer(),
       stringsAsFactors = FALSE
     )
-    
-    # Add metadata even for empty results
     attr(empty_df, "requested_date") <- date
     attr(empty_df, "actual_date") <- formatted_date
-    
     return(empty_df)
   }
+
+  if ("platform" %in% names(result)) {
+    result <- result[result$platform == "steam", , drop = FALSE]
+  }
+
+  df <- data.frame(
+    steamAppId = as.integer(result$externalId %||% NA),
+    date = formatted_date,
+    dau = as.integer(result$dau %||% NA),
+    mau = as.integer(result$mau %||% NA),
+    stringsAsFactors = FALSE
+  )
+  df <- df[!is.na(df$steamAppId), , drop = FALSE]
+  if (nrow(df) == 0) {
+    df <- data.frame(
+      steamAppId = integer(),
+      date = character(),
+      dau = integer(),
+      mau = integer(),
+      dauMauRatio = numeric(),
+      activeRank = integer(),
+      stringsAsFactors = FALSE
+    )
+    attr(df, "requested_date") <- date
+    attr(df, "actual_date") <- formatted_date
+    return(df)
+  }
+
+  df$dauMauRatio <- ifelse(df$mau > 0, df$dau / df$mau, NA_real_)
+  df <- df[order(-df$dau), , drop = FALSE]
+  df$activeRank <- seq_len(nrow(df))
+
+  if (!is.null(offset) && offset > 0 && nrow(df) > offset) {
+    df <- df[(offset + 1):nrow(df), , drop = FALSE]
+  } else if (!is.null(offset) && offset >= nrow(df)) {
+    df <- df[0, , drop = FALSE]
+  }
+  if (!is.null(limit) && nrow(df) > limit) {
+    df <- df[seq_len(limit), , drop = FALSE]
+  }
+
+  attr(df, "requested_date") <- requested_date
+  attr(df, "actual_date") <- formatted_date
+  warn_if_stale_ids(df$steamAppId)
+  df
 }

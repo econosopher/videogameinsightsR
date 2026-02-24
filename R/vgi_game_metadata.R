@@ -34,56 +34,60 @@ vgi_game_metadata <- function(steam_app_id,
   # Convert to character if numeric
   steam_app_id <- as.character(steam_app_id)
   
-  # Make API request using the new endpoint structure
+  # v4 metadata endpoint takes IDs as query params.
   response <- make_api_request(
-    endpoint = paste0("games/", steam_app_id, "/metadata"),
+    endpoint = "games/metadata",
+    query_params = list(steamAppIds = steam_app_id, limit = 1),
     auth_token = auth_token,
     headers = headers
   )
-  
-  # Handle the response directly since it contains nested structures
-  if (is.null(response) || length(response) == 0) {
+  rows <- .vgi_unwrap_results(response)
+
+  if (!is.data.frame(rows) || nrow(rows) == 0) {
     return(data.frame())
   }
-  
-  # Convert to data frame, handling nested lists
+
+  row <- rows[1, , drop = FALSE]
+  parsed_steam_id <- .vgi_parse_steam_app_id(row$storeUrl.steam)
+  out_steam_id <- if (!is.na(parsed_steam_id)) parsed_steam_id else as.integer(steam_app_id)
+
+  # Normalize nested vectors/lists into compact scalar fields for compatibility.
+  genres <- if ("genre" %in% names(row)) paste(unlist(row$genre[[1]]), collapse = ", ") else NA_character_
+  subgenres <- if ("subgenre" %in% names(row)) paste(unlist(row$subgenre[[1]]), collapse = ", ") else NA_character_
+  languages <- if ("languages" %in% names(row)) paste(unlist(row$languages[[1]]), collapse = ", ") else NA_character_
+
   result <- data.frame(
-    steamAppId = as.integer(response$steamAppId %||% steam_app_id),
-    name = response$name %||% NA_character_,
-    price = as.numeric(response$price %||% NA),
-    releaseDate = response$releaseDate %||% NA_character_,
-    fullReleaseDate = response$fullReleaseDate %||% NA_character_,
-    genres = response$genres %||% NA_character_,
-    subgenres = response$subgenres %||% NA_character_,
-    languages = response$languages %||% NA_character_,
-    publisherClassification = response$publisherClassification %||% NA_character_,
-    vgiUrl = response$vgiUrl %||% NA_character_,
-    steamUrl = response$steamUrl %||% NA_character_,
-    publishingType = response$publishingType %||% NA_character_,
+    steamAppId = as.integer(out_steam_id),
+    id = as.integer(out_steam_id),
+    name = as.character(row$name %||% NA_character_),
+    price = as.numeric(row$price.steam %||% NA),
+    releaseDate = as.character(row$releaseDate.steam %||% row$steamFullReleaseDate %||% NA_character_),
+    fullReleaseDate = as.character(row$steamFullReleaseDate %||% NA_character_),
+    genres = genres,
+    subgenres = subgenres,
+    languages = languages,
+    publisherClassification = as.character(row$publisherClassification %||% NA_character_),
+    vgiUrl = as.character(row$vgiUrl %||% NA_character_),
+    steamUrl = as.character(row$storeUrl.steam %||% NA_character_),
+    publishingType = as.character(row$publishingType %||% NA_character_),
     stringsAsFactors = FALSE
   )
   
   # Add publisher info if available
-  if (!is.null(response$publishers)) {
-    if (is.data.frame(response$publishers) && nrow(response$publishers) > 0) {
-      result$publisherId <- response$publishers$companyId[1] %||% NA_integer_
-      result$publisherName <- response$publishers$companyName[1] %||% NA_character_
-    } else if (is.list(response$publishers) && length(response$publishers) > 0) {
-      pub <- response$publishers[[1]]
-      result$publisherId <- pub$companyId %||% NA_integer_
-      result$publisherName <- pub$companyName %||% NA_character_
+  if ("publishers" %in% names(row)) {
+    pubs <- row$publishers[[1]]
+    if (is.data.frame(pubs) && nrow(pubs) > 0) {
+      result$publisherId <- as.integer(pubs$companyId[1] %||% NA_integer_)
+      result$publisherName <- as.character(pubs$companyName[1] %||% NA_character_)
     }
   }
   
   # Add developer info if available
-  if (!is.null(response$developers)) {
-    if (is.data.frame(response$developers) && nrow(response$developers) > 0) {
-      result$developerId <- response$developers$companyId[1] %||% NA_integer_
-      result$developerName <- response$developers$companyName[1] %||% NA_character_
-    } else if (is.list(response$developers) && length(response$developers) > 0) {
-      dev <- response$developers[[1]]
-      result$developerId <- dev$companyId %||% NA_integer_
-      result$developerName <- dev$companyName %||% NA_character_
+  if ("developers" %in% names(row)) {
+    devs <- row$developers[[1]]
+    if (is.data.frame(devs) && nrow(devs) > 0) {
+      result$developerId <- as.integer(devs$companyId[1] %||% NA_integer_)
+      result$developerName <- as.character(devs$companyName[1] %||% NA_character_)
     }
   }
   

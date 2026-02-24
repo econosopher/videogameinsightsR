@@ -80,29 +80,15 @@ vgi_top_wishlist_countries <- function(steam_app_id,
   
   # Make API request
   result <- make_api_request(
-    endpoint = paste0("player-insights/games/", steam_app_id, "/top-wishlist-countries"),
+    endpoint = "player-insights/games/top-wishlist-countries",
+    query_params = list(steamAppIds = as.character(steam_app_id), limit = 1),
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
-    df <- do.call(rbind, lapply(seq_along(result), function(i) {
-      x <- result[[i]]
-      data.frame(
-        country = as.character(x$country %||% NA),
-        countryName = as.character(x$countryName %||% NA),
-        wishlistCount = as.integer(x$wishlistCount %||% NA),
-        percentage = as.numeric(x$percentage %||% NA),
-        rank = i,  # Rank by order in response
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0 || !"wishlists" %in% names(rows)) {
     return(data.frame(
       country = character(),
       countryName = character(),
@@ -112,4 +98,25 @@ vgi_top_wishlist_countries <- function(steam_app_id,
       stringsAsFactors = FALSE
     ))
   }
+
+  wishlists <- rows$wishlists[[1]]
+  if (!is.data.frame(wishlists) || nrow(wishlists) == 0) {
+    return(data.frame(
+      country = character(),
+      countryName = character(),
+      wishlistCount = integer(),
+      percentage = numeric(),
+      rank = integer(),
+      stringsAsFactors = FALSE
+    ))
+  }
+
+  data.frame(
+    country = as.character(wishlists$countryCode %||% NA_character_),
+    countryName = as.character(wishlists$countryName %||% NA_character_),
+    wishlistCount = as.integer(NA),
+    percentage = as.numeric(wishlists$percentage %||% NA),
+    rank = as.integer(wishlists$rank %||% seq_len(nrow(wishlists))),
+    stringsAsFactors = FALSE
+  )
 }

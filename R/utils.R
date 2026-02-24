@@ -32,7 +32,7 @@ get_base_url <- function() {
   if (!is.null(opt) && nzchar(opt)) return(opt)
   env <- Sys.getenv("VGI_BASE_URL", "")
   if (nzchar(env)) return(env)
-  "https://vginsights.com/api/v3"
+  "https://vginsights.com/api/v4"
 }
 
 # Build a consistent User-Agent string including package version
@@ -378,4 +378,73 @@ warn_if_stale_ids <- function(steam_app_ids) {
     warning("API returned only old games (Steam IDs < 1000). This may indicate stale data.")
   }
   invisible(NULL)
+}
+
+# --- v4 response helpers ---
+
+.vgi_unwrap_results <- function(result) {
+  if (is.list(result) && !is.data.frame(result) && "results" %in% names(result)) {
+    return(result$results)
+  }
+  result
+}
+
+.vgi_to_csv_ids <- function(ids) {
+  if (is.null(ids) || length(ids) == 0) return(NULL)
+  ids <- unique(ids[!is.na(ids)])
+  if (length(ids) == 0) return(NULL)
+  paste(ids, collapse = ",")
+}
+
+.vgi_parse_steam_app_id <- function(url_or_id) {
+  if (is.null(url_or_id) || length(url_or_id) == 0) return(NA_integer_)
+  if (is.numeric(url_or_id)) return(as.integer(url_or_id[[1]]))
+  value <- as.character(url_or_id[[1]])
+  if (!nzchar(value)) return(NA_integer_)
+  if (grepl("^[0-9]+$", value)) return(as.integer(value))
+
+  # Steam URLs are usually .../app/<id>
+  m <- regexpr("/app/([0-9]+)", value, perl = TRUE)
+  if (m[1] == -1) return(NA_integer_)
+  hit <- regmatches(value, m)
+  as.integer(sub("/app/", "", hit))
+}
+
+.vgi_historical_results <- function(date,
+                                    steam_app_ids = NULL,
+                                    vgi_ids = NULL,
+                                    slugs = NULL,
+                                    limit = NULL,
+                                    cursor = NULL,
+                                    auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                    headers = list()) {
+  query_params <- list(date = format_date(date))
+  if (!is.null(limit)) {
+    lim <- as.integer(limit)
+    if (is.na(lim) || lim < 1) lim <- 1
+    if (lim > 1000) lim <- 1000
+    query_params$limit <- lim
+  }
+  if (!is.null(cursor)) {
+    cur <- as.integer(cursor)
+    if (is.na(cur) || cur < 0) cur <- 0
+    query_params$cursor <- cur
+  }
+  steam_csv <- .vgi_to_csv_ids(steam_app_ids)
+  vgi_csv <- .vgi_to_csv_ids(vgi_ids)
+  if (!is.null(steam_csv)) query_params$steamAppIds <- steam_csv
+  if (!is.null(vgi_csv)) query_params$vgiIds <- vgi_csv
+  if (!is.null(slugs) && length(slugs) > 0) {
+    query_params$slugs <- paste(unique(slugs[!is.na(slugs)]), collapse = ",")
+  }
+
+  result <- make_api_request(
+    endpoint = "historical-data",
+    query_params = query_params,
+    auth_token = auth_token,
+    method = "GET",
+    headers = headers
+  )
+
+  .vgi_unwrap_results(result)
 }

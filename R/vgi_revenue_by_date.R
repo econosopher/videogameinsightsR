@@ -108,61 +108,18 @@ vgi_revenue_by_date <- function(date,
   # Validate and format date
   formatted_date <- format_date(date)
   
-  # Build query parameters if steam_app_ids provided
-  query_params <- list()
-  if (!is.null(steam_app_ids)) {
-    # Ensure numeric and convert to comma-separated string
-    steam_app_ids <- as.numeric(steam_app_ids)
-    ids_string <- paste(steam_app_ids, collapse = ",")
-    query_params$steamAppIds <- ids_string
-  }
-  
-  # Make API request
-  result <- make_api_request(
-    endpoint = paste0("commercial-performance/revenue/", formatted_date),
-    query_params = query_params,
+  steam_app_ids <- if (is.null(steam_app_ids)) NULL else as.numeric(steam_app_ids)
+  fetch_limit <- if (is.null(steam_app_ids)) 2000 else max(50, length(steam_app_ids) * 5)
+
+  result <- .vgi_historical_results(
+    date = formatted_date,
+    steam_app_ids = steam_app_ids,
+    limit = fetch_limit,
     auth_token = auth_token,
-    method = "GET",
     headers = headers
   )
-  
-  # Handle response - it may already be a data frame
-  if (is.data.frame(result)) {
-    # Response is already a data frame from jsonlite
-    df <- data.frame(
-      steamAppId = as.integer(result$steamAppId),
-      date = formatted_date,
-      revenue = as.numeric(result$revenueTotal),
-      dailyRevenue = as.numeric(result$revenueChange),
-      stringsAsFactors = FALSE
-    )
-    
-    # Sort by revenue descending and add rank
-    df <- df[order(-df$revenue), ]
-    df$revenueRank <- seq_len(nrow(df))
-    
-    return(df)
-  } else if (is.list(result) && length(result) > 0) {
-    # Handle list response (old format)
-    df <- do.call(rbind, lapply(result, function(x) {
-      # Handle different response formats
-      # API returns revenueTotal and revenueChange fields
-      data.frame(
-        steamAppId = as.integer(x$steamAppId),
-        date = formatted_date,
-        revenue = as.numeric(x$revenueTotal %||% x$revenue %||% 0),
-        dailyRevenue = as.numeric(x$revenueChange %||% x$dailyRevenue %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by revenue descending and add rank
-    df <- df[order(-df$revenue), ]
-    df$revenueRank <- seq_len(nrow(df))
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
+
+  if (!is.data.frame(result) || nrow(result) == 0) {
     return(data.frame(
       steamAppId = integer(),
       date = character(),
@@ -172,4 +129,31 @@ vgi_revenue_by_date <- function(date,
       stringsAsFactors = FALSE
     ))
   }
+
+  if ("platform" %in% names(result)) {
+    result <- result[result$platform == "steam", , drop = FALSE]
+  }
+
+  df <- data.frame(
+    steamAppId = as.integer(result$externalId %||% NA),
+    date = formatted_date,
+    revenue = as.numeric(result$revenueTotal %||% NA),
+    dailyRevenue = as.numeric(result$revenueChange %||% NA),
+    stringsAsFactors = FALSE
+  )
+  df <- df[!is.na(df$steamAppId), , drop = FALSE]
+  if (nrow(df) == 0) {
+    return(data.frame(
+      steamAppId = integer(),
+      date = character(),
+      revenue = numeric(),
+      dailyRevenue = numeric(),
+      revenueRank = integer(),
+      stringsAsFactors = FALSE
+    ))
+  }
+
+  df <- df[order(-df$revenue), , drop = FALSE]
+  df$revenueRank <- seq_len(nrow(df))
+  df
 }

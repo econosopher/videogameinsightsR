@@ -18,4 +18,3 @@ Performs a lightweight authenticated request to verify that the configured
 credentials can access the API. Returns TRUE on success; otherwise FALSE
 with an informative message.
 }
-

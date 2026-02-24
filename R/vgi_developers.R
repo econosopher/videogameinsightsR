@@ -61,13 +61,16 @@ vgi_developer_info <- function(company_id,
   
   # Make API request
   result <- make_api_request(
-    endpoint = paste0("developers/", company_id),
+    endpoint = "companies/developers",
+    query_params = list(vgiIds = as.character(company_id), limit = 1),
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  return(result)
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0) return(list())
+  as.list(rows[1, , drop = FALSE])
 }
 
 #' Get Game IDs by Developer
@@ -141,19 +144,14 @@ vgi_developer_games <- function(company_id,
   
   # Make API request
   result <- make_api_request(
-    endpoint = paste0("developers/", company_id, "/game-ids"),
+    endpoint = "companies/developers/game-ids",
+    query_params = list(vgiIds = as.character(company_id), limit = 1),
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # The result should be an array of game IDs
-  if (is.list(result) && length(result) > 0) {
-    # Convert to numeric vector
-    game_ids <- unlist(result)
-    return(as.numeric(game_ids))
-  } else {
-    # Return empty numeric vector
-    return(numeric(0))
-  }
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0) return(numeric(0))
+  as.numeric(unlist(rows$vgiGameIds[[1]]))
 }

@@ -111,50 +111,9 @@ vgi_all_games_wishlist_countries <- function(auth_token = Sys.getenv("VGI_AUTH_T
     method = "GET",
     headers = headers
   )
-  
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
-    df <- do.call(rbind, lapply(result, function(x) {
-      # Process top wishlist countries
-      top_wishlist_countries <- NULL
-      top_wishlist_country <- NA
-      top_wishlist_country_pct <- NA
-      wishlist_country_count <- 0
-      
-      if (!is.null(x$topWishlistCountries) && length(x$topWishlistCountries) > 0) {
-        wc_df <- do.call(rbind, lapply(x$topWishlistCountries, function(wc) {
-          data.frame(
-            country = as.character(wc$country %||% NA),
-            countryName = as.character(wc$countryName %||% NA),
-            percentage = as.numeric(wc$percentage %||% 0),
-            stringsAsFactors = FALSE
-          )
-        }))
-        
-        top_wishlist_countries <- wc_df
-        wishlist_country_count <- nrow(wc_df)
-        if (wishlist_country_count > 0) {
-          top_wishlist_country <- wc_df$country[1]
-          top_wishlist_country_pct <- wc_df$percentage[1]
-        }
-      }
-      
-      data.frame(
-        steamAppId = as.integer(x$steamAppId),
-        topWishlistCountries = I(list(top_wishlist_countries)),
-        wishlistCountryCount = wishlist_country_count,
-        topWishlistCountry = top_wishlist_country,
-        topWishlistCountryPct = top_wishlist_country_pct,
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by top wishlist country percentage descending
-    df <- df[order(-df$topWishlistCountryPct, na.last = TRUE), ]
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0) {
     return(data.frame(
       steamAppId = integer(),
       topWishlistCountries = I(list()),
@@ -164,4 +123,37 @@ vgi_all_games_wishlist_countries <- function(auth_token = Sys.getenv("VGI_AUTH_T
       stringsAsFactors = FALSE
     ))
   }
+
+  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+    wc <- if ("wishlists" %in% names(rows)) rows$wishlists[[i]] else NULL
+    if (is.data.frame(wc) && nrow(wc) > 0) {
+      wc_df <- data.frame(
+        country = as.character(wc$countryCode %||% NA_character_),
+        countryName = as.character(wc$countryName %||% NA_character_),
+        percentage = as.numeric(wc$percentage %||% NA_real_),
+        stringsAsFactors = FALSE
+      )
+      top_country <- wc_df$country[1]
+      top_country_pct <- wc_df$percentage[1]
+      country_count <- nrow(wc_df)
+    } else {
+      wc_df <- NULL
+      top_country <- NA_character_
+      top_country_pct <- NA_real_
+      country_count <- 0
+    }
+
+    data.frame(
+      steamAppId = as.integer(rows$externalId[i] %||% NA),
+      topWishlistCountries = I(list(wc_df)),
+      wishlistCountryCount = as.integer(country_count),
+      topWishlistCountry = top_country,
+      topWishlistCountryPct = as.numeric(top_country_pct),
+      stringsAsFactors = FALSE
+    )
+  }))
+
+  df <- df[!is.na(df$steamAppId), , drop = FALSE]
+  df <- df[order(-df$topWishlistCountryPct, na.last = TRUE), , drop = FALSE]
+  df
 }

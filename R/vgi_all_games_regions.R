@@ -108,47 +108,14 @@ vgi_all_games_regions <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   
   # Make API request
   result <- make_api_request(
-    endpoint = "player-insights/games/regions",
+    endpoint = "player-insights/games/top-regions",
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
-    df <- do.call(rbind, lapply(result, function(x) {
-      # Extract regional percentages
-      na_pct <- as.numeric(x$northAmerica %||% 0)
-      eu_pct <- as.numeric(x$europe %||% 0)
-      asia_pct <- as.numeric(x$asia %||% 0)
-      sa_pct <- as.numeric(x$southAmerica %||% 0)
-      oc_pct <- as.numeric(x$oceania %||% 0)
-      af_pct <- as.numeric(x$africa %||% 0)
-      me_pct <- as.numeric(x$middleEast %||% 0)
-      
-      # Determine dominant region
-      regions <- c("northAmerica", "europe", "asia", "southAmerica", 
-                  "oceania", "africa", "middleEast")
-      percentages <- c(na_pct, eu_pct, asia_pct, sa_pct, oc_pct, af_pct, me_pct)
-      dominant_region <- regions[which.max(percentages)]
-      
-      data.frame(
-        steamAppId = as.integer(x$steamAppId),
-        northAmerica = na_pct,
-        europe = eu_pct,
-        asia = asia_pct,
-        southAmerica = sa_pct,
-        oceania = oc_pct,
-        africa = af_pct,
-        middleEast = me_pct,
-        dominantRegion = dominant_region,
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0) {
     return(data.frame(
       steamAppId = integer(),
       northAmerica = numeric(),
@@ -162,4 +129,47 @@ vgi_all_games_regions <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
       stringsAsFactors = FALSE
     ))
   }
+
+  map_region <- function(region_name) {
+    key <- tolower(region_name %||% "")
+    if (key == "north america") return("northAmerica")
+    if (key == "south america") return("southAmerica")
+    if (key == "middle east") return("middleEast")
+    if (key %in% c("europe", "asia", "oceania", "africa")) return(key)
+    NULL
+  }
+
+  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+    reg_df <- if ("topRegions" %in% names(rows)) rows$topRegions[[i]] else NULL
+    region_vals <- c(
+      northAmerica = 0, europe = 0, asia = 0, southAmerica = 0,
+      oceania = 0, africa = 0, middleEast = 0
+    )
+
+    if (is.data.frame(reg_df) && nrow(reg_df) > 0) {
+      for (j in seq_len(nrow(reg_df))) {
+        key <- map_region(reg_df$regionName[j])
+        if (!is.null(key)) {
+          region_vals[key] <- as.numeric(reg_df$percentage[j] %||% 0)
+        }
+      }
+    }
+
+    dominant_region <- names(region_vals)[which.max(region_vals)]
+    data.frame(
+      steamAppId = as.integer(rows$externalId[i] %||% NA),
+      northAmerica = as.numeric(region_vals["northAmerica"]),
+      europe = as.numeric(region_vals["europe"]),
+      asia = as.numeric(region_vals["asia"]),
+      southAmerica = as.numeric(region_vals["southAmerica"]),
+      oceania = as.numeric(region_vals["oceania"]),
+      africa = as.numeric(region_vals["africa"]),
+      middleEast = as.numeric(region_vals["middleEast"]),
+      dominantRegion = as.character(dominant_region),
+      stringsAsFactors = FALSE
+    )
+  }))
+
+  df <- df[!is.na(df$steamAppId), , drop = FALSE]
+  df
 }

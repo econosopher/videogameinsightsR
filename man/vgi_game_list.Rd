@@ -13,9 +13,9 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A data frame with columns:
+A tibble with columns:
 \describe{
-\item{id}{Integer. The Steam App ID}
+\item{steamAppId}{Integer. The Steam App ID}
 \item{name}{Character. The game name}
 }
 }

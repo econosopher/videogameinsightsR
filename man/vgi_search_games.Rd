@@ -8,7 +8,8 @@ vgi_search_games(
   query,
   limit = 10,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  allow_api_fallback = getOption("vgi.search_allow_api_fallback", TRUE)
 )
 }
 \arguments{
@@ -20,6 +21,10 @@ vgi_search_games(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{allow_api_fallback}{Logical. If \code{TRUE}, falls back to the expensive
+\code{games/game-list} API endpoint when no local cache is available. Defaults
+to \code{TRUE} (set \code{options(vgi.search_allow_api_fallback = FALSE)} to disable).}
 }
 \value{
 A \link[tibble:tibble]{tibble} containing search results with game

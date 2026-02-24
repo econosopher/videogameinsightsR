@@ -1,5 +1,5 @@
 test_that("get_base_url returns correct URL", {
-  expect_equal(get_base_url(), "https://vginsights.com/api/v3")
+  expect_equal(get_base_url(), "https://vginsights.com/api/v4")
 })
 
 test_that("get_auth_token works correctly", {

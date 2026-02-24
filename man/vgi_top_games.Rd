@@ -48,6 +48,12 @@ A \link[tibble:tibble]{tibble} containing top games with columns:
 Retrieve top games ranked by various metrics including revenue, units sold,
 concurrent users (CCU), daily active users (DAU), or followers.
 }
+\details{
+Note: The API does not currently provide server-side filtering by platform
+or direct CCU/DAU top lists. This function constructs top lists from the
+rankings endpoint, which may not perfectly reflect CCU/DAU. Treat these as
+approximate until the API supports direct metrics.
+}
 \examples{
 \dontrun{
 # Ensure the VGI_AUTH_TOKEN environment variable is set

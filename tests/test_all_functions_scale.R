@@ -18,7 +18,7 @@ cat(paste0("\n=== API KEY STATUS ===\n"))
 cat(paste0("API Key: ", ifelse(api_key != "", "Found", "NOT FOUND"), "\n\n"))
 
 # Base URL
-base_url <- "https://vginsights.com/api/v3"
+base_url <- "https://vginsights.com/api/v4"
 
 # Test Steam IDs - mix of popular games
 test_ids <- c(

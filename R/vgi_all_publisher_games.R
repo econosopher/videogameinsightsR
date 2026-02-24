@@ -96,30 +96,14 @@ vgi_all_publisher_games <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), h
   
   # Make API request
   result <- make_api_request(
-    endpoint = "publishers/game-ids",
+    endpoint = "companies/publishers/game-ids",
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
-    df <- do.call(rbind, lapply(names(result), function(pub_id) {
-      game_ids <- result[[pub_id]]
-      data.frame(
-        publisherId = as.integer(pub_id),
-        gameIds = I(list(as.integer(unlist(game_ids)))),
-        gameCount = length(game_ids),
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by game count descending
-    df <- df[order(-df$gameCount), ]
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0) {
     return(data.frame(
       publisherId = integer(),
       gameIds = I(list()),
@@ -127,4 +111,16 @@ vgi_all_publisher_games <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), h
       stringsAsFactors = FALSE
     ))
   }
+
+  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+    game_ids <- as.integer(unlist(rows$vgiGameIds[[i]]))
+    data.frame(
+      publisherId = as.integer(rows$vgiCompanyId[i]),
+      gameIds = I(list(game_ids)),
+      gameCount = length(game_ids),
+      stringsAsFactors = FALSE
+    )
+  }))
+  df <- df[order(-df$gameCount), , drop = FALSE]
+  df
 }

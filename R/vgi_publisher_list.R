@@ -67,11 +67,6 @@ vgi_publisher_list <- function(search = NULL,
   
   # Validate authentication early to satisfy test expectations
   get_auth_token(auth_token)
-
-  # Require the search parameter as the primary criterion
-  if (is.null(search)) {
-    stop("The 'search' parameter is required. You must specify a publisher name or search term to find publishers. The 'min_games' and 'limit' parameters are optional filters.")
-  }
   
   # Prevent abuse of limit parameter
   if (!is.null(limit) && limit > 1000) {
@@ -84,51 +79,38 @@ vgi_publisher_list <- function(search = NULL,
     validate_numeric(limit, "limit", min_val = 1, max_val = 10000)
   }
   
+  # v4 list endpoint supports pagination but not text search/min_games filters.
   if (!is.null(min_games)) {
-    validate_numeric(min_games, "min_games", min_val = 1)
+    warning("'min_games' is not supported by v4 publisher list endpoint and will be ignored.")
   }
-  
-  # Build query parameters
   query_params <- list()
-  if (!is.null(search)) {
-    query_params$search <- search
-  }
-  if (!is.null(limit)) {
-    query_params$limit <- limit
-  }
-  if (!is.null(min_games)) {
-    query_params$min_games <- min_games
-  }
-  
-  # Make API request
+  if (!is.null(limit)) query_params$limit <- limit
+
   result <- make_api_request(
-    endpoint = "publishers/publisher-list",
+    endpoint = "companies/publishers/list",
     query_params = query_params,
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
-    df <- do.call(rbind, lapply(result, function(x) {
-      data.frame(
-        id = as.integer(x$id),
-        name = as.character(x$name),
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by name for easier browsing
-    df <- df[order(df$name), ]
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
-    return(data.frame(
-      id = integer(),
-      name = character(),
-      stringsAsFactors = FALSE
-    ))
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0) {
+    return(data.frame(id = integer(), name = character(), stringsAsFactors = FALSE))
   }
+
+  df <- data.frame(
+    id = as.integer(rows$vgiCompanyId %||% NA),
+    name = as.character(rows$name %||% NA_character_),
+    slug = as.character(rows$slug %||% NA_character_),
+    stringsAsFactors = FALSE
+  )
+  df <- df[!is.na(df$id), , drop = FALSE]
+  if (!is.null(search) && nzchar(search)) {
+    nm <- df$name
+    nm[is.na(nm)] <- ""
+    df <- df[grepl(search, nm, ignore.case = TRUE), , drop = FALSE]
+  }
+  df <- df[order(df$name), , drop = FALSE]
+  df
 }

@@ -105,55 +105,14 @@ vgi_all_games_player_overlap <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN
   
   # Make API request
   result <- make_api_request(
-    endpoint = "player-insights/games/player-overlap",
+    endpoint = "player-overlap",
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
-    df <- do.call(rbind, lapply(result, function(x) {
-      # Process overlap data
-      top_overlaps <- NULL
-      overlap_count <- 0
-      top_overlap_game <- NA
-      top_overlap_pct <- NA
-      
-      if (!is.null(x$topOverlaps) && length(x$topOverlaps) > 0) {
-        overlap_df <- do.call(rbind, lapply(x$topOverlaps, function(overlap) {
-          data.frame(
-            steamAppId = as.integer(overlap$steamAppId %||% NA),
-            overlapPercentage = as.numeric(overlap$overlapPercentage %||% 0),
-            overlapIndex = as.numeric(overlap$overlapIndex %||% 0),
-            stringsAsFactors = FALSE
-          )
-        }))
-        
-        top_overlaps <- overlap_df
-        overlap_count <- nrow(overlap_df)
-        if (overlap_count > 0) {
-          top_overlap_game <- overlap_df$steamAppId[1]
-          top_overlap_pct <- overlap_df$overlapPercentage[1]
-        }
-      }
-      
-      data.frame(
-        steamAppId = as.integer(x$steamAppId),
-        topOverlaps = I(list(top_overlaps)),
-        overlapCount = overlap_count,
-        topOverlapGame = top_overlap_game,
-        topOverlapPct = top_overlap_pct,
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    # Sort by top overlap percentage descending
-    df <- df[order(-df$topOverlapPct, na.last = TRUE), ]
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0) {
     return(data.frame(
       steamAppId = integer(),
       topOverlaps = I(list()),
@@ -163,4 +122,37 @@ vgi_all_games_player_overlap <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN
       stringsAsFactors = FALSE
     ))
   }
+
+  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+    overlaps <- if ("playerOverlaps" %in% names(rows)) rows$playerOverlaps[[i]] else NULL
+    if (is.data.frame(overlaps) && nrow(overlaps) > 0) {
+      overlap_df <- data.frame(
+        steamAppId = as.integer(overlaps$externalId %||% NA),
+        overlapPercentage = as.numeric(overlaps$unitsSoldOverlapPercentage %||% NA),
+        overlapIndex = as.numeric(overlaps$unitsSoldOverlapIndex %||% NA),
+        stringsAsFactors = FALSE
+      )
+      overlap_count <- nrow(overlap_df)
+      top_overlap_game <- overlap_df$steamAppId[1]
+      top_overlap_pct <- overlap_df$overlapPercentage[1]
+    } else {
+      overlap_df <- NULL
+      overlap_count <- 0
+      top_overlap_game <- NA_integer_
+      top_overlap_pct <- NA_real_
+    }
+
+    data.frame(
+      steamAppId = as.integer(rows$externalId[i] %||% NA),
+      topOverlaps = I(list(overlap_df)),
+      overlapCount = as.integer(overlap_count),
+      topOverlapGame = as.integer(top_overlap_game),
+      topOverlapPct = as.numeric(top_overlap_pct),
+      stringsAsFactors = FALSE
+    )
+  }))
+
+  df <- df[!is.na(df$steamAppId), , drop = FALSE]
+  df <- df[order(-df$topOverlapPct, na.last = TRUE), , drop = FALSE]
+  df
 }

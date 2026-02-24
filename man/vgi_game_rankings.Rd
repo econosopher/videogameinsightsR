@@ -7,6 +7,7 @@
 vgi_game_rankings(
   offset = NULL,
   limit = NULL,
+  date = Sys.Date() - 7,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   headers = list()
 )
@@ -16,6 +17,9 @@ vgi_game_rankings(
 
 \item{limit}{Integer. Maximum number of results to return. Without specifying
 limit you will receive 5 results. The maximum limit is 1000. Optional.}
+
+\item{date}{Character string or Date. Snapshot date to build rankings from.
+Defaults to 7 days ago to align with data availability lag.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}

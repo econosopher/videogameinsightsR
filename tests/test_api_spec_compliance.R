@@ -63,7 +63,7 @@ capture_api_call <- function(func, ...) {
 context("API Specification Compliance")
 
 test_that("vgi_game_rankings sends only spec-compliant parameters", {
-  spec_params <- get_endpoint_params("/v3/games/rankings")
+  spec_params <- get_endpoint_params("/v4/games/rankings")
   spec_param_names <- names(spec_params)
   
   # Test what parameters the function actually sends
@@ -91,7 +91,7 @@ test_that("vgi_top_games sends only spec-compliant parameters", {
   metrics <- c("revenue", "units", "ccu", "dau", "followers")
   
   for (metric in metrics) {
-    endpoint_path <- sprintf("/v3/analytics/top-games-%s", metric)
+    endpoint_path <- sprintf("/v4/analytics/top-games-%s", metric)
     spec_params <- get_endpoint_params(endpoint_path)
     
     if (is.null(spec_params)) {
@@ -116,7 +116,7 @@ test_that("vgi_top_games sends only spec-compliant parameters", {
 })
 
 test_that("vgi_game_list sends only spec-compliant parameters", {
-  spec_params <- get_endpoint_params("/v3/games/game-list")
+  spec_params <- get_endpoint_params("/v4/games/game-list")
   spec_param_names <- names(spec_params)
   
   call_info <- capture_api_call(vgi_game_list,

@@ -73,29 +73,15 @@ vgi_top_countries <- function(steam_app_id,
   
   # Make API request
   result <- make_api_request(
-    endpoint = paste0("player-insights/games/", steam_app_id, "/top-countries"),
+    endpoint = "player-insights/games/top-countries",
+    query_params = list(steamAppIds = as.character(steam_app_id), limit = 1),
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
-    df <- do.call(rbind, lapply(seq_along(result), function(i) {
-      x <- result[[i]]
-      data.frame(
-        country = as.character(x$country %||% NA),
-        countryName = as.character(x$countryName %||% NA),
-        playerCount = as.integer(x$playerCount %||% NA),
-        percentage = as.numeric(x$percentage %||% NA),
-        rank = i,  # Rank by order in response
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0 || !"topCountries" %in% names(rows)) {
     return(data.frame(
       country = character(),
       countryName = character(),
@@ -105,4 +91,25 @@ vgi_top_countries <- function(steam_app_id,
       stringsAsFactors = FALSE
     ))
   }
+
+  top_countries <- rows$topCountries[[1]]
+  if (!is.data.frame(top_countries) || nrow(top_countries) == 0) {
+    return(data.frame(
+      country = character(),
+      countryName = character(),
+      playerCount = integer(),
+      percentage = numeric(),
+      rank = integer(),
+      stringsAsFactors = FALSE
+    ))
+  }
+
+  data.frame(
+    country = as.character(top_countries$countryCode %||% NA_character_),
+    countryName = as.character(top_countries$countryName %||% NA_character_),
+    playerCount = as.integer(NA),
+    percentage = as.numeric(top_countries$percentage %||% NA),
+    rank = as.integer(top_countries$rank %||% seq_len(nrow(top_countries))),
+    stringsAsFactors = FALSE
+  )
 }

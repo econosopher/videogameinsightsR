@@ -41,7 +41,7 @@ test_results <- list()
 # Test authentication first
 cat("\n=== AUTHENTICATION TEST ===\n")
 test_auth <- tryCatch({
-  req <- request("https://vginsights.com/api/v3") |>
+  req <- request("https://vginsights.com/api/v4") |>
     req_url_path_append("games", "game-list") |>
     req_url_query(limit = 1) |>
     req_headers("api-key" = api_key) |>

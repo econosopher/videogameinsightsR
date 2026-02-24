@@ -58,8 +58,10 @@
 vgi_game_list <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), 
                          headers = list()) {
   
-  # Warn about potentially large response
-  message("Note: This endpoint returns ALL games and may take some time. Consider caching the results.")
+  # Warn about potentially large response in interactive/verbose sessions.
+  if (interactive() || isTRUE(getOption("vgi.verbose", FALSE))) {
+    message("Note: This endpoint returns ALL games and may take some time. Consider caching the results.")
+  }
   
   # Make API request - no query parameters supported
   result <- make_api_request(

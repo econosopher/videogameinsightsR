@@ -77,34 +77,45 @@ vgi_insights_playtime <- function(steam_app_id,
   # Validate inputs
   validate_numeric(steam_app_id, "steam_app_id")
   
-  # Make API request to the new endpoint
+  # v4 playtime endpoint is query-based.
   result <- make_api_request(
-    endpoint = paste0("player-insights/games/", steam_app_id, "/playtime"),
+    endpoint = "player-insights/games/playtime",
+    query_params = list(steamAppIds = as.character(steam_app_id), limit = 1),
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # Process the playtimeRanges array if it exists
-  if (!is.null(result$playtimeRanges) && length(result$playtimeRanges) > 0) {
-    # Convert to data frame
-    ranges_df <- do.call(rbind, lapply(result$playtimeRanges, function(x) {
-      data.frame(
-        range = as.character(x$range),
-        percentage = as.numeric(x$percentage %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    result$playtimeRanges <- ranges_df
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0) {
+    return(list(
+      steamAppId = as.integer(steam_app_id),
+      avgPlaytime = NA_real_,
+      medianPlaytime = NA_real_,
+      avgPlaytimeRank = NA_integer_,
+      avgPlaytimePrct = NA_real_,
+      playtimeRanges = data.frame(range = character(), percentage = numeric(), stringsAsFactors = FALSE)
+    ))
+  }
+
+  row <- rows[1, , drop = FALSE]
+  ranges <- if ("playtime" %in% names(row)) row$playtime[[1]] else NULL
+  if (!is.data.frame(ranges) || nrow(ranges) == 0) {
+    ranges_df <- data.frame(range = character(), percentage = numeric(), stringsAsFactors = FALSE)
   } else {
-    # Return empty data frame with correct structure
-    result$playtimeRanges <- data.frame(
-      range = character(),
-      percentage = numeric(),
+    ranges_df <- data.frame(
+      range = as.character(ranges$range %||% NA_character_),
+      percentage = as.numeric(ranges$percentage %||% NA_real_),
       stringsAsFactors = FALSE
     )
   }
-  
-  return(result)
+
+  list(
+    steamAppId = as.integer(row$externalId %||% steam_app_id),
+    avgPlaytime = as.numeric(row$avgPlaytime %||% NA_real_),
+    medianPlaytime = as.numeric(row$medianPlaytime %||% NA_real_),
+    avgPlaytimeRank = as.integer(row$avgPlaytimeRank %||% NA_integer_),
+    avgPlaytimePrct = as.numeric(row$avgPlaytimePrct %||% NA_real_),
+    playtimeRanges = ranges_df
+  )
 }

@@ -132,7 +132,7 @@ vgi_all_games_metadata <- function(limit = 1000,
   validate_numeric(offset, "offset", min_val = 0)
   
   # Build query parameters
-  query_params <- list(offset = offset)
+  query_params <- list(cursor = offset)
   if (!is.null(limit)) {
     query_params$limit <- limit
   }
@@ -146,26 +146,8 @@ vgi_all_games_metadata <- function(limit = 1000,
     headers = headers
   )
   
-  # Convert to data frame
-  if (is.list(result) && length(result) > 0) {
-    df <- do.call(rbind, lapply(result, function(x) {
-      data.frame(
-        steamAppId = as.integer(x$steamAppId %||% NA),
-        name = as.character(x$name %||% NA),
-        releaseDate = as.character(x$releaseDate %||% NA),
-        developer = as.character(x$developer %||% NA),
-        publisher = as.character(x$publisher %||% NA),
-        genres = I(list(unlist(x$genres))),
-        tags = I(list(unlist(x$tags))),
-        price = as.numeric(x$price %||% 0),
-        description = as.character(x$description %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-    
-    return(df)
-  } else {
-    # Return empty data frame with correct structure
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0) {
     return(data.frame(
       steamAppId = integer(),
       name = character(),
@@ -179,4 +161,32 @@ vgi_all_games_metadata <- function(limit = 1000,
       stringsAsFactors = FALSE
     ))
   }
+
+  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+    row <- rows[i, , drop = FALSE]
+    steam_id <- .vgi_parse_steam_app_id(row$storeUrl.steam)
+    dev_name <- NA_character_
+    pub_name <- NA_character_
+    if ("developers" %in% names(row) && is.data.frame(row$developers[[1]]) && nrow(row$developers[[1]]) > 0) {
+      dev_name <- as.character(row$developers[[1]]$companyName[1] %||% NA_character_)
+    }
+    if ("publishers" %in% names(row) && is.data.frame(row$publishers[[1]]) && nrow(row$publishers[[1]]) > 0) {
+      pub_name <- as.character(row$publishers[[1]]$companyName[1] %||% NA_character_)
+    }
+    data.frame(
+      steamAppId = as.integer(steam_id),
+      name = as.character(row$name %||% NA_character_),
+      releaseDate = as.character(row$releaseDate.steam %||% row$steamFullReleaseDate %||% NA_character_),
+      developer = dev_name,
+      publisher = pub_name,
+      genres = I(list(unlist(row$genre[[1]] %||% character(0)))),
+      tags = I(list(unlist(row$steamTags[[1]] %||% character(0)))),
+      price = as.numeric(row$price.steam %||% NA),
+      description = as.character(NA),
+      stringsAsFactors = FALSE
+    )
+  }))
+
+  df <- df[!is.na(df$steamAppId), , drop = FALSE]
+  df
 }

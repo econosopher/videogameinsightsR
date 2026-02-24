@@ -86,26 +86,67 @@
 #'                         pricing$unitsSold > 50000, ]
 #' cat("Premium games (>$40) with >50k sales:", nrow(premium_games), "\n")
 #' }
-vgi_units_sold_by_date <- function(date,
-                                  steam_app_ids = NULL,
-                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                  headers = list()) {
+vgi_entitlements_by_date <- function(date,
+                                    steam_app_ids = NULL,
+                                    auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                    headers = list()) {
   
   # Validate and format date
   formatted_date <- format_date(date)
   
-  steam_app_ids <- if (is.null(steam_app_ids)) NULL else as.numeric(steam_app_ids)
-  fetch_limit <- if (is.null(steam_app_ids)) 2000 else max(50, length(steam_app_ids) * 5)
-
-  result <- .vgi_historical_results(
-    date = formatted_date,
-    steam_app_ids = steam_app_ids,
-    limit = fetch_limit,
+  # Build query parameters if steam_app_ids provided
+  query_params <- list()
+  if (!is.null(steam_app_ids)) {
+    # Ensure numeric and convert to comma-separated string
+    steam_app_ids <- as.numeric(steam_app_ids)
+    ids_string <- paste(steam_app_ids, collapse = ",")
+    query_params$steamAppIds <- ids_string
+  }
+  
+  # Make API request
+  result <- make_api_request(
+    endpoint = paste0("commercial-performance/units-sold/", formatted_date),
+    query_params = query_params,
     auth_token = auth_token,
+    method = "GET",
     headers = headers
   )
-
-  if (!is.data.frame(result) || nrow(result) == 0) {
+  
+  # Handle response - it may already be a data frame
+  if (is.data.frame(result)) {
+    # Response is already a data frame from jsonlite
+    df <- data.frame(
+      steamAppId = as.integer(result$steamAppId),
+      date = formatted_date,
+      unitsSold = as.integer(result$unitsSoldTotal),
+      dailyUnits = as.integer(result$unitsSoldChange),
+      stringsAsFactors = FALSE
+    )
+    
+    # Sort by entitlements descending and add rank
+    df <- df[order(-df$entitlements), ]
+    df$entitlementsRank <- seq_len(nrow(df))
+    
+    return(df)
+  } else if (is.list(result) && length(result) > 0) {
+    # Handle list response (old format)
+    df <- do.call(rbind, lapply(result, function(x) {
+      data.frame(
+        steamAppId = as.integer(x$steamAppId),
+        date = formatted_date,
+        unitsSold = as.integer(x$unitsSoldTotal %||% x$unitsSold %||% 0),
+        dailyUnits = as.integer(x$unitsSoldChange %||% x$dailyUnits %||% NA),
+        stringsAsFactors = FALSE
+      )
+    }))
+    
+    # Sort by entitlements descending and add rank
+    df <- df[order(-df$entitlements), ]
+    df$entitlementsRank <- seq_len(nrow(df))
+    
+    return(df)
+  } else {
+    # Return empty data frame with correct structure
     return(data.frame(
       steamAppId = integer(),
       date = character(),
@@ -115,31 +156,4 @@ vgi_units_sold_by_date <- function(date,
       stringsAsFactors = FALSE
     ))
   }
-
-  if ("platform" %in% names(result)) {
-    result <- result[result$platform == "steam", , drop = FALSE]
-  }
-
-  df <- data.frame(
-    steamAppId = as.integer(result$externalId %||% NA),
-    date = formatted_date,
-    unitsSold = as.integer(result$unitsSoldTotal %||% NA),
-    dailyUnits = as.integer(result$unitsSoldChange %||% NA),
-    stringsAsFactors = FALSE
-  )
-  df <- df[!is.na(df$steamAppId), , drop = FALSE]
-  if (nrow(df) == 0) {
-    return(data.frame(
-      steamAppId = integer(),
-      date = character(),
-      unitsSold = integer(),
-      dailyUnits = integer(),
-      salesRank = integer(),
-      stringsAsFactors = FALSE
-    ))
-  }
-
-  df <- df[order(-df$unitsSold), , drop = FALSE]
-  df$salesRank <- seq_len(nrow(df))
-  df
 }

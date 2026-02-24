@@ -71,50 +71,13 @@ vgi_steam_market_data <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   
   # Make API request
   result <- make_api_request(
-    endpoint = "analytics/steam-market-data",
+    endpoint = "market-data",
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # Process nested data structures if they exist
-  if (!is.null(result$topGenres) && length(result$topGenres) > 0) {
-    # Convert to data frame
-    result$topGenres <- do.call(rbind, lapply(result$topGenres, function(x) {
-      data.frame(
-        genre = as.character(x$genre %||% NA),
-        gameCount = as.integer(x$gameCount %||% NA),
-        totalRevenue = as.numeric(x$totalRevenue %||% NA),
-        averagePrice = as.numeric(x$averagePrice %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  if (!is.null(result$topTags) && length(result$topTags) > 0) {
-    # Convert to data frame
-    result$topTags <- do.call(rbind, lapply(result$topTags, function(x) {
-      data.frame(
-        tag = as.character(x$tag %||% NA),
-        gameCount = as.integer(x$gameCount %||% NA),
-        totalRevenue = as.numeric(x$totalRevenue %||% NA),
-        averageRating = as.numeric(x$averageRating %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  if (!is.null(result$priceDistribution) && length(result$priceDistribution) > 0) {
-    # Convert to data frame
-    result$priceDistribution <- do.call(rbind, lapply(result$priceDistribution, function(x) {
-      data.frame(
-        priceRange = as.character(x$priceRange %||% NA),
-        count = as.integer(x$count %||% NA),
-        percentage = as.numeric(x$percentage %||% NA),
-        stringsAsFactors = FALSE
-      )
-    }))
-  }
-  
-  return(result)
+
+  rows <- .vgi_unwrap_results(result)
+  if (is.data.frame(rows)) return(rows)
+  data.frame()
 }

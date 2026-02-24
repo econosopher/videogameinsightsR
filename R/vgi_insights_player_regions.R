@@ -70,39 +70,48 @@ vgi_insights_player_regions <- function(steam_app_id,
   # Validate inputs
   validate_numeric(steam_app_id, "steam_app_id")
   
-  # Make API request to the new endpoint
+  # v4 top-regions endpoint is query-based.
   result <- make_api_request(
-    endpoint = paste0("player-insights/games/", steam_app_id, "/regions"),
+    endpoint = "player-insights/games/top-regions",
+    query_params = list(steamAppIds = as.character(steam_app_id), limit = 1),
     auth_token = auth_token,
     method = "GET",
     headers = headers
   )
-  
-  # Process the regions array if it exists
-  if (!is.null(result$regions) && length(result$regions) > 0) {
-    # Convert to data frame
-    regions_df <- do.call(rbind, lapply(result$regions, function(x) {
-      data.frame(
-        regionName = as.character(x$regionName),
-        rank = as.integer(x$rank),
-        percentage = as.numeric(x$percentage),
+
+  rows <- .vgi_unwrap_results(result)
+  if (!is.data.frame(rows) || nrow(rows) == 0 || !"topRegions" %in% names(rows)) {
+    return(list(
+      steamAppId = as.integer(steam_app_id),
+      regions = data.frame(
+        regionName = character(),
+        rank = integer(),
+        percentage = numeric(),
         stringsAsFactors = FALSE
       )
-    }))
-    
-    # Sort by rank
-    regions_df <- regions_df[order(regions_df$rank), ]
-    
-    result$regions <- regions_df
-  } else {
-    # Return empty data frame with correct structure
-    result$regions <- data.frame(
+    ))
+  }
+
+  regions_df <- rows$topRegions[[1]]
+  if (!is.data.frame(regions_df) || nrow(regions_df) == 0) {
+    regions_df <- data.frame(
       regionName = character(),
       rank = integer(),
       percentage = numeric(),
       stringsAsFactors = FALSE
     )
+  } else {
+    regions_df <- data.frame(
+      regionName = as.character(regions_df$regionName %||% NA_character_),
+      rank = as.integer(regions_df$rank %||% seq_len(nrow(regions_df))),
+      percentage = as.numeric(regions_df$percentage %||% NA),
+      stringsAsFactors = FALSE
+    )
+    regions_df <- regions_df[order(regions_df$rank), , drop = FALSE]
   }
-  
-  return(result)
+
+  list(
+    steamAppId = as.integer(steam_app_id),
+    regions = regions_df
+  )
 }
