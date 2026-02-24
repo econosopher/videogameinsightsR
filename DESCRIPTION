@@ -31,7 +31,8 @@ Imports:
     tibble,
     tidyr,
     purrr,
-    rvest
+    rvest,
+    stats
 Suggests: 
     dotenv,
     ggplot2,

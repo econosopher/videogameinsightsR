@@ -5,7 +5,7 @@
 # preparation, and API request execution.
 
 #' @importFrom rlang abort %||%
-#' @importFrom stats setNames
+#' @importFrom stats setNames lag
 #' @importFrom httr2 request req_user_agent req_url_path_append req_url_query
 #'   req_error req_perform resp_status resp_body_raw resp_check_status
 #'   resp_body_string req_headers req_auth_bearer_token req_body_json
