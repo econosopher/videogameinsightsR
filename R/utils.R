@@ -4,7 +4,11 @@
 # in the package. They handle tasks like input validation, query parameter
 # preparation, and API request execution.
 
-#' @importFrom rlang abort %||%
+#' @importFrom rlang abort %||% :=
+#' @importFrom rvest read_html html_attr html_node
+#' @importFrom dplyr select arrange group_by mutate ungroup all_of
+#' @importFrom magrittr %>%
+#' @importFrom rlang .data
 #' @importFrom stats setNames lag
 #' @importFrom httr2 request req_user_agent req_url_path_append req_url_query
 #'   req_error req_perform resp_status resp_body_raw resp_check_status

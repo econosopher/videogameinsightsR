@@ -13,8 +13,8 @@
 #' print(bf_id)
 #' }
 get_steam_app_id <- function(game_name) {
-  library(httr2)
-  library(rvest)
+  requireNamespace("httr2", quietly = TRUE)
+  requireNamespace("rvest", quietly = TRUE)
   
   # URL encode the search term
   search_term <- URLencode(game_name)

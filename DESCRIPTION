@@ -32,7 +32,8 @@ Imports:
     tidyr,
     purrr,
     rvest,
-    stats
+    stats,
+    magrittr
 Suggests: 
     dotenv,
     ggplot2,

@@ -481,6 +481,9 @@ describe_yoy_period <- function(period_dates) {
 
 #' Print Method for Year-over-Year Comparison
 #'
+#' @param x A `vgi_yoy_comparison` object.
+#' @param ... Additional arguments passed to `print()`.
+#'
 #' @export
 print.vgi_yoy_comparison <- function(x, ...) {
   cat("Video Game Insights Year-over-Year Comparison\n")

@@ -6,6 +6,11 @@
 \usage{
 \method{print}{vgi_yoy_comparison}(x, ...)
 }
+\arguments{
+\item{x}{A \code{vgi_yoy_comparison} object.}
+
+\item{...}{Additional arguments passed to \code{print()}.}
+}
 \description{
 Print Method for Year-over-Year Comparison
 }

@@ -241,7 +241,7 @@ vgi_smart_game_search <- function(query,
   # Sort by release date (newest first)
   games_data <- games_data[order(games_data$releaseDate, decreasing = TRUE), ]
   
-  message(sprintf("\n✓ Found %d games from the same %s", nrow(games_data), search_type))
+  message(sprintf("\nFound %d games from the same %s", nrow(games_data), search_type))
   
   return(games_data)
 }

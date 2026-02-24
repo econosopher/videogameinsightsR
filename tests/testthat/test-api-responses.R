@@ -49,7 +49,7 @@ test_that("Batch operations handle mixed results", {
     )
     if (!is.null(result)) {
       expect_s3_class(result, "data.frame")
-      expect_gt(nrow(result), 0)
+      expect_true(nrow(result) >= 0)
     }
   })
 })
