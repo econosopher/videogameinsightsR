@@ -72,8 +72,7 @@ vgi_insights_price_history <- function(steam_app_id,
   
   empty_changes <- tibble::tibble(
     priceInitial = numeric(), priceFinal = numeric(),
-    firstDate = as.Date(character()), lastDate = as.Date(character()),
-
+    firstDate = as.Date(character()), lastDate = as.Date(character())
   )
   
   price_ts <- hist$priceHistory
@@ -84,10 +83,45 @@ vgi_insights_price_history <- function(steam_app_id,
       priceChanges = empty_changes
     )))
   }
+
+  # vgi_historical_data returns snake_case columns after name cleaning.
+  # Keep compatibility with both naming styles in case callers pass raw frames.
+  price_initial_col <- if ("price_initial" %in% names(price_ts)) {
+    "price_initial"
+  } else if ("priceInitial" %in% names(price_ts)) {
+    "priceInitial"
+  } else {
+    NULL
+  }
+  price_final_col <- if ("price_final" %in% names(price_ts)) {
+    "price_final"
+  } else if ("priceFinal" %in% names(price_ts)) {
+    "priceFinal"
+  } else {
+    NULL
+  }
+  if (is.null(price_initial_col) || is.null(price_final_col)) {
+    stop("priceHistory is missing expected price columns (price_initial/price_final).")
+  }
+
+  if (!is.null(currency) && "currency" %in% names(price_ts)) {
+    price_ts <- price_ts[price_ts$currency == currency, , drop = FALSE]
+    if (nrow(price_ts) == 0) {
+      return(.vgi_clean_list(list(
+        steamAppId = as.integer(steam_app_id),
+        currency = currency,
+        priceChanges = empty_changes
+      )))
+    }
+  }
   
   # Build price-change periods from daily snapshots
-  build_changes <- function(df) {
+  build_changes <- function(df, initial_col, final_col) {
     df <- df[order(df$date), , drop = FALSE]
+    initial_vals <- as.numeric(df[[initial_col]])
+    final_vals <- as.numeric(df[[final_col]])
+    df$priceInitial <- initial_vals
+    df$priceFinal <- final_vals
     df <- df[!is.na(df$priceInitial) | !is.na(df$priceFinal), , drop = FALSE]
     if (nrow(df) == 0) return(empty_changes)
     
@@ -103,8 +137,7 @@ vgi_insights_price_history <- function(steam_app_id,
         changes[[length(changes) + 1]] <- tibble::tibble(
           priceInitial = cur_init, priceFinal = cur_final,
           firstDate = as.Date(first_date),
-          lastDate = as.Date(df$date[i - 1]),
-
+          lastDate = as.Date(df$date[i - 1])
         )
         cur_init <- pi
         cur_final <- pf
@@ -113,15 +146,14 @@ vgi_insights_price_history <- function(steam_app_id,
     }
     changes[[length(changes) + 1]] <- tibble::tibble(
       priceInitial = cur_init, priceFinal = cur_final,
-      firstDate = as.Date(first_date), lastDate = as.Date(NA),
-
+      firstDate = as.Date(first_date), lastDate = as.Date(NA)
     )
     
     result <- dplyr::bind_rows(changes)
     result[order(result$firstDate, decreasing = TRUE), , drop = FALSE]
   }
   
-  price_changes <- build_changes(price_ts)
+  price_changes <- build_changes(price_ts, price_initial_col, price_final_col)
   
   .vgi_clean_list(list(
     steamAppId = as.integer(steam_app_id),
