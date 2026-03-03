@@ -1,7 +1,7 @@
 # API Specification vs R Package Implementation Mismatches
 
 ## Overview
-This document details all discrepancies between the Video Game Insights API specification and the videogameinsightsR package implementation. These mismatches explain why the API returns unexpected results.
+This document details all discrepancies between the Video Game Insights API specification and the VideoGameInsightsR package implementation. These mismatches explain why the API returns unexpected results.
 
 ## Critical Mismatches
 
@@ -134,7 +134,7 @@ The fundamental issue is that the R package was developed based on expected API 
 Run the diagnostic tests regularly:
 
 ```r
-# From the videogameinsightsR directory
+# From the VideoGameInsightsR directory
 source("R/run_api_diagnostics.R")
 ```
 
@@ -146,4 +146,4 @@ This will:
 
 ## Summary
 
-The videogameinsightsR package sends many parameters that the API doesn't accept, explaining why filtering doesn't work. Additionally, the API returns a static dataset of old games regardless of parameters, making it unusable for current gaming analytics. Both the R package and the API need updates to work correctly together.
+The VideoGameInsightsR package sends many parameters that the API doesn't accept, explaining why filtering doesn't work. Additionally, the API returns a static dataset of old games regardless of parameters, making it unusable for current gaming analytics. Both the R package and the API need updates to work correctly together.

@@ -46,20 +46,20 @@
 #'   print(paste("Weekly growth:", format(weekly_growth, big.mark = ",")))
 #' }
 #' 
-#' # Plot follower growth
+#' # Plot follower totals and daily changes
+#' old_par <- par(no.readonly = TRUE)
+#' par(mfrow = c(2, 1))
 #' plot(followers$followersChange$date, followers$followersChange$followersTotal,
 #'      type = "l", col = "darkgreen", lwd = 2,
 #'      main = "Follower Growth Over Time",
 #'      xlab = "Date", ylab = "Total Followers")
 #' 
-#' # Add daily changes as bars
-#' par(new = TRUE)
+#' # Daily changes as bars
 #' barplot(followers$followersChange$followersChange,
 #'         col = ifelse(followers$followersChange$followersChange > 0, 
 #'                      "lightgreen", "lightcoral"),
-#'         border = NA, axes = FALSE, xlab = "", ylab = "")
-#' axis(4)
-#' mtext("Daily Change", side = 4, line = 3)
+#'         border = NA, xlab = "Observation", ylab = "Daily Change")
+#' par(old_par)
 #' }
 vgi_insights_followers <- function(steam_app_id,
                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
@@ -71,18 +71,18 @@ vgi_insights_followers <- function(steam_app_id,
   
   fol <- hist$followers
   if (is.null(fol) || nrow(fol) == 0) {
-    changes_df <- data.frame(
+    changes_df <- tibble::tibble(
       date = as.Date(character()), followersTotal = integer(),
-      followersChange = integer(), stringsAsFactors = FALSE
+      followersChange = integer()
     )
   } else {
-    changes_df <- data.frame(
+    changes_df <- tibble::tibble(
       date = as.Date(fol$date),
       followersTotal = as.integer(fol$followers),
       followersChange = c(NA_integer_, diff(as.integer(fol$followers))),
-      stringsAsFactors = FALSE
+
     )
   }
   
-  list(steamAppId = as.integer(steam_app_id), followersChange = changes_df)
+  .vgi_clean_list(list(steamAppId = as.integer(steam_app_id), followersChange = changes_df))
 }

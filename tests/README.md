@@ -1,6 +1,6 @@
-# videogameinsightsR Tests
+# VideoGameInsightsR Tests
 
-This directory contains the test suite for the videogameinsightsR package.
+This directory contains the test suite for the VideoGameInsightsR package.
 
 ## Test Structure
 

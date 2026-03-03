@@ -49,18 +49,18 @@ vgi_insights_entitlements <- function(steam_app_id,
   
   units <- hist$unitsSold
   if (is.null(units) || nrow(units) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(), date = as.Date(character()),
       entitlementsChange = integer(), entitlementsTotal = integer(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
   
-  data.frame(
+  .vgi_clean_names(tibble::tibble(
     steamAppId = as.integer(steam_app_id),
     date = as.Date(units$date),
     entitlementsChange = as.integer(units$dailyUnits),
     entitlementsTotal = as.integer(units$unitsSold),
-    stringsAsFactors = FALSE
-  )
+
+  ))
 }

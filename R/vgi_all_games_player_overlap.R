@@ -73,12 +73,12 @@
 #' 
 #' # Build a gaming ecosystem map
 #' # Extract all overlap relationships
-#' all_overlaps <- do.call(rbind, lapply(seq_len(nrow(overlap_data)), function(i) {
+#' all_overlaps <- dplyr::bind_rows(lapply(seq_len(nrow(overlap_data)), function(i) {
 #'   game_id <- overlap_data$steamAppId[i]
 #'   overlaps <- overlap_data$topOverlaps[[i]]
 #'   if (is.null(overlaps) || nrow(overlaps) == 0) return(NULL)
 #'   
-#'   data.frame(
+#'   tibble::tibble(
 #'     from = game_id,
 #'     to = overlaps$steamAppId[1:min(5, nrow(overlaps))],
 #'     overlap_pct = overlaps$overlapPercentage[1:min(5, nrow(overlaps))]
@@ -113,24 +113,24 @@ vgi_all_games_player_overlap <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN
 
   rows <- .vgi_unwrap_results(result)
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       topOverlaps = I(list()),
       overlapCount = integer(),
       topOverlapGame = integer(),
       topOverlapPct = numeric(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
-  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+  df <- dplyr::bind_rows(lapply(seq_len(nrow(rows)), function(i) {
     overlaps <- if ("playerOverlaps" %in% names(rows)) rows$playerOverlaps[[i]] else NULL
     if (is.data.frame(overlaps) && nrow(overlaps) > 0) {
-      overlap_df <- data.frame(
+      overlap_df <- tibble::tibble(
         steamAppId = as.integer(overlaps$externalId %||% NA),
         overlapPercentage = as.numeric(overlaps$unitsSoldOverlapPercentage %||% NA),
         overlapIndex = as.numeric(overlaps$unitsSoldOverlapIndex %||% NA),
-        stringsAsFactors = FALSE
+
       )
       overlap_count <- nrow(overlap_df)
       top_overlap_game <- overlap_df$steamAppId[1]
@@ -142,17 +142,17 @@ vgi_all_games_player_overlap <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN
       top_overlap_pct <- NA_real_
     }
 
-    data.frame(
+    tibble::tibble(
       steamAppId = as.integer(rows$externalId[i] %||% NA),
       topOverlaps = I(list(overlap_df)),
       overlapCount = as.integer(overlap_count),
       topOverlapGame = as.integer(top_overlap_game),
       topOverlapPct = as.numeric(top_overlap_pct),
-      stringsAsFactors = FALSE
+
     )
   }))
 
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
   df <- df[order(-df$topOverlapPct, na.last = TRUE), , drop = FALSE]
-  df
+  .vgi_clean_names(df)
 }

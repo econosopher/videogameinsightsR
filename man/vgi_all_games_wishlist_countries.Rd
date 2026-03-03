@@ -82,9 +82,9 @@ player_top_countries <- table(player_countries$topCountry)
 
 # Compare which countries dominate wishlists vs players
 country_comparison <- merge(
-  data.frame(country = names(wishlist_top_countries),
+  tibble::tibble(country = names(wishlist_top_countries),
              wishlist_games = as.numeric(wishlist_top_countries)),
-  data.frame(country = names(player_top_countries),
+  tibble::tibble(country = names(player_top_countries),
              player_games = as.numeric(player_top_countries)),
   by = "country", all = TRUE
 )

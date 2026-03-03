@@ -44,7 +44,7 @@ vgi_game_metadata <- function(steam_app_id,
   rows <- .vgi_unwrap_results(response)
 
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(data.frame())
+    return(.vgi_clean_names(tibble::tibble()))
   }
 
   row <- rows[1, , drop = FALSE]
@@ -56,7 +56,7 @@ vgi_game_metadata <- function(steam_app_id,
   subgenres <- if ("subgenre" %in% names(row)) paste(unlist(row$subgenre[[1]]), collapse = ", ") else NA_character_
   languages <- if ("languages" %in% names(row)) paste(unlist(row$languages[[1]]), collapse = ", ") else NA_character_
 
-  result <- data.frame(
+  result <- tibble::tibble(
     steamAppId = as.integer(out_steam_id),
     id = as.integer(out_steam_id),
     name = as.character(row$name %||% NA_character_),
@@ -70,7 +70,7 @@ vgi_game_metadata <- function(steam_app_id,
     vgiUrl = as.character(row$vgiUrl %||% NA_character_),
     steamUrl = as.character(row$storeUrl.steam %||% NA_character_),
     publishingType = as.character(row$publishingType %||% NA_character_),
-    stringsAsFactors = FALSE
+
   )
   
   # Add publisher info if available
@@ -91,5 +91,5 @@ vgi_game_metadata <- function(steam_app_id,
     }
   }
   
-  return(result)
+  .vgi_clean_names(result)
 }

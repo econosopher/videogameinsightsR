@@ -90,14 +90,14 @@ vgi_developer_list <- function(search = NULL,
 
   rows <- .vgi_unwrap_results(result)
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(data.frame(id = integer(), name = character(), stringsAsFactors = FALSE))
+    return(.vgi_clean_names(tibble::tibble(id = integer(), name = character())))
   }
 
-  df <- data.frame(
+  df <- tibble::tibble(
     id = as.integer(rows$vgiCompanyId %||% NA),
     name = as.character(rows$name %||% NA_character_),
     slug = as.character(rows$slug %||% NA_character_),
-    stringsAsFactors = FALSE
+
   )
   df <- df[!is.na(df$id), , drop = FALSE]
   if (!is.null(search) && nzchar(search)) {
@@ -106,5 +106,5 @@ vgi_developer_list <- function(search = NULL,
     df <- df[grepl(search, nm, ignore.case = TRUE), , drop = FALSE]
   }
   df <- df[order(df$name), , drop = FALSE]
-  df
+  .vgi_clean_names(df)
 }

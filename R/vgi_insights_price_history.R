@@ -70,19 +70,19 @@ vgi_insights_price_history <- function(steam_app_id,
   
   hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
   
-  empty_changes <- data.frame(
+  empty_changes <- tibble::tibble(
     priceInitial = numeric(), priceFinal = numeric(),
     firstDate = as.Date(character()), lastDate = as.Date(character()),
-    stringsAsFactors = FALSE
+
   )
   
   price_ts <- hist$priceHistory
   if (is.null(price_ts) || nrow(price_ts) == 0) {
-    return(list(
+    return(.vgi_clean_list(list(
       steamAppId = as.integer(steam_app_id),
       currency = currency %||% "ALL",
       priceChanges = empty_changes
-    ))
+    )))
   }
   
   # Build price-change periods from daily snapshots
@@ -100,32 +100,32 @@ vgi_insights_price_history <- function(steam_app_id,
       pi <- df$priceInitial[i]
       pf <- df$priceFinal[i]
       if (!identical(pi, cur_init) || !identical(pf, cur_final)) {
-        changes[[length(changes) + 1]] <- data.frame(
+        changes[[length(changes) + 1]] <- tibble::tibble(
           priceInitial = cur_init, priceFinal = cur_final,
           firstDate = as.Date(first_date),
           lastDate = as.Date(df$date[i - 1]),
-          stringsAsFactors = FALSE
+
         )
         cur_init <- pi
         cur_final <- pf
         first_date <- df$date[i]
       }
     }
-    changes[[length(changes) + 1]] <- data.frame(
+    changes[[length(changes) + 1]] <- tibble::tibble(
       priceInitial = cur_init, priceFinal = cur_final,
       firstDate = as.Date(first_date), lastDate = as.Date(NA),
-      stringsAsFactors = FALSE
+
     )
     
-    result <- do.call(rbind, changes)
+    result <- dplyr::bind_rows(changes)
     result[order(result$firstDate, decreasing = TRUE), , drop = FALSE]
   }
   
   price_changes <- build_changes(price_ts)
   
-  list(
+  .vgi_clean_list(list(
     steamAppId = as.integer(steam_app_id),
     currency = currency %||% "USD",
     priceChanges = price_changes
-  )
+  ))
 }

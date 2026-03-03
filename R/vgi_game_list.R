@@ -41,14 +41,15 @@
 #' print(cs_games)
 #' 
 #' # Cache the complete list for future use
-#' saveRDS(all_games, "vgi_all_games_cache.rds")
+#' cache_file <- file.path(tempdir(), "vgi_all_games_cache.rds")
+#' saveRDS(all_games, cache_file)
 #' 
 #' # Later, load from cache instead of API
-#' if (file.exists("vgi_all_games_cache.rds")) {
-#'   all_games <- readRDS("vgi_all_games_cache.rds")
+#' if (file.exists(cache_file)) {
+#'   all_games <- readRDS(cache_file)
 #' } else {
 #'   all_games <- vgi_game_list()
-#'   saveRDS(all_games, "vgi_all_games_cache.rds")
+#'   saveRDS(all_games, cache_file)
 #' }
 #' 
 #' # Get a sample of games
@@ -98,13 +99,12 @@ vgi_game_list <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
       df$id <- df$steamAppId
     }
 
-    # Return tibble for consistency across the package
-    return(tibble::as_tibble(df))
+    return(.vgi_clean_names(df))
   } else {
-    # Return empty data frame with correct structure
-    return(tibble::tibble(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
-      name = character()
-    ))
+      name = character(),
+
+    )))
   }
 }

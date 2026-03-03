@@ -24,13 +24,17 @@
 #' @param batch_delay Numeric. Seconds to pause between batches.
 #'   Defaults to value from VGI_BATCH_DELAY environment variable or 1 second.
 #'
-#' @return A list containing:
+#' @return A `vgi_yoy_comparison` object (classed list) containing:
 #' \describe{
-#'   \item{comparison_table}{Summary table with metrics for each year and YoY growth}
-#'   \item{yearly_summaries}{List of detailed summaries by year}
-#'   \item{time_series_comparison}{Combined time series data with year labels}
-#'   \item{period}{Description of the comparison period}
-#'   \item{api_calls}{Total number of API calls made}
+#'   \item{comparison_table}{Data frame of per-game metrics by year, with optional
+#'   year-over-year growth columns.}
+#'   \item{yearly_summaries}{Named list of full `vgi_game_summary()` outputs,
+#'   one entry per year in the comparison.}
+#'   \item{time_series_comparison}{Named list of combined time-series data frames
+#'   (e.g., concurrent, revenue, units) with normalized dates for cross-year plotting.}
+#'   \item{period}{Human-readable description of the comparison window.}
+#'   \item{years}{Sorted numeric vector of years that were compared.}
+#'   \item{api_calls}{Total number of API calls made across all years.}
 #' }
 #'
 #' @details
@@ -109,12 +113,12 @@ vgi_game_summary_yoy <- function(steam_app_ids,
   total_api_calls <- 0
   
   # Fetch data for each year
-  cat("Fetching data for year-over-year comparison...\n")
+  message("Fetching data for year-over-year comparison...")
   for (i in seq_along(years)) {
     year <- years[i]
     dates <- period_dates[[as.character(year)]]
     
-    cat(sprintf("  Year %d: %s to %s\n", year, dates$start, dates$end))
+    message(sprintf("  Year %d: %s to %s", year, dates$start, dates$end))
     
     # Get summary for this year's period
     year_summary <- vgi_game_summary(
@@ -339,11 +343,11 @@ build_yoy_comparison_table <- function(yearly_summaries, include_growth = TRUE) 
   tables <- tables[!sapply(tables, is.null)]
   
   if (length(tables) == 0) {
-    return(data.frame())
+    return(tibble::tibble())
   }
   
   # Combine all years
-  combined <- do.call(rbind, tables)
+  combined <- dplyr::bind_rows(tables)
   
   # Pivot to wide format for comparison
   metrics_cols <- c("avg_peak_ccu", "avg_avg_ccu", "total_revenue", 
@@ -354,8 +358,8 @@ build_yoy_comparison_table <- function(yearly_summaries, include_growth = TRUE) 
   
   # Create comparison table
   comparison <- combined %>%
-    select(steamAppId, name, year, all_of(available_metrics)) %>%
-    arrange(steamAppId, year)
+    select(.data$steam_app_id, .data$name, .data$year, all_of(available_metrics)) %>%
+    arrange(.data$steam_app_id, .data$year)
   
   # Calculate year-over-year growth if requested
   if (include_growth && length(unique(comparison$year)) > 1) {
@@ -372,8 +376,8 @@ build_yoy_comparison_table <- function(yearly_summaries, include_growth = TRUE) 
 calculate_yoy_growth <- function(data, metric_cols) {
   # For each game and metric, calculate YoY growth
   data <- data %>%
-    arrange(steamAppId, year) %>%
-    group_by(steamAppId)
+    arrange(.data$steam_app_id, .data$year) %>%
+    group_by(.data$steam_app_id)
   
   # Add growth columns
   for (metric in metric_cols) {
@@ -420,7 +424,7 @@ combine_yoy_time_series <- function(yearly_summaries) {
     }
     
     if (length(combined_data) > 0) {
-      time_series[[metric]] <- do.call(rbind, combined_data)
+      time_series[[metric]] <- dplyr::bind_rows(combined_data)
     }
   }
   
@@ -483,6 +487,7 @@ describe_yoy_period <- function(period_dates) {
 #'
 #' @param x A `vgi_yoy_comparison` object.
 #' @param ... Additional arguments passed to `print()`.
+#' @return The input object `x`, invisibly.
 #'
 #' @export
 print.vgi_yoy_comparison <- function(x, ...) {
@@ -490,8 +495,9 @@ print.vgi_yoy_comparison <- function(x, ...) {
   cat("=============================================\n")
   cat("Period:", x$period, "\n")
   cat("Years compared:", paste(x$years, collapse = ", "), "\n")
-  cat("Games analyzed:", length(unique(x$comparison_table$steamAppId)), "\n")
+  cat("Games analyzed:", length(unique(x$comparison_table$steam_app_id)), "\n")
   cat("Total API calls:", x$api_calls, "\n")
   cat("\nUse $comparison_table to see the summary table\n")
   cat("Use $time_series_comparison to see time series data\n")
+  invisible(x)
 }

@@ -104,23 +104,23 @@ vgi_all_publisher_games <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), h
 
   rows <- .vgi_unwrap_results(result)
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       publisherId = integer(),
       gameIds = I(list()),
       gameCount = integer(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
-  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+  df <- dplyr::bind_rows(lapply(seq_len(nrow(rows)), function(i) {
     game_ids <- as.integer(unlist(rows$vgiGameIds[[i]]))
-    data.frame(
+    tibble::tibble(
       publisherId = as.integer(rows$vgiCompanyId[i]),
       gameIds = I(list(game_ids)),
       gameCount = length(game_ids),
-      stringsAsFactors = FALSE
+
     )
   }))
   df <- df[order(-df$gameCount), , drop = FALSE]
-  df
+  .vgi_clean_names(df)
 }

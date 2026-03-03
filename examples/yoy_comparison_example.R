@@ -1,7 +1,7 @@
 # Year-over-Year Comparison Example
 # This script demonstrates how to use the YoY comparison functionality
 
-library(videogameinsightsR)
+library(VideoGameInsightsR)
 library(dplyr)
 
 # Ensure API token is set

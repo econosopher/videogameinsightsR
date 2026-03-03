@@ -49,18 +49,18 @@ vgi_insights_revenue <- function(steam_app_id,
   
   rev <- hist$revenue
   if (is.null(rev) || nrow(rev) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(), date = as.Date(character()),
       revenueChange = numeric(), revenueTotal = numeric(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
   
-  data.frame(
+  .vgi_clean_names(tibble::tibble(
     steamAppId = as.integer(steam_app_id),
     date = as.Date(rev$date),
     revenueChange = as.numeric(rev$dailyRevenue),
     revenueTotal = as.numeric(rev$revenue),
-    stringsAsFactors = FALSE
-  )
+
+  ))
 }

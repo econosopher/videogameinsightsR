@@ -96,7 +96,7 @@ vgi_historical_data <- function(steam_app_id,
   
   validate_numeric(steam_app_id, "steam_app_id")
   
-  all_rows <- data.frame()
+  all_rows <- tibble::tibble()
   cursor <- NULL
   
   repeat {
@@ -122,12 +122,12 @@ vgi_historical_data <- function(steam_app_id,
   }
   
   if (nrow(all_rows) == 0) {
-    return(list(
+    return(.vgi_clean_list(list(
       steamAppId = as.integer(steam_app_id),
       revenue = NULL, unitsSold = NULL, concurrentPlayers = NULL,
       activePlayers = NULL, reviews = NULL, wishlists = NULL,
       followers = NULL, priceHistory = NULL
-    ))
+    )))
   }
   
   # Filter to steam platform rows matching the requested ID
@@ -143,7 +143,7 @@ vgi_historical_data <- function(steam_app_id,
   }
   
   make_ts <- function(cols) {
-    out <- data.frame(date = as.character(all_rows$date), stringsAsFactors = FALSE)
+    out <- tibble::tibble(date = as.character(all_rows$date))
     for (nm in names(cols)) {
       out[[nm]] <- as.numeric(safe_col(all_rows, cols[[nm]]))
     }
@@ -163,7 +163,7 @@ vgi_historical_data <- function(steam_app_id,
   
   null_if_empty <- function(df) if (nrow(df) == 0 || all(is.na(df[, -1, drop = FALSE]))) NULL else df
   
-  list(
+  .vgi_clean_list(list(
     steamAppId = as.integer(steam_app_id),
     revenue = null_if_empty(revenue_df),
     unitsSold = null_if_empty(units_df),
@@ -173,5 +173,5 @@ vgi_historical_data <- function(steam_app_id,
     wishlists = null_if_empty(wishlists_df),
     followers = null_if_empty(followers_df),
     priceHistory = null_if_empty(price_df)
-  )
+  ))
 }

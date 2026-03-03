@@ -7,13 +7,12 @@ library(jsonlite)
 library(knitr)
 
 # Load dotenv to get API key
-if (!require(dotenv)) install.packages("dotenv")
-library(dotenv)
+has_dotenv <- requireNamespace("dotenv", quietly = TRUE)
 
 # Load environment variables
 parent_env <- file.path(dirname(here::here()), ".env")
-if (file.exists(parent_env)) {
-  load_dot_env(parent_env)
+if (has_dotenv && file.exists(parent_env)) {
+  dotenv::load_dot_env(parent_env)
 }
 
 # Check API key
@@ -244,7 +243,7 @@ empty_tests <- sum(sapply(test_results, function(x) x$status %in% c("NULL_RESPON
 md_content <- c(
   "# Video Game Insights API Endpoint Test Report",
   paste0("\n**Generated:** ", Sys.time()),
-  paste0("\n**Package Version:** ", packageVersion("videogameinsightsR")),
+  paste0("\n**Package Version:** ", packageVersion("VideoGameInsightsR")),
   "",
   "## Summary",
   "",

@@ -50,9 +50,9 @@ vgi_search_games <- function(query,
   # The API fallback can be enabled explicitly with:
   # options(vgi.search_allow_api_fallback = TRUE)
   candidate_cache_paths <- c(
-    system.file("extdata", "game_cache.rds", package = "videogameinsightsR"),
+    system.file("extdata", "game_cache.rds", package = "VideoGameInsightsR"),
     file.path("inst", "extdata", "game_cache.rds"),
-    file.path(rappdirs::user_cache_dir("videogameinsightsR"), "vgi_all_games_cache.rds")
+    file.path(tools::R_user_dir("VideoGameInsightsR", "cache"), "vgi_all_games_cache.rds")
   )
   candidate_cache_paths <- unique(candidate_cache_paths[nzchar(candidate_cache_paths)])
 
@@ -80,19 +80,19 @@ vgi_search_games <- function(query,
   }
 
   if (!is.data.frame(all_games) || nrow(all_games) == 0) {
-    return(tibble::tibble(steamAppId = integer(), name = character(), id = integer()))
+    return(.vgi_clean_names(tibble::tibble(steamAppId = integer(), name = character(), id = integer())))
   }
 
-  # Ensure columns present
+  all_games <- .vgi_clean_names(all_games)
   if (!"name" %in% names(all_games)) all_games$name <- NA_character_
-  if (!"steamAppId" %in% names(all_games) && "id" %in% names(all_games)) all_games$steamAppId <- as.integer(all_games$id)
-  if (!"id" %in% names(all_games) && "steamAppId" %in% names(all_games)) all_games$id <- all_games$steamAppId
+  if (!"steam_app_id" %in% names(all_games) && "id" %in% names(all_games)) all_games$steam_app_id <- as.integer(all_games$id)
+  if (!"id" %in% names(all_games) && "steam_app_id" %in% names(all_games)) all_games$id <- all_games$steam_app_id
 
-  # Local filter and limit
   name_col <- all_games$name
   name_col[is.na(name_col)] <- ""
   matches <- grepl(query, name_col, ignore.case = TRUE)
-  filtered <- all_games[matches, c("steamAppId", "name", "id")]
+  keep_cols <- intersect(c("steam_app_id", "name", "id"), names(all_games))
+  filtered <- all_games[matches, keep_cols, drop = FALSE]
 
   # v4 fallback: try metadata lookup via slug (cheap and targeted).
   if (nrow(filtered) == 0) {
@@ -126,12 +126,12 @@ vgi_search_games <- function(query,
           rep(NA_character_, nrow(meta_rows))
         }
         fallback <- tibble::tibble(
-          steamAppId = as.integer(steam_ids),
+          steam_app_id = as.integer(steam_ids),
           name = meta_names
         )
-        fallback <- fallback[!is.na(fallback$steamAppId), , drop = FALSE]
+        fallback <- fallback[!is.na(fallback$steam_app_id), , drop = FALSE]
         if (nrow(fallback) > 0) {
-          fallback$id <- fallback$steamAppId
+          fallback$id <- fallback$steam_app_id
           # Keep exact/contains matches first.
           contains <- grepl(query, fallback$name, ignore.case = TRUE)
           if (any(contains)) fallback <- fallback[contains, , drop = FALSE]
@@ -145,19 +145,20 @@ vgi_search_games <- function(query,
   if (nrow(filtered) == 0 && isTRUE(allow_api_fallback)) {
     all_games_api <- tryCatch(
       vgi_game_list(auth_token = auth_token, headers = headers),
-      error = function(e) tibble::tibble(steamAppId = integer(), name = character(), id = integer())
+      error = function(e) tibble::tibble(steam_app_id = integer(), name = character(), id = integer())
     )
     if (is.data.frame(all_games_api) && nrow(all_games_api) > 0) {
       options(vgi.search_all_games_cache = all_games_api)
-      if (!"id" %in% names(all_games_api) && "steamAppId" %in% names(all_games_api)) {
-        all_games_api$id <- all_games_api$steamAppId
+      if (!"id" %in% names(all_games_api) && "steam_app_id" %in% names(all_games_api)) {
+        all_games_api$id <- all_games_api$steam_app_id
       }
       nm <- all_games_api$name
       nm[is.na(nm)] <- ""
-      filtered <- all_games_api[grepl(query, nm, ignore.case = TRUE), c("steamAppId", "name", "id")]
+      keep_cols <- intersect(c("steam_app_id", "name", "id"), names(all_games_api))
+      filtered <- all_games_api[grepl(query, nm, ignore.case = TRUE), keep_cols, drop = FALSE]
     }
   }
 
   if (nrow(filtered) > limit) filtered <- filtered[seq_len(limit), ]
-  tibble::as_tibble(filtered)
+  .vgi_clean_names(filtered)
 }

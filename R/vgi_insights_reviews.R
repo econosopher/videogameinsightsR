@@ -58,21 +58,21 @@ vgi_insights_reviews <- function(steam_app_id,
   
   rv <- hist$reviews
   if (is.null(rv) || nrow(rv) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(), date = as.Date(character()),
       positive = integer(), negative = integer(), total = integer(),
-      positiveRatio = numeric(), stringsAsFactors = FALSE
-    ))
+      positiveRatio = numeric()
+    )))
   }
   
   total <- as.integer(rv$positive) + as.integer(rv$negative)
-  data.frame(
+  .vgi_clean_names(tibble::tibble(
     steamAppId = as.integer(steam_app_id),
     date = as.Date(rv$date),
     positive = as.integer(rv$positive),
     negative = as.integer(rv$negative),
     total = total,
     positiveRatio = ifelse(total > 0, as.integer(rv$positive) / total, NA_real_),
-    stringsAsFactors = FALSE
-  )
+
+  ))
 }

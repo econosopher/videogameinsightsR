@@ -5,9 +5,15 @@
 
 # Cache directory setup
 .vgi_cache_dir <- function() {
-  cache_dir <- file.path(rappdirs::user_cache_dir("videogameinsightsR"), "vgi_cache")
+  configured_cache <- getOption("VideoGameInsightsR.cache_dir", Sys.getenv("VGI_CACHE_DIR", ""))
+  base_dir <- if (!is.null(configured_cache) && nzchar(configured_cache)) {
+    configured_cache
+  } else {
+    tempdir()
+  }
+  cache_dir <- file.path(base_dir, "vgi_cache")
   if (!dir.exists(cache_dir)) {
-    dir.create(cache_dir, recursive = TRUE)
+    dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
   }
   return(cache_dir)
 }
@@ -67,7 +73,7 @@ vgi_build_cache <- function(force_refresh = FALSE,
   }
   
   # Combine all games
-  games_df <- do.call(rbind, all_games)
+  games_df <- dplyr::bind_rows(all_games)
   message(sprintf("Found %d games total", nrow(games_df)))
   
   # Step 2: Get rankings to have additional data
@@ -83,7 +89,7 @@ vgi_build_cache <- function(force_refresh = FALSE,
     offset <- offset + 1000
   }
   
-  rankings_df <- do.call(rbind, rankings)
+  rankings_df <- dplyr::bind_rows(rankings)
   
   # Merge games with rankings
   cache_df <- merge(games_df, rankings_df, by.x = "id", by.y = "steamAppId", all.x = TRUE)
@@ -121,7 +127,7 @@ vgi_build_cache <- function(force_refresh = FALSE,
       }
       
       if (length(individual_meta) > 0) {
-        metadata_list[[i]] <- do.call(rbind, individual_meta)
+        metadata_list[[i]] <- dplyr::bind_rows(individual_meta)
       }
     })
     
@@ -131,7 +137,7 @@ vgi_build_cache <- function(force_refresh = FALSE,
   
   # Combine all metadata
   if (length(metadata_list) > 0) {
-    metadata_df <- do.call(rbind, metadata_list)
+    metadata_df <- dplyr::bind_rows(metadata_list)
     
     # Merge with cache
     cache_df <- merge(cache_df, metadata_df, 
@@ -182,7 +188,7 @@ vgi_load_cache <- function(auto_build = TRUE) {
     }
   }
   
-  return(cache_df)
+  return(.vgi_clean_names(cache_df))
 }
 
 #' Filter Games by Genre
@@ -222,10 +228,10 @@ vgi_filter_genre <- function(genre, cache_df = NULL) {
       }
     })
     
-    return(cache_df[matches, ])
+    return(.vgi_clean_names(cache_df[matches, ]))
   } else {
     warning("No genre information in cache. Run vgi_build_cache(force_refresh = TRUE)")
-    return(cache_df[0, ])
+    return(.vgi_clean_names(cache_df[0, ]))
   }
 }
 
@@ -268,11 +274,11 @@ vgi_get_games_by_id <- function(steam_app_ids, cache_df = NULL, fetch_missing = 
       tryCatch({
         meta <- vgi_game_metadata(id)
         # Convert to data frame row
-        missing_games[[as.character(id)]] <- data.frame(
+        missing_games[[as.character(id)]] <- tibble::tibble(
           steamAppId = id,
           name = meta$name %||% NA,
           genres = paste(meta$genres, collapse = ", "),
-          stringsAsFactors = FALSE
+
         )
       }, error = function(e) {
         # Skip failed games
@@ -280,13 +286,13 @@ vgi_get_games_by_id <- function(steam_app_ids, cache_df = NULL, fetch_missing = 
     }
     
     if (length(missing_games) > 0) {
-      missing_df <- do.call(rbind, missing_games)
+      missing_df <- dplyr::bind_rows(missing_games)
       # Combine with cached results
       cached_games <- rbind(cached_games, missing_df, fill = TRUE)
     }
   }
   
-  return(cached_games)
+  return(.vgi_clean_names(cached_games))
 }
 
 #' Get Cache Statistics
@@ -299,7 +305,7 @@ vgi_cache_stats <- function() {
   cache_file <- file.path(.vgi_cache_dir(), "game_cache.rds")
   
   if (!file.exists(cache_file)) {
-    cat("No cache found.\n")
+    message("No cache found.")
     return(invisible(NULL))
   }
   
@@ -320,16 +326,19 @@ vgi_cache_stats <- function() {
     }
   )
   
-  cat("Video Game Insights Cache Statistics\n")
-  cat("====================================\n")
-  cat(sprintf("Total games: %s\n", format(stats$total_games, big.mark = ",")))
-  cat(sprintf("Cache created: %s\n", format(stats$cache_time, "%Y-%m-%d %H:%M:%S")))
-  cat(sprintf("Cache age: %.1f days\n", stats$cache_age_days))
-  cat(sprintf("Cache size: %.1f MB\n", stats$cache_size_mb))
-  cat(sprintf("Games with rankings: %s\n", format(stats$has_rankings, big.mark = ",")))
+  message("Video Game Insights Cache Statistics")
+  message("====================================")
+  message(sprintf("Total games: %s", format(stats$total_games, big.mark = ",")))
+  message(sprintf("Cache created: %s", format(stats$cache_time, "%Y-%m-%d %H:%M:%S")))
+  message(sprintf("Cache age: %.1f days", stats$cache_age_days))
+  message(sprintf("Cache size: %.1f MB", stats$cache_size_mb))
+  message(sprintf("Games with rankings: %s", format(stats$has_rankings, big.mark = ",")))
   if (stats$has_genres && length(stats$unique_genres) > 0) {
-    cat(sprintf("Unique genres: %d\n", length(stats$unique_genres)))
-    cat("Top genres:", paste(head(sort(table(stats$unique_genres), decreasing = TRUE), 10), collapse = ", "), "\n")
+    message(sprintf("Unique genres: %d", length(stats$unique_genres)))
+    message(sprintf(
+      "Top genres: %s",
+      paste(head(sort(table(stats$unique_genres), decreasing = TRUE), 10), collapse = ", ")
+    ))
   }
   
   return(invisible(stats))

@@ -1,4 +1,4 @@
-# Development setup script for videogameinsightsR
+# Development setup script for VideoGameInsightsR
 
 # Install required packages for development
 if (!requireNamespace("devtools", quietly = TRUE)) {

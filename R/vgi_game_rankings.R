@@ -110,7 +110,7 @@ vgi_game_rankings <- function(offset = NULL,
   )
 
   if (!is.data.frame(result) || nrow(result) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       positiveReviewsRank = integer(),
       positiveReviewsPrct = numeric(),
@@ -129,8 +129,8 @@ vgi_game_rankings <- function(offset = NULL,
       yesterdayUnitsSold = numeric(),
       followers = numeric(),
       avgPlaytime = numeric(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
   rankings_df <- result
@@ -147,7 +147,7 @@ vgi_game_rankings <- function(offset = NULL,
   rankings_df$steamAppId <- suppressWarnings(as.integer(rankings_df$externalId))
   rankings_df <- rankings_df[!is.na(rankings_df$steamAppId), , drop = FALSE]
   if (nrow(rankings_df) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       positiveReviewsRank = integer(),
       positiveReviewsPrct = numeric(),
@@ -166,8 +166,8 @@ vgi_game_rankings <- function(offset = NULL,
       yesterdayUnitsSold = numeric(),
       followers = numeric(),
       avgPlaytime = numeric(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
   rankings_df$totalRevenue <- as.numeric(rankings_df$revenueTotal %||% NA)
@@ -205,5 +205,5 @@ vgi_game_rankings <- function(offset = NULL,
   }
 
   warn_if_stale_ids(rankings_df$steamAppId)
-  rankings_df
+  .vgi_clean_names(rankings_df)
 }

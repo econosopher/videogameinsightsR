@@ -89,34 +89,34 @@ vgi_top_wishlist_countries <- function(steam_app_id,
 
   rows <- .vgi_unwrap_results(result)
   if (!is.data.frame(rows) || nrow(rows) == 0 || !"wishlists" %in% names(rows)) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       country = character(),
       countryName = character(),
       wishlistCount = integer(),
       percentage = numeric(),
       rank = integer(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
   wishlists <- rows$wishlists[[1]]
   if (!is.data.frame(wishlists) || nrow(wishlists) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       country = character(),
       countryName = character(),
       wishlistCount = integer(),
       percentage = numeric(),
       rank = integer(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
-  data.frame(
+  .vgi_clean_names(tibble::tibble(
     country = as.character(wishlists$countryCode %||% NA_character_),
     countryName = as.character(wishlists$countryName %||% NA_character_),
     wishlistCount = as.integer(NA),
     percentage = as.numeric(wishlists$percentage %||% NA),
     rank = as.integer(wishlists$rank %||% seq_len(nrow(wishlists))),
-    stringsAsFactors = FALSE
-  )
+
+  ))
 }

@@ -94,12 +94,12 @@ vgi_reviews_by_date <- function(date,
     headers = headers
   )
   
-  empty_df <- data.frame(
+  empty_df <- .vgi_clean_names(tibble::tibble(
     steamAppId = integer(), date = character(),
     positiveReviews = integer(), negativeReviews = integer(),
     totalReviews = integer(), positiveRatio = numeric(),
-    stringsAsFactors = FALSE
-  )
+
+  ))
   
   if (!is.data.frame(result) || nrow(result) == 0) return(empty_df)
   
@@ -111,17 +111,17 @@ vgi_reviews_by_date <- function(date,
   negative <- as.integer(result$negativeReviewsTotal %||% NA)
   total <- positive + negative
   
-  df <- data.frame(
+  df <- tibble::tibble(
     steamAppId = as.integer(result$externalId %||% NA),
     date = formatted_date,
     positiveReviews = positive,
     negativeReviews = negative,
     totalReviews = total,
     positiveRatio = ifelse(total > 0, positive / total, NA_real_),
-    stringsAsFactors = FALSE
+
   )
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
   if (nrow(df) == 0) return(empty_df)
   
-  df[order(-df$totalReviews), , drop = FALSE]
+  .vgi_clean_names(df[order(-df$totalReviews), , drop = FALSE])
 }

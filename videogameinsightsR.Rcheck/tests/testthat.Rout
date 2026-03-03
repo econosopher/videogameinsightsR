@@ -1,0 +1,37 @@
+
+R version 4.2.2 (2022-10-31) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(testthat)
+> library(videogameinsightsR)
+> 
+> test_check("videogameinsightsR")
+[ FAIL 0 | WARN 15 | SKIP 11 | PASS 131 ]
+
+══ Skipped tests (11) ══════════════════════════════════════════════════════════
+• empty test (3): 'test-api-responses.R:4:1', 'test-data-processing.R:39:1',
+  'test-data-processing.R:61:1'
+• VGI_AUTH_TOKEN not set (8): 'test-api-responses.R:68:3',
+  'test-data-processing.R:77:3', 'test-game-comparison.R:5:3',
+  'test-game-comparison.R:20:3', 'test-game-comparison.R:32:3',
+  'test-game-comparison.R:57:3', 'test-game-comparison.R:216:3',
+  'test-game-comparison.R:232:3'
+
+[ FAIL 0 | WARN 15 | SKIP 11 | PASS 131 ]
+> 
+> proc.time()
+   user  system elapsed 
+  0.798   0.108   3.637 

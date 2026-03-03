@@ -81,36 +81,36 @@ vgi_top_countries <- function(steam_app_id,
   )
 
   rows <- .vgi_unwrap_results(result)
-  empty_countries <- data.frame(
+  empty_countries <- tibble::tibble(
     country = character(), countryName = character(),
     playerCount = integer(), percentage = numeric(), rank = integer(),
-    stringsAsFactors = FALSE
+
   )
   if (!is.data.frame(rows) || nrow(rows) == 0 || !"topCountries" %in% names(rows)) {
-    return(empty_countries)
+    return(.vgi_clean_names(empty_countries))
   }
 
   row <- .vgi_steam_row(rows, steam_app_id)
-  if (is.null(row) || !"topCountries" %in% names(row)) return(empty_countries)
+  if (is.null(row) || !"topCountries" %in% names(row)) return(.vgi_clean_names(empty_countries))
 
   top_countries <- row$topCountries[[1]]
   if (!is.data.frame(top_countries) || nrow(top_countries) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       country = character(),
       countryName = character(),
       playerCount = integer(),
       percentage = numeric(),
       rank = integer(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
-  data.frame(
+  .vgi_clean_names(tibble::tibble(
     country = as.character(top_countries$countryCode %||% NA_character_),
     countryName = as.character(top_countries$countryName %||% NA_character_),
     playerCount = as.integer(NA),
     percentage = as.numeric(top_countries$percentage %||% NA),
     rank = as.integer(top_countries$rank %||% seq_len(nrow(top_countries))),
-    stringsAsFactors = FALSE
-  )
+
+  ))
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-# BATCH DOWNLOAD CACHE FOR videogameinsightsR
+# BATCH DOWNLOAD CACHE FOR VideoGameInsightsR
 # 
 # PURPOSE: This creates a cache for BATCH OPERATIONS, not for searching!
 # 
@@ -26,15 +26,15 @@ if (!nzchar(Sys.getenv("VGI_AUTH_TOKEN"))) {
   stop("VGI_AUTH_TOKEN environment variable is required. Set it with Sys.setenv(VGI_AUTH_TOKEN='your_token')")
 }
 
-# Load the videogameinsightsR package
-devtools::load_all("/Users/phillip/Documents/vibe_coding_projects/videogameinsightsR")
+# Load the VideoGameInsightsR package
+devtools::load_all("/Users/phillip/Documents/vibe_coding_projects/VideoGameInsightsR")
 
-message("=== Building Game Cache for videogameinsightsR ===\n")
+message("=== Building Game Cache for VideoGameInsightsR ===\n")
 
 # Configuration
 TARGET_GAMES <- 2000  # Reasonable number for initial cache
 BATCH_SIZE <- 1000  # Maximum limit per API call
-CACHE_FILE <- "/Users/phillip/Documents/vibe_coding_projects/videogameinsightsR/inst/extdata/game_cache.rds"
+CACHE_FILE <- "/Users/phillip/Documents/vibe_coding_projects/VideoGameInsightsR/inst/extdata/game_cache.rds"
 
 # Ensure directory exists
 dir.create(dirname(CACHE_FILE), recursive = TRUE, showWarnings = FALSE)

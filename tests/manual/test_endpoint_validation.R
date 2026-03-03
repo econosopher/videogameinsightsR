@@ -4,7 +4,7 @@
 library(testthat)
 library(httr2)
 library(jsonlite)
-library(videogameinsightsR)
+library(VideoGameInsightsR)
 
 # Test configuration
 readRenviron("../../.env")

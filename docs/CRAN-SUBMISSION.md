@@ -1,4 +1,4 @@
-# CRAN Submission Checklist for videogameinsightsR
+# CRAN Submission Checklist for VideoGameInsightsR
 
 This checklist ensures the package meets all CRAN requirements before submission.
 
@@ -18,7 +18,7 @@ This checklist ensures the package meets all CRAN requirements before submission
 - [ ] All parameters are documented with @param
 - [ ] Return values are documented with @return
 - [ ] Examples are provided and wrapped in \dontrun{} if they require API access
-- [ ] Package-level documentation exists (?videogameinsightsR)
+- [ ] Package-level documentation exists (?VideoGameInsightsR)
 - [ ] NEWS.md file is up to date
 - [ ] README.md does not contain any badges that won't work on CRAN
 

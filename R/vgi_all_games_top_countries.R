@@ -113,24 +113,24 @@ vgi_all_games_top_countries <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"
 
   rows <- .vgi_unwrap_results(result)
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       topCountries = I(list()),
       countryCount = integer(),
       topCountry = character(),
       topCountryPct = numeric(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
-  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+  df <- dplyr::bind_rows(lapply(seq_len(nrow(rows)), function(i) {
     tc <- if ("topCountries" %in% names(rows)) rows$topCountries[[i]] else NULL
     if (is.data.frame(tc) && nrow(tc) > 0) {
-      tc_df <- data.frame(
+      tc_df <- tibble::tibble(
         country = as.character(tc$countryCode %||% NA_character_),
         countryName = as.character(tc$countryName %||% NA_character_),
         percentage = as.numeric(tc$percentage %||% NA_real_),
-        stringsAsFactors = FALSE
+
       )
       top_country <- tc_df$country[1]
       top_country_pct <- tc_df$percentage[1]
@@ -142,17 +142,17 @@ vgi_all_games_top_countries <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"
       country_count <- 0
     }
 
-    data.frame(
+    tibble::tibble(
       steamAppId = as.integer(rows$externalId[i] %||% NA),
       topCountries = I(list(tc_df)),
       countryCount = as.integer(country_count),
       topCountry = top_country,
       topCountryPct = as.numeric(top_country_pct),
-      stringsAsFactors = FALSE
+
     )
   }))
 
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
   df <- df[order(-df$topCountryPct, na.last = TRUE), , drop = FALSE]
-  df
+  .vgi_clean_names(df)
 }

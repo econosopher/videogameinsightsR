@@ -9,7 +9,7 @@ if (file.exists(parent_env)) {
 }
 
 # Source VGI functions
-vgi_path <- file.path(dirname(getwd()), "videogameinsightsR", "R")
+vgi_path <- file.path(dirname(getwd()), "VideoGameInsightsR", "R")
 if (dir.exists(vgi_path)) {
   source(file.path(vgi_path, "utils.R"))
   source(file.path(vgi_path, "vgi_active_players_by_date.R"))

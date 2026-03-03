@@ -5,10 +5,10 @@
 library(testthat)
 library(jsonlite)
 library(httr2)
-library(videogameinsightsR)
+library(VideoGameInsightsR)
 
 # Load API specification
-spec_path <- system.file("extdata", "vgi-api-spec.json", package = "videogameinsightsR")
+spec_path <- system.file("extdata", "vgi-api-spec.json", package = "VideoGameInsightsR")
 if (spec_path == "") {
   spec_path <- "../vgi-api-spec.json"
 }
@@ -39,7 +39,7 @@ capture_api_call <- function(func, ...) {
   called_endpoint <- NULL
   
   # Temporarily override make_api_request to capture calls
-  trace(videogameinsightsR:::make_api_request, 
+  trace(VideoGameInsightsR:::make_api_request, 
         exit = function() {
           env <- parent.frame()
           if (exists("endpoint", env)) called_endpoint <<- get("endpoint", env)
@@ -54,7 +54,7 @@ capture_api_call <- function(func, ...) {
     # Ignore errors - we're testing parameter passing, not functionality
   })
   
-  untrace(videogameinsightsR:::make_api_request)
+  untrace(VideoGameInsightsR:::make_api_request)
   
   return(list(endpoint = called_endpoint, params = names(called_params)))
 }
@@ -139,7 +139,7 @@ generate_compliance_report <- function() {
   report <- list()
   
   # Test all exported functions
-  pkg_functions <- ls("package:videogameinsightsR")
+  pkg_functions <- ls("package:VideoGameInsightsR")
   api_functions <- grep("^vgi_", pkg_functions, value = TRUE)
   
   for (func_name in api_functions) {

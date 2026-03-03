@@ -106,7 +106,7 @@ vgi_player_overlap <- function(steam_app_id,
   )
 
   rows <- .vgi_unwrap_results(result)
-  empty_overlaps <- data.frame(
+  empty_overlaps <- tibble::tibble(
     steamAppId = integer(),
     medianPlaytime = numeric(),
     unitsSoldOverlap = numeric(),
@@ -118,23 +118,23 @@ vgi_player_overlap <- function(steam_app_id,
     wishlistOverlap = numeric(),
     wishlistOverlapPercentage = numeric(),
     wishlistOverlapIndex = numeric(),
-    stringsAsFactors = FALSE
+
   )
 
   if (!is.data.frame(rows) || nrow(rows) == 0 || !"playerOverlaps" %in% names(rows)) {
-    return(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps))
+    return(.vgi_clean_list(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps)))
   }
 
   row <- .vgi_steam_row(rows, steam_app_id)
   if (is.null(row) || !"playerOverlaps" %in% names(row)) {
-    return(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps))
+    return(.vgi_clean_list(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps)))
   }
   overlaps <- row$playerOverlaps[[1]]
   if (!is.data.frame(overlaps) || nrow(overlaps) == 0) {
-    return(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps))
+    return(.vgi_clean_list(list(steamAppId = as.integer(steam_app_id), playerOverlaps = empty_overlaps)))
   }
 
-  overlaps_df <- data.frame(
+  overlaps_df <- tibble::tibble(
     steamAppId = as.integer(overlaps$externalId %||% NA),
     medianPlaytime = as.numeric(overlaps$medianPlaytime %||% NA),
     unitsSoldOverlap = as.numeric(overlaps$unitsSoldOverlap %||% NA),
@@ -146,7 +146,7 @@ vgi_player_overlap <- function(steam_app_id,
     wishlistOverlap = as.numeric(overlaps$wishlistOverlap %||% NA),
     wishlistOverlapPercentage = as.numeric(overlaps$wishlistOverlapPercentage %||% NA),
     wishlistOverlapIndex = as.numeric(overlaps$wishlistOverlapIndex %||% NA),
-    stringsAsFactors = FALSE
+
   )
   overlaps_df <- overlaps_df[order(-overlaps_df$unitsSoldOverlapPercentage), , drop = FALSE]
   
@@ -154,8 +154,8 @@ vgi_player_overlap <- function(steam_app_id,
     overlaps_df <- overlaps_df[seq_len(limit), , drop = FALSE]
   }
 
-  list(
+  .vgi_clean_list(list(
     steamAppId = as.integer(steam_app_id),
     playerOverlaps = overlaps_df
-  )
+  ))
 }

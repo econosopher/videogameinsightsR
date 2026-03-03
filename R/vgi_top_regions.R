@@ -17,12 +17,12 @@ vgi_top_regions <- function(steam_app_id,
     headers = headers
   )
   if (is.list(out) && "regions" %in% names(out) && is.data.frame(out$regions)) {
-    return(out$regions)
+    return(.vgi_clean_names(out$regions))
   }
-  data.frame(
+  .vgi_clean_names(tibble::tibble(
     regionName = character(),
     rank = integer(),
     percentage = numeric(),
-    stringsAsFactors = FALSE
-  )
+
+  ))
 }

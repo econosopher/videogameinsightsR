@@ -1,4 +1,4 @@
-# Comprehensive Test Script for videogameinsightsR Package
+# Comprehensive Test Script for VideoGameInsightsR Package
 # Tests all major functions with real API calls
 
 library(pacman)
@@ -17,7 +17,7 @@ if (api_key == "") {
 }
 
 # Source VGI functions
-vgi_path <- file.path(dirname(getwd()), "videogameinsightsR", "R")
+vgi_path <- file.path(dirname(getwd()), "VideoGameInsightsR", "R")
 if (dir.exists(vgi_path)) {
   source(file.path(vgi_path, "utils.R"))
   source(file.path(vgi_path, "vgi_search_games.R"))
@@ -29,7 +29,7 @@ if (dir.exists(vgi_path)) {
   source(file.path(vgi_path, "vgi_game_summary.R"))
   cat("✅ VGI functions loaded\n")
 } else {
-  stop("videogameinsightsR package functions not found")
+  stop("VideoGameInsightsR package functions not found")
 }
 
 # Test configuration

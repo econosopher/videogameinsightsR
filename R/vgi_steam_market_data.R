@@ -78,6 +78,6 @@ vgi_steam_market_data <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   )
 
   rows <- .vgi_unwrap_results(result)
-  if (is.data.frame(rows)) return(rows)
-  data.frame()
+  if (is.data.frame(rows)) return(.vgi_clean_names(rows))
+  .vgi_clean_names(tibble::tibble())
 }

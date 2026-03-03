@@ -162,7 +162,7 @@ vgi_game_summary <- function(steam_app_ids,
     }
     
     if (length(concurrent_data) > 0) {
-      results$time_series$concurrent <- do.call(rbind, concurrent_data)
+      results$time_series$concurrent <- dplyr::bind_rows(concurrent_data)
     }
   }
   
@@ -207,7 +207,7 @@ vgi_game_summary <- function(steam_app_ids,
     }
     
     if (length(active_data) > 0) {
-      results$time_series$active <- do.call(rbind, active_data)
+      results$time_series$active <- dplyr::bind_rows(active_data)
       message(paste0("  Retrieved active player data for ", length(active_data), " days"))
     } else {
       message("  No active player data retrieved (dates may be before availability)")
@@ -245,7 +245,7 @@ vgi_game_summary <- function(steam_app_ids,
     }
     
     if (length(revenue_data) > 0) {
-      results$time_series$revenue <- do.call(rbind, revenue_data)
+      results$time_series$revenue <- dplyr::bind_rows(revenue_data)
       message(paste0("  Retrieved revenue data for ", length(revenue_data), " game-days"))
     } else {
       message("  No revenue data retrieved (may not be available for these games)")
@@ -285,7 +285,7 @@ vgi_game_summary <- function(steam_app_ids,
   }
   
   if (length(metadata_list) > 0) {
-    results$metadata <- do.call(rbind, metadata_list)
+    results$metadata <- dplyr::bind_rows(metadata_list)
     message(paste0("  Retrieved metadata for ", length(metadata_list), " games"))
   } else {
     message("  No metadata retrieved")
@@ -322,7 +322,7 @@ vgi_game_summary <- function(steam_app_ids,
     }
     
     if (length(units_data) > 0) {
-      results$time_series$units <- do.call(rbind, units_data)
+      results$time_series$units <- dplyr::bind_rows(units_data)
       message(paste0("  Retrieved units data for ", length(units_data), " days"))
     } else {
       message("  No units sold data retrieved")
@@ -356,7 +356,7 @@ vgi_game_summary <- function(steam_app_ids,
     }
     
     if (length(reviews_data) > 0) {
-      results$time_series$reviews <- do.call(rbind, reviews_data)
+      results$time_series$reviews <- dplyr::bind_rows(reviews_data)
       message(paste0("  Retrieved reviews data for ", length(reviews_data), " days"))
     } else {
       message("  No reviews data retrieved")
@@ -390,7 +390,7 @@ vgi_game_summary <- function(steam_app_ids,
     }
     
     if (length(followers_data) > 0) {
-      results$time_series$followers <- do.call(rbind, followers_data)
+      results$time_series$followers <- dplyr::bind_rows(followers_data)
       message(paste0("  Retrieved followers data for ", length(followers_data), " days"))
     } else {
       message("  No followers data retrieved")
@@ -424,7 +424,7 @@ vgi_game_summary <- function(steam_app_ids,
     }
     
     if (length(wishlists_data) > 0) {
-      results$time_series$wishlists <- do.call(rbind, wishlists_data)
+      results$time_series$wishlists <- dplyr::bind_rows(wishlists_data)
       message(paste0("  Retrieved wishlists data for ", length(wishlists_data), " days"))
     } else {
       message("  No wishlists data retrieved")
@@ -436,14 +436,14 @@ vgi_game_summary <- function(steam_app_ids,
   summary_data <- list()
   
   for (id in steam_app_ids) {
-    game_summary <- data.frame(
-      steamAppId = id,
-      stringsAsFactors = FALSE
+    game_summary <- tibble::tibble(
+      steam_app_id = id,
+
     )
     
     # Add game name from metadata
     if (!is.null(results$metadata)) {
-      game_meta <- results$metadata[results$metadata$steamAppId == id, ]
+      game_meta <- results$metadata[results$metadata$steam_app_id == id, ]
       if (nrow(game_meta) > 0) {
         game_summary$name <- game_meta$name[1]
       }
@@ -451,65 +451,62 @@ vgi_game_summary <- function(steam_app_ids,
     
     # Aggregate concurrent players
     if (!is.null(results$time_series$concurrent)) {
-      game_ccu <- results$time_series$concurrent[results$time_series$concurrent$steamAppId == id, ]
+      game_ccu <- results$time_series$concurrent[results$time_series$concurrent$steam_app_id == id, ]
       if (nrow(game_ccu) > 0) {
-        game_summary$avg_peak_ccu <- round(mean(game_ccu$peakConcurrent, na.rm = TRUE))
-        game_summary$max_peak_ccu <- max(game_ccu$peakConcurrent, na.rm = TRUE)
-        game_summary$avg_avg_ccu <- round(mean(game_ccu$avgConcurrent, na.rm = TRUE))
+        game_summary$avg_peak_ccu <- round(mean(game_ccu$peak_concurrent, na.rm = TRUE))
+        game_summary$max_peak_ccu <- max(game_ccu$peak_concurrent, na.rm = TRUE)
+        game_summary$avg_avg_ccu <- round(mean(game_ccu$avg_concurrent, na.rm = TRUE))
       }
     }
     
     # Aggregate active players
     if (!is.null(results$time_series$active)) {
-      game_active <- results$time_series$active[results$time_series$active$steamAppId == id, ]
+      game_active <- results$time_series$active[results$time_series$active$steam_app_id == id, ]
       if (nrow(game_active) > 0) {
         game_summary$avg_dau <- round(mean(game_active$dau, na.rm = TRUE))
         game_summary$avg_mau <- round(mean(game_active$mau, na.rm = TRUE))
-        game_summary$avg_dau_mau_ratio <- round(mean(game_active$dauMauRatio, na.rm = TRUE), 3)
+        game_summary$avg_dau_mau_ratio <- round(mean(game_active$dau_mau_ratio, na.rm = TRUE), 3)
       }
     }
     
     # Aggregate revenue
     if (!is.null(results$time_series$revenue)) {
-      game_rev <- results$time_series$revenue[results$time_series$revenue$steamAppId == id, ]
+      game_rev <- results$time_series$revenue[results$time_series$revenue$steam_app_id == id, ]
       if (nrow(game_rev) > 0) {
-        game_summary$total_revenue <- sum(game_rev$dailyRevenue, na.rm = TRUE)
-        game_summary$avg_daily_revenue <- round(mean(game_rev$dailyRevenue, na.rm = TRUE))
+        game_summary$total_revenue <- sum(game_rev$daily_revenue, na.rm = TRUE)
+        game_summary$avg_daily_revenue <- round(mean(game_rev$daily_revenue, na.rm = TRUE))
       }
     }
     
     # Aggregate units sold
     if (!is.null(results$time_series$units)) {
-      game_units <- results$time_series$units[results$time_series$units$steamAppId == id, ]
+      game_units <- results$time_series$units[results$time_series$units$steam_app_id == id, ]
       if (nrow(game_units) > 0) {
-        # Get latest total units and calculate daily average
-        game_summary$total_units <- max(game_units$unitsSold, na.rm = TRUE)
-        game_summary$avg_daily_units <- round(mean(game_units$dailyUnits, na.rm = TRUE))
+        game_summary$total_units <- max(game_units$units_sold, na.rm = TRUE)
+        game_summary$avg_daily_units <- round(mean(game_units$daily_units, na.rm = TRUE))
       }
     }
     
     # Aggregate reviews
     if (!is.null(results$time_series$reviews)) {
-      game_reviews <- results$time_series$reviews[results$time_series$reviews$steamAppId == id, ]
+      game_reviews <- results$time_series$reviews[results$time_series$reviews$steam_app_id == id, ]
       if (nrow(game_reviews) > 0) {
-        # Get latest review counts
         latest_reviews <- game_reviews[which.max(as.Date(game_reviews$date)), ]
-        game_summary$total_reviews <- latest_reviews$totalReviews
-        game_summary$positive_reviews <- latest_reviews$positiveReviews
-        game_summary$negative_reviews <- latest_reviews$negativeReviews
-        game_summary$positive_ratio <- round(latest_reviews$positiveRatio, 3)
+        game_summary$total_reviews <- latest_reviews$total_reviews
+        game_summary$positive_reviews <- latest_reviews$positive_reviews
+        game_summary$negative_reviews <- latest_reviews$negative_reviews
+        game_summary$positive_ratio <- round(latest_reviews$positive_ratio, 3)
       }
     }
     
     # Aggregate followers
     if (!is.null(results$time_series$followers)) {
-      game_followers <- results$time_series$followers[results$time_series$followers$steamAppId == id, ]
+      game_followers <- results$time_series$followers[results$time_series$followers$steam_app_id == id, ]
       if (nrow(game_followers) > 0) {
-        # Get latest follower count and calculate change
-        game_summary$current_followers <- max(game_followers$followerCount, na.rm = TRUE)
+        game_summary$current_followers <- max(game_followers$follower_count, na.rm = TRUE)
         if (nrow(game_followers) > 1) {
-          first_count <- game_followers$followerCount[1]
-          last_count <- game_followers$followerCount[nrow(game_followers)]
+          first_count <- game_followers$follower_count[1]
+          last_count <- game_followers$follower_count[nrow(game_followers)]
           game_summary$follower_change <- last_count - first_count
         }
       }
@@ -517,13 +514,12 @@ vgi_game_summary <- function(steam_app_ids,
     
     # Aggregate wishlists
     if (!is.null(results$time_series$wishlists)) {
-      game_wishlists <- results$time_series$wishlists[results$time_series$wishlists$steamAppId == id, ]
+      game_wishlists <- results$time_series$wishlists[results$time_series$wishlists$steam_app_id == id, ]
       if (nrow(game_wishlists) > 0) {
-        # Get latest wishlist count and calculate change
-        game_summary$current_wishlists <- max(game_wishlists$wishlistCount, na.rm = TRUE)
+        game_summary$current_wishlists <- max(game_wishlists$wishlist_count, na.rm = TRUE)
         if (nrow(game_wishlists) > 1) {
-          first_count <- game_wishlists$wishlistCount[1]
-          last_count <- game_wishlists$wishlistCount[nrow(game_wishlists)]
+          first_count <- game_wishlists$wishlist_count[1]
+          last_count <- game_wishlists$wishlist_count[nrow(game_wishlists)]
           game_summary$wishlist_change <- last_count - first_count
         }
       }
@@ -533,7 +529,7 @@ vgi_game_summary <- function(steam_app_ids,
   }
   
   if (length(summary_data) > 0) {
-    results$summary_table <- do.call(rbind, summary_data)
+    results$summary_table <- dplyr::bind_rows(summary_data)
   }
   
   # Add date range to results
@@ -551,5 +547,5 @@ vgi_game_summary <- function(steam_app_ids,
                    sum(sapply(results$errors, length))))
   }
   
-  return(results)
+  return(.vgi_clean_list(results))
 }

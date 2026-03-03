@@ -87,35 +87,35 @@ vgi_insights_playtime <- function(steam_app_id,
   )
 
   rows <- .vgi_unwrap_results(result)
-  empty_result <- list(
+  empty_result <- .vgi_clean_list(list(
     steamAppId = as.integer(steam_app_id),
     avgPlaytime = NA_real_,
     medianPlaytime = NA_real_,
     avgPlaytimeRank = NA_integer_,
     avgPlaytimePrct = NA_real_,
-    playtimeRanges = data.frame(range = character(), percentage = numeric(), stringsAsFactors = FALSE)
-  )
+    playtimeRanges = tibble::tibble(range = character(), percentage = numeric())
+  ))
   if (!is.data.frame(rows) || nrow(rows) == 0) return(empty_result)
 
   row <- .vgi_steam_row(rows, steam_app_id)
   if (is.null(row)) return(empty_result)
   ranges <- if ("playtime" %in% names(row)) row$playtime[[1]] else NULL
   if (!is.data.frame(ranges) || nrow(ranges) == 0) {
-    ranges_df <- data.frame(range = character(), percentage = numeric(), stringsAsFactors = FALSE)
+    ranges_df <- tibble::tibble(range = character(), percentage = numeric())
   } else {
-    ranges_df <- data.frame(
+    ranges_df <- tibble::tibble(
       range = as.character(ranges$range %||% NA_character_),
       percentage = as.numeric(ranges$percentage %||% NA_real_),
-      stringsAsFactors = FALSE
+
     )
   }
 
-  list(
+  .vgi_clean_list(list(
     steamAppId = as.integer(row$externalId %||% steam_app_id),
     avgPlaytime = as.numeric(row$avgPlaytime %||% NA_real_),
     medianPlaytime = as.numeric(row$medianPlaytime %||% NA_real_),
     avgPlaytimeRank = as.integer(row$avgPlaytimeRank %||% NA_integer_),
     avgPlaytimePrct = as.numeric(row$avgPlaytimePrct %||% NA_real_),
     playtimeRanges = ranges_df
-  )
+  ))
 }

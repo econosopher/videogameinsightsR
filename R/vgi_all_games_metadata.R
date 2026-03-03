@@ -43,30 +43,26 @@
 #' games_metadata <- vgi_all_games_metadata(limit = 1000)
 #' 
 #' # Basic statistics
-#' cat("Total games:", nrow(games_metadata), "\n")
-#' cat("Date range:", min(games_metadata$releaseDate), "to", 
-#'     max(games_metadata$releaseDate), "\n")
+#' nrow(games_metadata)
+#' range(as.Date(games_metadata$releaseDate), na.rm = TRUE)
 #' 
 #' # Price analysis
-#' price_stats <- summary(games_metadata$price)
-#' print(price_stats)
+#' summary(games_metadata$price)
 #' 
 #' # Free vs paid games
-#' free_games <- sum(games_metadata$price == 0)
-#' cat("Free games:", free_games, 
-#'     "(", round(free_games/nrow(games_metadata)*100, 1), "%)\n")
+#' free_games <- sum(games_metadata$price == 0, na.rm = TRUE)
+#' free_share <- free_games / nrow(games_metadata)
+#' c(free_games = free_games, free_share = free_share)
 #' 
 #' # Genre analysis
 #' all_genres <- unlist(games_metadata$genres)
 #' genre_counts <- sort(table(all_genres), decreasing = TRUE)
-#' cat("Top 10 genres:\n")
-#' print(head(genre_counts, 10))
+#' head(genre_counts, 10)
 #' 
 #' # Tag analysis for trends
 #' all_tags <- unlist(games_metadata$tags)
 #' tag_counts <- sort(table(all_tags), decreasing = TRUE)
-#' cat("Top 20 tags:\n")
-#' print(head(tag_counts, 20))
+#' head(tag_counts, 20)
 #' 
 #' # Release patterns by year
 #' games_metadata$year <- format(as.Date(games_metadata$releaseDate), "%Y")
@@ -78,47 +74,6 @@
 #'         ylab = "Number of Games",
 #'         las = 2,
 #'         col = "steelblue")
-#' 
-#' # Developer analysis
-#' dev_counts <- sort(table(games_metadata$developer), decreasing = TRUE)
-#' cat("Most prolific developers:\n")
-#' print(head(dev_counts, 10))
-#' 
-#' # Price tier analysis
-#' games_metadata$price_tier <- cut(games_metadata$price,
-#'                                  breaks = c(-0.01, 0, 9.99, 19.99, 
-#'                                            39.99, 59.99, Inf),
-#'                                  labels = c("Free", "<$10", "$10-20", 
-#'                                            "$20-40", "$40-60", ">$60"))
-#' 
-#' tier_dist <- table(games_metadata$price_tier)
-#' pie(tier_dist,
-#'     main = "Games by Price Tier",
-#'     col = rainbow(length(tier_dist)))
-#' 
-#' # Find games by specific criteria
-#' # Recent indie games
-#' recent_indie <- games_metadata[
-#'   games_metadata$year >= "2023" & 
-#'   sapply(games_metadata$tags, function(t) "Indie" %in% t) &
-#'   games_metadata$price < 30,
-#' ]
-#' cat("Recent indie games under $30:", nrow(recent_indie), "\n")
-#' 
-#' # Export for external analysis
-#' # write.csv(games_metadata, "all_games_metadata.csv", row.names = FALSE)
-#' 
-#' # Paginated retrieval for large datasets
-#' # all_games <- list()
-#' # offset <- 0
-#' # repeat {
-#' #   batch <- vgi_all_games_metadata(limit = 1000, offset = offset)
-#' #   if (nrow(batch) == 0) break
-#' #   all_games[[length(all_games) + 1]] <- batch
-#' #   offset <- offset + 1000
-#' #   cat("Retrieved", offset, "games...\n")
-#' # }
-#' # all_games_df <- do.call(rbind, all_games)
 #' }
 vgi_all_games_metadata <- function(limit = 1000,
                                   offset = 0,
@@ -148,7 +103,7 @@ vgi_all_games_metadata <- function(limit = 1000,
   
   rows <- .vgi_unwrap_results(result)
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       name = character(),
       releaseDate = character(),
@@ -158,11 +113,11 @@ vgi_all_games_metadata <- function(limit = 1000,
       tags = I(list()),
       price = numeric(),
       description = character(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
-  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+  df <- dplyr::bind_rows(lapply(seq_len(nrow(rows)), function(i) {
     row <- rows[i, , drop = FALSE]
     steam_id <- .vgi_parse_steam_app_id(row$storeUrl.steam)
     dev_name <- NA_character_
@@ -173,7 +128,7 @@ vgi_all_games_metadata <- function(limit = 1000,
     if ("publishers" %in% names(row) && is.data.frame(row$publishers[[1]]) && nrow(row$publishers[[1]]) > 0) {
       pub_name <- as.character(row$publishers[[1]]$companyName[1] %||% NA_character_)
     }
-    data.frame(
+    tibble::tibble(
       steamAppId = as.integer(steam_id),
       name = as.character(row$name %||% NA_character_),
       releaseDate = as.character(row$releaseDate.steam %||% row$steamFullReleaseDate %||% NA_character_),
@@ -183,10 +138,10 @@ vgi_all_games_metadata <- function(limit = 1000,
       tags = I(list(unlist(row$steamTags[[1]] %||% character(0)))),
       price = as.numeric(row$price.steam %||% NA),
       description = as.character(NA),
-      stringsAsFactors = FALSE
+
     )
   }))
 
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
-  df
+  .vgi_clean_names(df)
 }

@@ -116,7 +116,7 @@ vgi_all_games_regions <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
 
   rows <- .vgi_unwrap_results(result)
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       northAmerica = numeric(),
       europe = numeric(),
@@ -126,8 +126,8 @@ vgi_all_games_regions <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
       africa = numeric(),
       middleEast = numeric(),
       dominantRegion = character(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
   map_region <- function(region_name) {
@@ -139,7 +139,7 @@ vgi_all_games_regions <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
     NULL
   }
 
-  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+  df <- dplyr::bind_rows(lapply(seq_len(nrow(rows)), function(i) {
     reg_df <- if ("topRegions" %in% names(rows)) rows$topRegions[[i]] else NULL
     region_vals <- c(
       northAmerica = 0, europe = 0, asia = 0, southAmerica = 0,
@@ -156,7 +156,7 @@ vgi_all_games_regions <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
     }
 
     dominant_region <- names(region_vals)[which.max(region_vals)]
-    data.frame(
+    tibble::tibble(
       steamAppId = as.integer(rows$externalId[i] %||% NA),
       northAmerica = as.numeric(region_vals["northAmerica"]),
       europe = as.numeric(region_vals["europe"]),
@@ -166,10 +166,10 @@ vgi_all_games_regions <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
       africa = as.numeric(region_vals["africa"]),
       middleEast = as.numeric(region_vals["middleEast"]),
       dominantRegion = as.character(dominant_region),
-      stringsAsFactors = FALSE
+
     )
   }))
 
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
-  df
+  .vgi_clean_names(df)
 }

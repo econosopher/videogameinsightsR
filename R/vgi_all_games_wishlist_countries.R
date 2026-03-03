@@ -70,9 +70,9 @@
 #' 
 #' # Compare which countries dominate wishlists vs players
 #' country_comparison <- merge(
-#'   data.frame(country = names(wishlist_top_countries),
+#'   tibble::tibble(country = names(wishlist_top_countries),
 #'              wishlist_games = as.numeric(wishlist_top_countries)),
-#'   data.frame(country = names(player_top_countries),
+#'   tibble::tibble(country = names(player_top_countries),
 #'              player_games = as.numeric(player_top_countries)),
 #'   by = "country", all = TRUE
 #' )
@@ -114,24 +114,24 @@ vgi_all_games_wishlist_countries <- function(auth_token = Sys.getenv("VGI_AUTH_T
 
   rows <- .vgi_unwrap_results(result)
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       topWishlistCountries = I(list()),
       wishlistCountryCount = integer(),
       topWishlistCountry = character(),
       topWishlistCountryPct = numeric(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
-  df <- do.call(rbind, lapply(seq_len(nrow(rows)), function(i) {
+  df <- dplyr::bind_rows(lapply(seq_len(nrow(rows)), function(i) {
     wc <- if ("wishlists" %in% names(rows)) rows$wishlists[[i]] else NULL
     if (is.data.frame(wc) && nrow(wc) > 0) {
-      wc_df <- data.frame(
+      wc_df <- tibble::tibble(
         country = as.character(wc$countryCode %||% NA_character_),
         countryName = as.character(wc$countryName %||% NA_character_),
         percentage = as.numeric(wc$percentage %||% NA_real_),
-        stringsAsFactors = FALSE
+
       )
       top_country <- wc_df$country[1]
       top_country_pct <- wc_df$percentage[1]
@@ -143,17 +143,17 @@ vgi_all_games_wishlist_countries <- function(auth_token = Sys.getenv("VGI_AUTH_T
       country_count <- 0
     }
 
-    data.frame(
+    tibble::tibble(
       steamAppId = as.integer(rows$externalId[i] %||% NA),
       topWishlistCountries = I(list(wc_df)),
       wishlistCountryCount = as.integer(country_count),
       topWishlistCountry = top_country,
       topWishlistCountryPct = as.numeric(top_country_pct),
-      stringsAsFactors = FALSE
+
     )
   }))
 
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
   df <- df[order(-df$topWishlistCountryPct, na.last = TRUE), , drop = FALSE]
-  df
+  .vgi_clean_names(df)
 }

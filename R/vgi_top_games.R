@@ -87,7 +87,7 @@ vgi_top_games <- function(metric,
   )
   
   if (nrow(rankings) == 0) {
-    return(tibble::tibble())
+    return(.vgi_clean_names(tibble::tibble()))
   }
   
   # Determine which column to sort by based on metric
@@ -148,11 +148,11 @@ vgi_top_games <- function(metric,
   })
   
   # Create output with relevant columns including actual values
-  result <- data.frame(
+  result <- tibble::tibble(
     steamAppId = rankings$steamAppId,
     rank = rankings[[rank_column]],
     percentile = rankings[[value_column]],
-    stringsAsFactors = FALSE
+
   )
   
   # Add actual metric values based on what was requested (best-effort proxies)
@@ -185,5 +185,5 @@ vgi_top_games <- function(metric,
   # Convert to tibble
   result <- tibble::as_tibble(result)
   
-  return(result)
+  return(.vgi_clean_names(result))
 }

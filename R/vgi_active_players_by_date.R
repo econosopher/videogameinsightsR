@@ -146,15 +146,15 @@ vgi_active_players_by_date <- function(date,
   )
 
   if (!is.data.frame(result) || nrow(result) == 0) {
-    empty_df <- data.frame(
+    empty_df <- .vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       date = character(),
       dau = integer(),
       mau = integer(),
       dauMauRatio = numeric(),
       activeRank = integer(),
-      stringsAsFactors = FALSE
-    )
+
+    ))
     attr(empty_df, "requested_date") <- date
     attr(empty_df, "actual_date") <- formatted_date
     return(empty_df)
@@ -164,27 +164,27 @@ vgi_active_players_by_date <- function(date,
     result <- result[result$platform == "steam", , drop = FALSE]
   }
 
-  df <- data.frame(
+  df <- tibble::tibble(
     steamAppId = as.integer(result$externalId %||% NA),
     date = formatted_date,
     dau = as.integer(result$dau %||% NA),
     mau = as.integer(result$mau %||% NA),
-    stringsAsFactors = FALSE
+
   )
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
   if (nrow(df) == 0) {
-    df <- data.frame(
+    empty_df <- .vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       date = character(),
       dau = integer(),
       mau = integer(),
       dauMauRatio = numeric(),
       activeRank = integer(),
-      stringsAsFactors = FALSE
-    )
-    attr(df, "requested_date") <- date
-    attr(df, "actual_date") <- formatted_date
-    return(df)
+
+    ))
+    attr(empty_df, "requested_date") <- date
+    attr(empty_df, "actual_date") <- formatted_date
+    return(empty_df)
   }
 
   df$dauMauRatio <- ifelse(df$mau > 0, df$dau / df$mau, NA_real_)
@@ -200,8 +200,9 @@ vgi_active_players_by_date <- function(date,
     df <- df[seq_len(limit), , drop = FALSE]
   }
 
-  attr(df, "requested_date") <- requested_date
-  attr(df, "actual_date") <- formatted_date
   warn_if_stale_ids(df$steamAppId)
-  df
+  out <- .vgi_clean_names(df)
+  attr(out, "requested_date") <- requested_date
+  attr(out, "actual_date") <- formatted_date
+  out
 }

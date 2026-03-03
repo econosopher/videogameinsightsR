@@ -1,222 +1,180 @@
-# videogameinsightsR
+# VideoGameInsightsR
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/econosopher/videogameinsightsR/workflows/R-CMD-check/badge.svg)](https://github.com/econosopher/videogameinsightsR/actions)
+[![R-CMD-check](https://github.com/econosopher/VideoGameInsightsR/workflows/R-CMD-check/badge.svg)](https://github.com/econosopher/VideoGameInsightsR/actions)
 <!-- badges: end -->
 
-R package for interfacing with the Video Game Insights API to fetch comprehensive gaming analytics data for Steam games.
+R package for the [Video Game Insights](https://app.sensortower.com/vgi/) API. Retrieve
+player counts, revenue, units sold, wishlists, reviews, and more for Steam games
+-- all returned as tidy tibbles with snake\_case column names.
 
 ## Installation
 
 ```r
-# Install from GitHub
-devtools::install_github("econosopher/videogameinsightsR")
+devtools::install_github("econosopher/VideoGameInsightsR")
 ```
 
-## Authentication
-
-Store your Video Game Insights API token as an environment variable:
+## Quick Start
 
 ```r
-# Set in your R session
+library(VideoGameInsightsR)
+
+# Store your API token (once per session, or add to .Renviron)
 Sys.setenv(VGI_AUTH_TOKEN = "your_token_here")
 
-# Or add to .Renviron for persistent storage
-usethis::edit_r_environ()
-# Add: VGI_AUTH_TOKEN="YOUR_SECRET_TOKEN_HERE"
+# Search and inspect a game
+vgi_search_games("Valheim")
+vgi_game_metadata(892970)
 ```
 
-## Overview
+## Core Workflow
 
-The videogameinsightsR package provides a comprehensive R interface to the Video Game Insights API, enabling:
-
-- Concurrent player statistics (CCU)
-- Daily and Monthly Active Users (DAU/MAU)
-- Revenue and units sold data
-- Game metadata including publishers and developers
-- Game search functionality
-- Comprehensive summary reports
-
-## Core Functions
-
-### Game Information
-
-- `vgi_search_games()` - Search for games by title
-- `vgi_game_metadata()` - Get detailed metadata for a single game
-
-### Player Metrics
-
-- `vgi_concurrent_players_by_date()` - Get concurrent player statistics (supports multiple IDs)
-- `vgi_active_players_by_date()` - Get DAU/MAU data (supports multiple IDs)
-
-### Revenue & Sales
-
-- `vgi_revenue_by_date()` - Get revenue data (supports multiple IDs)
-- `vgi_units_sold_by_date()` - Get units sold information (supports multiple IDs)
-
-### Comprehensive Summary
-
-- `vgi_game_summary()` - Get all available metrics in one call
-- `vgi_game_summary_yoy()` - Compare metrics across multiple years
-
-## Usage Examples
+The typical workflow is **search -> inspect -> pull time series -> analyse**.
+Every function returns a tibble so results pipe naturally.
 
 ```r
-library(videogameinsightsR)
+library(dplyr)
 
-# Search for games
-valheim_results <- vgi_search_games("Valheim")
+# 1. Find a game
+games <- vgi_search_games("Elden Ring")
+app_id <- games$steam_app_id[1]
 
-# Get game metadata
-valheim_metadata <- vgi_game_metadata(892970)
+# 2. Pull metadata
+meta <- vgi_game_metadata(app_id)
+meta$name
+#> "ELDEN RING"
 
-# Get concurrent players for multiple games
-battlefield_ids <- c(1517290, 1238810, 1238860, 1238840, 24960)
-ccu_data <- vgi_concurrent_players_by_date(
-  steam_app_ids = battlefield_ids,
-  start_date = "2024-07-01",
-  end_date = "2024-07-07"
+# 3. Get daily time-series data
+ccu   <- vgi_concurrent_players_by_date("2025-06-01", steam_app_ids = app_id)
+dau   <- vgi_active_players_by_date("2025-06-01", steam_app_ids = app_id)
+rev   <- vgi_revenue_by_date("2025-06-01", steam_app_ids = app_id)
+units <- vgi_units_sold_by_date("2025-06-01", steam_app_ids = app_id)
+
+# 4. Or grab everything at once with the historical data endpoint
+hist <- vgi_historical_data(app_id)
+names(hist)
+#> "steam_app_id" "revenue" "units_sold" "concurrent_players"
+#> "active_players" "reviews" "wishlists" "followers" "price_history"
+```
+
+## Function Families
+
+### Game Discovery
+
+| Function | Description |
+|---|---|
+| `vgi_search_games()` | Search by title (uses local cache + API fallback) |
+| `vgi_game_list()` | Full game catalogue |
+| `vgi_top_games()` | Top games by various ranking metrics |
+| `vgi_game_metadata()` | Detailed metadata for a single game |
+
+### Time Series (by date)
+
+All accept `date` and optional `steam_app_ids` to filter.
+
+| Function | Columns |
+|---|---|
+| `vgi_concurrent_players_by_date()` | `peak_concurrent`, `avg_concurrent` |
+| `vgi_active_players_by_date()` | `dau`, `mau`, `dau_mau_ratio` |
+| `vgi_revenue_by_date()` | `revenue`, `daily_revenue` |
+| `vgi_units_sold_by_date()` | `units_sold`, `daily_units` |
+| `vgi_reviews_by_date()` | `positive_reviews`, `negative_reviews`, `positive_ratio` |
+| `vgi_followers_by_date()` | `follower_count` |
+| `vgi_wishlists_by_date()` | `wishlist_count` |
+
+### Comprehensive Historical Data
+
+```r
+hist <- vgi_historical_data(892970)
+hist$revenue        # tibble: date, revenue, daily_revenue
+hist$active_players # tibble: date, dau, mau
+hist$price_history  # tibble: date, price_initial, price_final
+```
+
+### Insights (per-game summaries)
+
+| Function | Returns |
+|---|---|
+| `vgi_insights_ccu()` | CCU history |
+| `vgi_insights_dau_mau()` | Active player history |
+| `vgi_insights_revenue()` | Revenue time series |
+| `vgi_insights_units()` | Units sold time series |
+| `vgi_insights_playtime()` | Average/median playtime + ranges |
+| `vgi_insights_player_regions()` | Player geographic distribution |
+| `vgi_insights_price_history()` | Price change periods by currency |
+
+### Convenience Functions
+
+```r
+# Everything in one call
+summary <- vgi_game_summary(
+  steam_app_ids = c(892970, 1245620),
+  start_date = "2025-01-01",
+  end_date   = "2025-01-31"
 )
+summary$summary_table
+summary$time_series$concurrent
 
-# Get comprehensive summary
-game_summary <- vgi_game_summary(
-  steam_app_ids = battlefield_ids,
-  start_date = "2024-07-01",
-  end_date = "2024-07-31",
-  metrics = c("concurrent", "active", "revenue", "units")  # Optional
-)
-
-# Access summary table with averages
-print(game_summary$summary_table)
-
-# Access time series data
-print(game_summary$time_series$concurrent)
-print(game_summary$time_series$revenue)
-
-# Year-over-Year Comparison
-yoy_comparison <- vgi_game_summary_yoy(
-  steam_app_ids = c(892970, 1145360),
-  years = c(2023, 2024, 2025),
+# Year-over-year comparison
+yoy <- vgi_game_summary_yoy(
+  steam_app_ids = 892970,
+  years = c(2024, 2025),
   start_month = "Jan",
   end_month = "Mar"
 )
+yoy$comparison_table
+```
 
-# View comparison table with growth rates
-print(yoy_comparison$comparison_table)
+### Publishers and Developers
 
-# Access time series data for custom visualization
-revenue_data <- yoy_comparison$time_series_comparison$revenue
+```r
+vgi_publishers_overview()   # All publishers with key metrics
+vgi_developers_overview()   # All developers with key metrics
+vgi_publisher_list()        # Publisher names and IDs
+vgi_developer_list()        # Developer names and IDs
+```
+
+## Configuration
+
+```r
+# Base URL (default: v4)
+options(vgi.base_url = "https://vginsights.com/api/v4")
+
+# Timeouts and retries
+options(vgi.timeout = 30)
+options(vgi.retry_max_tries = 4)
+
+# Request caching (seconds, GET only)
+options(vgi.request_cache_ttl = 3600)
+
+# Rate limiting
+options(vgi.auto_rate_limit = TRUE)
+options(vgi.calls_per_batch = 10)
+options(vgi.batch_delay = 1)
+
+# Verbose logging
+options(vgi.verbose = TRUE)
 ```
 
 ## Important Notes
 
-### Steam App IDs Required
-
-The Video Game Insights API requires explicit Steam App ID filtering to access production data. Without the `steamAppIds` parameter, endpoints return only demo data.
-
-```r
-# ❌ INCORRECT - Returns demo data
-ccu_data <- vgi_concurrent_players_by_date("2024-07-01")
-
-# ✅ CORRECT - Returns actual data
-ccu_data <- vgi_concurrent_players_by_date(
-  steam_app_ids = c(892970, 1145360),
-  start_date = "2024-07-01"
-)
-```
-
-### Date Availability
-
-- **Daily Active Users (DAU)**: Available from 2024-03-18 onwards
-- **Monthly Active Users (MAU)**: Available from 2024-03-23 onwards
-- Functions handle these restrictions gracefully and return available data
-
-### Response Format
-
-The API returns different field names depending on the endpoint:
-- Revenue: `revenueTotal` (total) and `revenueChange` (daily change)
-- Units: `unitsSoldTotal` (total) and `unitsSoldChange` (daily change)
-- CCU: `peakConcurrent` and `avgConcurrent`
-
-### Known API Limitations (as of current release)
-
-- Rankings and some list endpoints often return only very old Steam App IDs (<1000), limiting “modern” coverage. Functions include warnings when results look stale.
-- Game metadata responses can be irregularly shaped; batch metadata calls fall back to per‑ID fetching with robust parsing.
-- Direct “top by CCU/DAU” endpoints are not available; `vgi_top_games()` uses proxy columns from rankings and best‑effort enrichment.
-- Server‑side search filters are unreliable; `vgi_search_games()` performs local filtering over the full game list.
-- Some analytics endpoints in older docs are absent or return 404; the package avoids calling non‑existent routes.
-
-If you encounter issues, set `options(vgi.verbose = TRUE)` to log requests, and consider enabling a GET cache via `options(vgi.request_cache_ttl = 3600)`.
-
-## Rate Limiting and Batching
-
-To reduce stress on the API, the package supports configurable rate limiting:
-
-```r
-# Set rate limiting via environment variables
-Sys.setenv(VGI_BATCH_SIZE = "10")   # API calls per batch
-Sys.setenv(VGI_BATCH_DELAY = "1.5") # Seconds between batches
-
-# Or use the rate limiter directly
-limiter <- create_rate_limiter(calls_per_batch = 5, delay_seconds = 2)
-for (date in dates) {
-  data <- vgi_concurrent_players_by_date(date)
-  limiter$increment()  # Applies delay when threshold reached
-}
-```
-
-Functions that make many sequential API calls (like `vgi_game_summary`) automatically
-apply intelligent batching based on the request size.
-
-### Configuration
-
-You can control behavior via options or environment variables:
-
-- Base URL: set `options(vgi.base_url = "https://vginsights.com/api/v4")` or `VGI_BASE_URL`
-- Timeouts: `options(vgi.timeout = 30)`
-- Retries: `options(vgi.retry_max_tries = 4)`
-- Request cache TTL (seconds, GET only): `options(vgi.request_cache_ttl = 3600)` or `VGI_REQUEST_CACHE_TTL_SECONDS`
-- Auto rate limiting (global): `options(vgi.auto_rate_limit = TRUE)`
-- Calls per batch: `options(vgi.calls_per_batch = 10)` or `VGI_BATCH_SIZE`
-- Delay seconds: `options(vgi.batch_delay = 1)` or `VGI_BATCH_DELAY`
-- Verbose request logging: `options(vgi.verbose = TRUE)`
-
-## Recent Updates
-
-### Version 0.0.4 (2026-02-24)
-- Migrated package core to use VGI API v4 (`https://vginsights.com/api/v4`).
-- Added `vgi_publishers_overview()` and `vgi_developers_overview()` for rich company data.
-- Added `vgi_top_regions()` for easy access to regional performance data.
-- Search functions are now significantly faster and rely on local caches before falling back to full-DB endpoints.
-- Re-architected data endpoints to use `historical-data` snapshot polling under the hood, ensuring cleaner rate-limit usage and handling API v4 shape changes gracefully.
-
-### Version 0.0.3 (2025-08-01)
-- Added `vgi_game_summary_yoy()` for year-over-year comparisons
-- Support for flexible date specification (months or explicit dates)
-- Automatic calculation of year-over-year growth percentages
-- Support for periods that cross year boundaries (e.g., holiday season)
-- Returns comparison tables and normalized time series data
-- Added rate limiting utilities to reduce API stress
-
-### Version 0.0.2 (2025-08-01)
-- Added support for multiple Steam App IDs in all data retrieval functions
-- Fixed field mapping for revenue and units sold endpoints
-- Added comprehensive `vgi_game_summary()` function
-- Improved error handling for date availability constraints
-- Fixed metadata endpoint to use correct URL structure
-- Enhanced API response handling with automatic data frame conversion
-- Fixed date handling in loops to prevent numeric conversion
+- **Steam App IDs required**: Pass explicit IDs to time-series functions.
+  Without them the API returns demo/aggregate data only.
+- **DAU/MAU availability**: DAU from 2024-03-18, MAU from 2024-03-23.
+- **Column names**: All output uses snake\_case (e.g. `steam_app_id`,
+  `peak_concurrent`, `daily_revenue`). This is a breaking change from v0.0.x.
+- **Return types**: All data-returning functions produce tibbles.
 
 ## Development
 
-This package is under active development. If you encounter any issues or have suggestions, please file an issue on [GitHub](https://github.com/econosopher/videogameinsightsR).
+```r
+devtools::load_all()
+devtools::test()
+devtools::check(cran = TRUE)
+```
 
-## Tests and Fixtures
-
-- Deterministic tests use `httptest2` fixtures recorded under `tests/testthat/vginsights.com/`.
-- To re-record fixtures, run `Rscript dev/record_fixtures.R` with a valid `VGI_AUTH_TOKEN` available.
-- Do not commit secrets; fixtures only contain request/response bodies and normalized URLs.
+Tests use `httptest2` fixtures under `tests/testthat/vginsights.com/`.
 
 ## License
 
-MIT License
+MIT

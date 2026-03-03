@@ -85,12 +85,12 @@ cat("Games with significant overlap with game", target_game, ":",
 
 # Build a gaming ecosystem map
 # Extract all overlap relationships
-all_overlaps <- do.call(rbind, lapply(seq_len(nrow(overlap_data)), function(i) {
+all_overlaps <- dplyr::bind_rows(lapply(seq_len(nrow(overlap_data)), function(i) {
   game_id <- overlap_data$steamAppId[i]
   overlaps <- overlap_data$topOverlaps[[i]]
   if (is.null(overlaps) || nrow(overlaps) == 0) return(NULL)
   
-  data.frame(
+  tibble::tibble(
     from = game_id,
     to = overlaps$steamAppId[1:min(5, nrow(overlaps))],
     overlap_pct = overlaps$overlapPercentage[1:min(5, nrow(overlaps))]

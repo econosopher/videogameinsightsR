@@ -1,6 +1,6 @@
-# videogameinsightsR Examples
+# VideoGameInsightsR Examples
 
-This directory contains example scripts and visualizations created with the videogameinsightsR package.
+This directory contains example scripts and visualizations created with the VideoGameInsightsR package.
 
 ## Requirements
 

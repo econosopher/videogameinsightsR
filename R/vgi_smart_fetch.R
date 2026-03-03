@@ -16,23 +16,20 @@
 vgi_fetch_all_games <- function(cache_results = TRUE, 
                                verbose = TRUE,
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN")) {
+  configured_cache <- getOption("VideoGameInsightsR.cache_dir", Sys.getenv("VGI_CACHE_DIR", ""))
+  cache_base_dir <- if (!is.null(configured_cache) && nzchar(configured_cache)) {
+    configured_cache
+  } else {
+    tempdir()
+  }
+  cache_file <- file.path(cache_base_dir, "vgi_all_games_cache.rds")
   
   if (cache_results) {
-    # Prefer persistent cache; fall back to temp cache for backwards compatibility
-    persistent_cache_file <- file.path(rappdirs::user_cache_dir("videogameinsightsR"), "vgi_all_games_cache.rds")
-    temp_cache_file <- file.path(tempdir(), "vgi_all_games_temp.rds")
-
-    if (file.exists(persistent_cache_file)) {
-      cache_age <- difftime(Sys.time(), file.info(persistent_cache_file)$mtime, units = "hours")
-      if (cache_age < 24) {
-        if (verbose) message("Using cached game list from persistent cache (less than 24 hours old)")
-        return(readRDS(persistent_cache_file))
-      }
-    } else if (file.exists(temp_cache_file)) {
-      cache_age <- difftime(Sys.time(), file.info(temp_cache_file)$mtime, units = "hours")
+    if (file.exists(cache_file)) {
+      cache_age <- difftime(Sys.time(), file.info(cache_file)$mtime, units = "hours")
       if (cache_age < 24) {
         if (verbose) message("Using cached game list (less than 24 hours old)")
-        return(readRDS(temp_cache_file))
+        return(.vgi_clean_names(readRDS(cache_file)))
       }
     }
   }
@@ -67,17 +64,17 @@ vgi_fetch_all_games <- function(cache_results = TRUE,
   }
   
   # Combine all results
-  all_games_df <- do.call(rbind, all_games)
+  all_games_df <- dplyr::bind_rows(all_games)
   
   if (cache_results && nrow(all_games_df) > 0) {
-    # Move caching into persistent cache directory for consistency
-    persistent_cache_file <- file.path(rappdirs::user_cache_dir("videogameinsightsR"), "vgi_all_games_cache.rds")
-    if (!dir.exists(dirname(persistent_cache_file))) dir.create(dirname(persistent_cache_file), recursive = TRUE)
-    saveRDS(all_games_df, persistent_cache_file)
-    if (verbose) message(sprintf("Cached %d games to %s", nrow(all_games_df), persistent_cache_file))
+    if (!dir.exists(dirname(cache_file))) {
+      dir.create(dirname(cache_file), recursive = TRUE, showWarnings = FALSE)
+    }
+    saveRDS(all_games_df, cache_file)
+    if (verbose) message(sprintf("Cached %d games to %s", nrow(all_games_df), cache_file))
   }
   
-  return(all_games_df)
+  return(.vgi_clean_names(all_games_df))
 }
 
 #' Fetch Games by ID List
@@ -115,7 +112,7 @@ vgi_fetch_by_ids <- function(steam_app_ids,
   if (data_type == "rankings") {
     # For rankings, we need to fetch all and filter
     all_rankings <- vgi_fetch_all_games(cache_results = use_cache)
-    return(all_rankings[all_rankings$steamAppId %in% steam_app_ids, ])
+    return(.vgi_clean_names(all_rankings[all_rankings$steam_app_id %in% steam_app_ids, ]))
   }
   
   if (data_type == "active_players") {
@@ -125,7 +122,7 @@ vgi_fetch_by_ids <- function(steam_app_ids,
     all_active <- vgi_active_players_by_date(date, limit = 1000)
     
     # Filter for our IDs
-    return(all_active[all_active$steamAppId %in% steam_app_ids, ])
+    return(.vgi_clean_names(all_active[all_active$steam_app_id %in% steam_app_ids, ]))
   }
   
   if (data_type == "metadata") {
@@ -142,14 +139,14 @@ vgi_fetch_by_ids <- function(steam_app_ids,
       for (id in steam_app_ids) {
         tryCatch({
           meta <- vgi_game_metadata(id)
-          metadata_list[[as.character(id)]] <- data.frame(
-            steamAppId = id,
+          metadata_list[[as.character(id)]] <- tibble::tibble(
+            steam_app_id = id,
             name = meta$name,
             genres = paste(meta$genres, collapse = ", "),
-            releaseDate = meta$releaseDate,
+            release_date = meta$release_date,
             developer = meta$developer,
             publisher = meta$publisher,
-            stringsAsFactors = FALSE
+
           )
           success_count <- success_count + 1
         }, error = function(e) {
@@ -164,13 +161,13 @@ vgi_fetch_by_ids <- function(steam_app_ids,
       }
       
       if (length(metadata_list) > 0) {
-        do.call(rbind, metadata_list)
+        dplyr::bind_rows(metadata_list)
       } else {
-        data.frame()
+        tibble::tibble()
       }
     })
     
-    return(result)
+    return(.vgi_clean_names(result))
   }
 }
 
@@ -207,36 +204,28 @@ vgi_smart_search <- function(genre = NULL,
   # Get all games with rankings
   all_games <- vgi_fetch_all_games(verbose = FALSE)
   
-  # Determine which rank column to use
   rank_col <- switch(metric,
-    revenue = "totalRevenueRank",
-    units = "totalUnitsSoldRank",
-    followers = "followersRank"
+    revenue = "total_revenue_rank",
+    units = "total_units_sold_rank",
+    followers = "followers_rank"
   )
   
-  # Apply rank filter if specified
   if (!is.null(min_rank)) {
     all_games <- all_games[!is.na(all_games[[rank_col]]) & 
                           all_games[[rank_col]] <= min_rank, ]
   }
   
-  # Sort by rank
   all_games <- all_games[order(all_games[[rank_col]]), ]
   
-  # If no other filters, return top N
   if (is.null(genre) && is.null(developer) && is.null(publisher)) {
-    return(head(all_games, limit))
+    return(.vgi_clean_names(head(all_games, limit)))
   }
   
-  # We need metadata for filtering
-  # Get IDs of top candidates (fetch more than limit to account for filtering)
-  candidate_ids <- head(all_games$steamAppId, limit * 3)
+  candidate_ids <- head(all_games$steam_app_id, limit * 3)
   
-  # Fetch metadata for candidates
   metadata <- vgi_fetch_by_ids(candidate_ids, "metadata")
   
-  # Merge with rankings
-  results <- merge(all_games, metadata, by = "steamAppId")
+  results <- merge(all_games, metadata, by = "steam_app_id")
   
   # Apply filters
   if (!is.null(genre)) {
@@ -252,7 +241,7 @@ vgi_smart_search <- function(genre = NULL,
   }
   
   # Return top N after filtering
-  return(head(results, limit))
+  return(.vgi_clean_names(head(results, limit)))
 }
 
 #' Get Top Games with Active Player Data
@@ -279,23 +268,21 @@ vgi_top_games_with_activity <- function(date,
   } else {
     all_games <- vgi_fetch_all_games(verbose = FALSE)
     rank_col <- switch(metric,
-      revenue = "totalRevenueRank",
-      units = "totalUnitsSoldRank", 
-      followers = "followersRank"
+      revenue = "total_revenue_rank",
+      units = "total_units_sold_rank", 
+      followers = "followers_rank"
     )
     top_games <- head(all_games[order(all_games[[rank_col]]), ], limit * 2)
   }
   
-  # Get active player data
   active_data <- vgi_active_players_by_date(date, limit = 1000)
   
-  # Merge the data
-  results <- merge(top_games, active_data, by = "steamAppId", all.x = TRUE)
+  results <- merge(top_games, active_data, by = "steam_app_id", all.x = TRUE)
   
   # Sort by DAU (if available) or by original metric
   if (sum(!is.na(results$dau)) > 0) {
     results <- results[order(-results$dau, results[[rank_col]]), ]
   }
   
-  return(head(results, limit))
+  return(.vgi_clean_names(head(results, limit)))
 }

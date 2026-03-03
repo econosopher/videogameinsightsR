@@ -120,40 +120,40 @@ vgi_revenue_by_date <- function(date,
   )
 
   if (!is.data.frame(result) || nrow(result) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       date = character(),
       revenue = numeric(),
       dailyRevenue = numeric(),
       revenueRank = integer(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
   if ("platform" %in% names(result)) {
     result <- result[result$platform == "steam", , drop = FALSE]
   }
 
-  df <- data.frame(
+  df <- tibble::tibble(
     steamAppId = as.integer(result$externalId %||% NA),
     date = formatted_date,
     revenue = as.numeric(result$revenueTotal %||% NA),
     dailyRevenue = as.numeric(result$revenueChange %||% NA),
-    stringsAsFactors = FALSE
+
   )
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
   if (nrow(df) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       date = character(),
       revenue = numeric(),
       dailyRevenue = numeric(),
       revenueRank = integer(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
   df <- df[order(-df$revenue), , drop = FALSE]
   df$revenueRank <- seq_len(nrow(df))
-  df
+  .vgi_clean_names(df)
 }

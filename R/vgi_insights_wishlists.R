@@ -74,18 +74,18 @@ vgi_insights_wishlists <- function(steam_app_id,
   
   wl <- hist$wishlists
   if (is.null(wl) || nrow(wl) == 0) {
-    changes_df <- data.frame(
+    changes_df <- tibble::tibble(
       date = as.Date(character()), wishlistsTotal = integer(),
-      wishlistsChange = integer(), stringsAsFactors = FALSE
+      wishlistsChange = integer()
     )
   } else {
-    changes_df <- data.frame(
+    changes_df <- tibble::tibble(
       date = as.Date(wl$date),
       wishlistsTotal = as.integer(wl$wishlists),
       wishlistsChange = c(NA_integer_, diff(as.integer(wl$wishlists))),
-      stringsAsFactors = FALSE
+
     )
   }
   
-  list(steamAppId = as.integer(steam_app_id), wishlistChanges = changes_df)
+  .vgi_clean_list(list(steamAppId = as.integer(steam_app_id), wishlistChanges = changes_df))
 }

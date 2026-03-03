@@ -47,20 +47,29 @@ vgi_insights_ccu <- function(steam_app_id,
   
   ccu <- hist$concurrentPlayers
   if (is.null(ccu) || nrow(ccu) == 0) {
-    history_df <- data.frame(
+    history_df <- tibble::tibble(
       date = as.Date(character()), avg = numeric(),
       median = numeric(), max = numeric(),
-      stringsAsFactors = FALSE
+
     )
   } else {
-    history_df <- data.frame(
+    pick_col <- function(df, candidates) {
+      for (nm in candidates) {
+        if (nm %in% names(df)) return(df[[nm]])
+      }
+      rep(NA_real_, nrow(df))
+    }
+
+    history_df <- tibble::tibble(
       date = as.Date(ccu$date),
-      avg = as.numeric(ccu$ccuAvg),
-      median = as.numeric(ccu$ccuMedian),
-      max = as.numeric(ccu$ccuMax),
-      stringsAsFactors = FALSE
+      # Support both legacy camelCase and cleaned snake_case columns.
+      avg = as.numeric(pick_col(ccu, c("ccuAvg", "ccu_avg", "avg"))),
+      median = as.numeric(pick_col(ccu, c("ccuMedian", "ccu_median", "median"))),
+      max = as.numeric(pick_col(ccu, c("ccuMax", "ccu_max", "max"))),
+
     )
+    history_df <- history_df[order(history_df$date), , drop = FALSE]
   }
   
-  list(steamAppId = as.integer(steam_app_id), playerHistory = history_df)
+  .vgi_clean_list(list(steamAppId = as.integer(steam_app_id), playerHistory = history_df))
 }

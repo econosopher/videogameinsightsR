@@ -1,4 +1,4 @@
-# --- Utility Functions for videogameinsightsR ---
+# --- Utility Functions for VideoGameInsightsR ---
 
 # This file contains helper functions used by the main data-fetching functions
 # in the package. They handle tasks like input validation, query parameter
@@ -41,14 +41,14 @@ get_base_url <- function() {
 
 # Build a consistent User-Agent string including package version
 get_user_agent <- function() {
-  pkg_ver <- tryCatch(as.character(utils::packageVersion("videogameinsightsR")), error = function(e) "0.0.0")
-  sprintf("videogameinsightsR/%s", pkg_ver)
+  pkg_ver <- tryCatch(as.character(utils::packageVersion("VideoGameInsightsR")), error = function(e) "0.0.0")
+  sprintf("VideoGameInsightsR/%s", pkg_ver)
 }
 
 # --- Request-level Cache Helpers ---
 
 .vgi_request_cache_dir <- function() {
-  dir <- file.path(rappdirs::user_cache_dir("videogameinsightsR"), "request_cache")
+  dir <- file.path(tools::R_user_dir("VideoGameInsightsR", "cache"), "request_cache")
   if (!dir.exists(dir)) dir.create(dir, recursive = TRUE)
   dir
 }
@@ -86,18 +86,18 @@ get_user_agent <- function() {
 
 # --- Global Rate Limiter Integration ---
 
+.vgi_env <- new.env(parent = emptyenv())
+
 .vgi_get_global_limiter <- function() {
-  # Allow users to disable auto rate limiting
   auto <- getOption("vgi.auto_rate_limit", TRUE)
   if (!isTRUE(auto)) return(NULL)
-  if (!exists(".vgi_global_limiter", envir = .GlobalEnv, inherits = FALSE)) {
-    # Read defaults from env/options
+  if (!exists(".vgi_global_limiter", envir = .vgi_env, inherits = FALSE)) {
     calls <- getOption("vgi.calls_per_batch", as.numeric(Sys.getenv("VGI_BATCH_SIZE", "10")))
     delay <- getOption("vgi.batch_delay", as.numeric(Sys.getenv("VGI_BATCH_DELAY", "1")))
     limiter <- create_rate_limiter(calls_per_batch = calls, delay_seconds = delay, show_messages = isTRUE(getOption("vgi.verbose", FALSE)))
-    assign(".vgi_global_limiter", limiter, envir = .GlobalEnv)
+    assign(".vgi_global_limiter", limiter, envir = .vgi_env)
   }
-  get(".vgi_global_limiter", envir = .GlobalEnv, inherits = FALSE)
+  get(".vgi_global_limiter", envir = .vgi_env, inherits = FALSE)
 }
 
 # Get authentication token
@@ -384,6 +384,25 @@ warn_if_stale_ids <- function(steam_app_ids) {
     warning("API returned only old games (Steam IDs < 1000). This may indicate stale data.")
   }
   invisible(NULL)
+}
+
+# --- Tidyverse name cleaning ---
+
+.vgi_clean_names <- function(df) {
+  if (!is.data.frame(df) || ncol(df) == 0) return(df)
+  names(df) <- gsub("([a-z0-9])([A-Z])", "\\1_\\2", names(df))
+  names(df) <- tolower(names(df))
+  tibble::as_tibble(df)
+}
+
+.vgi_clean_list <- function(x) {
+  if (is.data.frame(x)) return(.vgi_clean_names(x))
+  if (is.list(x)) {
+    return(lapply(x, function(el) {
+      if (is.data.frame(el)) .vgi_clean_names(el) else el
+    }))
+  }
+  x
 }
 
 # --- v4 response helpers ---

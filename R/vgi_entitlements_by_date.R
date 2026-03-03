@@ -104,11 +104,11 @@ vgi_entitlements_by_date <- function(date,
     headers = headers
   )
   
-  empty_df <- data.frame(
+  empty_df <- .vgi_clean_names(tibble::tibble(
     steamAppId = integer(), date = character(),
     unitsSold = integer(), dailyUnits = integer(),
-    salesRank = integer(), stringsAsFactors = FALSE
-  )
+    salesRank = integer()
+  ))
   
   if (!is.data.frame(result) || nrow(result) == 0) return(empty_df)
   
@@ -116,17 +116,17 @@ vgi_entitlements_by_date <- function(date,
     result <- result[result$platform == "steam", , drop = FALSE]
   }
   
-  df <- data.frame(
+  df <- tibble::tibble(
     steamAppId = as.integer(result$externalId %||% NA),
     date = formatted_date,
     unitsSold = as.integer(result$unitsSoldTotal %||% NA),
     dailyUnits = as.integer(result$unitsSoldChange %||% NA),
-    stringsAsFactors = FALSE
+
   )
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
   if (nrow(df) == 0) return(empty_df)
   
   df <- df[order(-df$unitsSold), , drop = FALSE]
   df$salesRank <- seq_len(nrow(df))
-  df
+  .vgi_clean_names(df)
 }

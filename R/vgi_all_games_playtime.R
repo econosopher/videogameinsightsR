@@ -100,36 +100,36 @@ vgi_all_games_playtime <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
 
   rows <- .vgi_unwrap_results(result)
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       avgPlaytime = numeric(),
       medianPlaytime = numeric(),
       totalPlaytime = numeric(),
       playtimeRank = integer(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
-  df <- data.frame(
+  df <- tibble::tibble(
     steamAppId = as.integer(rows$externalId %||% NA),
     avgPlaytime = as.numeric(rows$avgPlaytime %||% NA),
     medianPlaytime = as.numeric(rows$medianPlaytime %||% NA),
     totalPlaytime = as.numeric(NA),
-    stringsAsFactors = FALSE
+
   )
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
   if (nrow(df) == 0) {
-    return(data.frame(
+    return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(),
       avgPlaytime = numeric(),
       medianPlaytime = numeric(),
       totalPlaytime = numeric(),
       playtimeRank = integer(),
-      stringsAsFactors = FALSE
-    ))
+
+    )))
   }
 
   df <- df[order(-df$avgPlaytime), , drop = FALSE]
   df$playtimeRank <- seq_len(nrow(df))
-  df
+  .vgi_clean_names(df)
 }

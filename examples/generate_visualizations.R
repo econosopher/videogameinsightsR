@@ -1,10 +1,12 @@
-# Unified visualization generation script for videogameinsightsR
+# Unified visualization generation script for VideoGameInsightsR
 # This script combines all visualizations from the separate scripts
 
 # Load required packages
-if (!require(pacman)) install.packages("pacman")
+if (!requireNamespace("pacman", quietly = TRUE)) {
+  stop("Package 'pacman' is required for this script. Please install it before running.")
+}
 pacman::p_load(
-  videogameinsightsR,
+  VideoGameInsightsR,
   ggplot2,
   dplyr,
   tidyr,
@@ -236,7 +238,7 @@ tryCatch({
         ),
         locations = cells_body(columns = trend)
       ) %>%
-      tab_source_note("Data source: Video Game Insights API | Generated with videogameinsightsR")
+      tab_source_note("Data source: Video Game Insights API | Generated with VideoGameInsightsR")
     
     gtsave(summary_table, "outputs/top_games_revenue_table_api.png", vwidth = 700)
     cat("✓ Saved: top_games_revenue_table_api.png\n")
@@ -663,7 +665,7 @@ if (!is.null(game_data) && nrow(game_data) > 0) {
         ),
         locations = cells_column_labels(everything())
       ) %>%
-      tab_source_note("Data source: Video Game Insights API | Generated with videogameinsightsR")
+      tab_source_note("Data source: Video Game Insights API | Generated with VideoGameInsightsR")
     
     gtsave(game_table, "outputs/game_details_table_api.png", vwidth = 800)
     cat("✓ Saved: game_details_table_api.png\n")
@@ -747,7 +749,7 @@ if (!is.null(game_data) && nrow(game_data) > 0) {
             domain = NULL
           )
         ) %>%
-        tab_source_note("Data source: Video Game Insights API | Generated with videogameinsightsR")
+        tab_source_note("Data source: Video Game Insights API | Generated with VideoGameInsightsR")
       
       gtsave(comparison_table, "outputs/genre_analysis_table_api.png", vwidth = 900)
       cat("✓ Saved: genre_analysis_table_api.png\n")

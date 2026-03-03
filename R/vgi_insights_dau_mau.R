@@ -52,6 +52,7 @@
 #' print(paste("Average DAU/MAU ratio:", round(avg_ratio, 3)))
 #' 
 #' # Plot DAU and MAU over time
+#' old_par <- par(no.readonly = TRUE)
 #' par(mfrow = c(2, 1))
 #' plot(active_players$playerHistory$date, active_players$playerHistory$dau, 
 #'      type = "l", col = "blue",
@@ -69,6 +70,7 @@
 #'      main = "Player Retention (DAU/MAU Ratio)",
 #'      xlab = "Date", ylab = "DAU/MAU Ratio")
 #' abline(h = 0.3, col = "gray", lty = 2)  # Industry average
+#' par(old_par)
 #' }
 vgi_insights_dau_mau <- function(steam_app_id, 
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
@@ -80,22 +82,22 @@ vgi_insights_dau_mau <- function(steam_app_id,
   
   ap <- hist$activePlayers
   if (is.null(ap) || nrow(ap) == 0) {
-    player_history <- data.frame(
+    player_history <- tibble::tibble(
       date = as.Date(character()), dau = integer(), mau = integer(),
-      stringsAsFactors = FALSE
+
     )
   } else {
-    player_history <- data.frame(
+    player_history <- tibble::tibble(
       date = as.Date(ap$date),
       dau = as.integer(ap$dau),
       mau = as.integer(ap$mau),
-      stringsAsFactors = FALSE
+
     )
     player_history <- player_history[order(player_history$date), , drop = FALSE]
   }
   
-  list(
+  .vgi_clean_list(list(
     steamAppId = as.integer(steam_app_id),
     playerHistory = player_history
-  )
+  ))
 }

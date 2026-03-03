@@ -106,11 +106,11 @@ vgi_followers_by_date <- function(date,
     headers = headers
   )
   
-  empty_df <- data.frame(
+  empty_df <- .vgi_clean_names(tibble::tibble(
     steamAppId = integer(), date = character(),
     followerCount = integer(), followerRank = integer(),
-    stringsAsFactors = FALSE
-  )
+
+  ))
   
   if (!is.data.frame(result) || nrow(result) == 0) return(empty_df)
   
@@ -118,16 +118,16 @@ vgi_followers_by_date <- function(date,
     result <- result[result$platform == "steam", , drop = FALSE]
   }
   
-  df <- data.frame(
+  df <- tibble::tibble(
     steamAppId = as.integer(result$externalId %||% NA),
     date = formatted_date,
     followerCount = as.integer(result$followersTotal %||% NA),
-    stringsAsFactors = FALSE
+
   )
   df <- df[!is.na(df$steamAppId), , drop = FALSE]
   if (nrow(df) == 0) return(empty_df)
   
   df <- df[order(-df$followerCount), , drop = FALSE]
   df$followerRank <- seq_len(nrow(df))
-  df
+  .vgi_clean_names(df)
 }
