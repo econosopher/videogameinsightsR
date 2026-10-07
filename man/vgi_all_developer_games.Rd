@@ -2,11 +2,18 @@
 % Please edit documentation in R/vgi_all_developer_games.R
 \name{vgi_all_developer_games}
 \alias{vgi_all_developer_games}
-\title{Get All Developer Game IDs}
+\title{Get Game IDs for Developers}
 \usage{
 vgi_all_developer_games(
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  vgi_ids = NULL,
+  slugs = NULL,
+  limit = NULL,
+  cursor = NULL,
+  offset = NULL,
+  all_pages = FALSE,
+  version = c("v4", "v3")
 )
 }
 \arguments{
@@ -14,83 +21,34 @@ vgi_all_developer_games(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{vgi_ids}{Integer vector. VGI company IDs to select (v4 only).}
+
+\item{slugs}{Character vector. VGI company slugs to select (v4 only).}
+
+\item{limit}{Integer. Records per page (maximum 1000).}
+
+\item{cursor}{Integer. Cursor from a previous page (v4 only).}
+
+\item{offset}{Integer. Records to skip (v3 only).}
+
+\item{all_pages}{Logical. Fetch every page.}
+
+\item{version}{\code{"v4"} (default) or \code{"v3"}.}
 }
 \value{
-A data frame with columns:
-\describe{
-\item{developerId}{Integer. The developer's company ID}
-\item{gameIds}{List. A list of Steam App IDs for games by this developer}
-\item{gameCount}{Integer. Number of games by this developer}
-}
+A \link[tibble:tibble]{tibble} with columns \code{developer_id}, \code{name}
+(v4), \code{game_ids} (list-column), \code{id_type} and \code{game_count}; see
+\code{\link[=vgi_all_publisher_games]{vgi_all_publisher_games()}}.
 }
 \description{
-Retrieve a comprehensive mapping of all developers to their game IDs,
-useful for bulk analysis of developer portfolios.
-}
-\details{
-This endpoint provides a complete developer-to-games mapping, enabling:
-\itemize{
-\item Portfolio size analysis across all developers
-\item Developer productivity metrics
-\item Market concentration studies
-\item Genre specialization analysis
-\item Developer ranking by output
-}
-
-Note: The gameIds column contains lists, which may need special handling
-for certain analyses.
+Retrieve the game IDs attached to each developer. The v4
+\verb{/companies/developers/game-ids} endpoint (default) returns VGI game IDs
+and supports selection by company ID or slug; the v3 \verb{/developers/game-ids}
+endpoint returns Steam App IDs with offset paging.
 }
 \examples{
 \dontrun{
-# Get all developer game mappings
-dev_games <- vgi_all_developer_games()
-
-# Find most prolific developers
-top_devs <- head(dev_games[order(-dev_games$gameCount), ], 20)
-cat("Top 20 most prolific developers:\n")
-print(top_devs[, c("developerId", "gameCount")])
-
-# Get developer names for context
-dev_list <- vgi_developer_list()
-top_devs_named <- merge(top_devs, dev_list, 
-                       by.x = "developerId", by.y = "id")
-print(top_devs_named[, c("name", "gameCount")])
-
-# Analyze developer portfolio sizes
-hist(dev_games$gameCount[dev_games$gameCount <= 50],
-     breaks = 50,
-     main = "Distribution of Developer Portfolio Sizes",
-     xlab = "Number of Games",
-     col = "lightblue")
-
-# Find single-game developers
-single_game_devs <- dev_games[dev_games$gameCount == 1, ]
-cat("Developers with only one game:", nrow(single_game_devs), "\n")
-cat("Percentage of single-game developers:", 
-    round(nrow(single_game_devs) / nrow(dev_games) * 100, 1), "\%\n")
-
-# Analyze specific developer's portfolio
-valve_id <- 8  # Example: Valve's ID
-valve_games <- dev_games$gameIds[dev_games$developerId == valve_id][[1]]
-if (length(valve_games) > 0) {
-  cat("Valve has", length(valve_games), "games\n")
-  
-  # Get metadata for all Valve games
-  valve_metadata <- vgi_game_metadata_batch(valve_games)
-  print(valve_metadata[, c("name", "releaseDate")])
-}
-
-# Find developers with similar portfolio sizes
-target_size <- 10
-similar_devs <- dev_games[dev_games$gameCount >= target_size - 2 & 
-                         dev_games$gameCount <= target_size + 2, ]
-cat("Developers with 8-12 games:", nrow(similar_devs), "\n")
-
-# Calculate total games in database
-total_games <- sum(dev_games$gameCount)
-unique_games <- length(unique(unlist(dev_games$gameIds)))
-cat("Total developer-game relationships:", total_games, "\n")
-cat("Unique games:", unique_games, "\n")
-cat("Average developers per game:", round(total_games / unique_games, 2), "\n")
+vgi_all_developer_games(vgi_ids = 28663)
 }
 }

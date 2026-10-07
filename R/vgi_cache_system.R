@@ -92,14 +92,13 @@ vgi_build_cache <- function(force_refresh = FALSE,
   rankings_df <- dplyr::bind_rows(rankings)
   
   # Merge games with rankings
-  cache_df <- merge(games_df, rankings_df, by.x = "id", by.y = "steamAppId", all.x = TRUE)
-  names(cache_df)[names(cache_df) == "id"] <- "steamAppId"
+  cache_df <- merge(games_df, rankings_df, by = "steam_app_id", all.x = TRUE)
   
   # Step 3: Fetch metadata for games in batches
   message("Fetching metadata for all games...")
   
   # Split into batches
-  game_ids <- unique(cache_df$steamAppId)
+  game_ids <- unique(cache_df$steam_app_id)
   batches <- split(game_ids, ceiling(seq_along(game_ids) / batch_size))
   
   metadata_list <- list()
@@ -141,7 +140,7 @@ vgi_build_cache <- function(force_refresh = FALSE,
     
     # Merge with cache
     cache_df <- merge(cache_df, metadata_df, 
-                      by = "steamAppId", 
+                      by = "steam_app_id", 
                       all.x = TRUE, 
                       suffixes = c("", "_meta"))
   }
@@ -260,10 +259,10 @@ vgi_get_games_by_id <- function(steam_app_ids, cache_df = NULL, fetch_missing = 
   }
   
   # Get games from cache
-  cached_games <- cache_df[cache_df$steamAppId %in% steam_app_ids, ]
+  cached_games <- cache_df[cache_df$steam_app_id %in% steam_app_ids, ]
   
   # Check for missing games
-  missing_ids <- setdiff(steam_app_ids, cached_games$steamAppId)
+  missing_ids <- setdiff(steam_app_ids, cached_games$steam_app_id)
   
   if (length(missing_ids) > 0 && fetch_missing) {
     message(sprintf("Fetching %d games not in cache...", length(missing_ids)))
@@ -275,7 +274,7 @@ vgi_get_games_by_id <- function(steam_app_ids, cache_df = NULL, fetch_missing = 
         meta <- vgi_game_metadata(id)
         # Convert to data frame row
         missing_games[[as.character(id)]] <- tibble::tibble(
-          steamAppId = id,
+          steam_app_id = id,
           name = meta$name %||% NA,
           genres = paste(meta$genres, collapse = ", "),
 

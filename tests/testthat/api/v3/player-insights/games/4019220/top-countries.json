@@ -1,0 +1,131 @@
+{
+    "steamAppId": 4019220,
+    "topCountries": [
+        {
+            "countryName": "United States",
+            "countryCode": "US",
+            "rank": 1,
+            "percentage": 33.33
+        },
+        {
+            "countryName": "China",
+            "countryCode": "CN",
+            "rank": 2,
+            "percentage": 10.05
+        },
+        {
+            "countryName": "United Kingdom",
+            "countryCode": "GB",
+            "rank": 3,
+            "percentage": 6.88
+        },
+        {
+            "countryName": "Germany",
+            "countryCode": "DE",
+            "rank": 4,
+            "percentage": 5.29
+        },
+        {
+            "countryName": "Canada",
+            "countryCode": "CA",
+            "rank": 5,
+            "percentage": 4.76
+        },
+        {
+            "countryName": "Australia",
+            "countryCode": "AU",
+            "rank": 6,
+            "percentage": 4.23
+        },
+        {
+            "countryName": "Poland",
+            "countryCode": "PL",
+            "rank": 7,
+            "percentage": 3.7
+        },
+        {
+            "countryName": "France",
+            "countryCode": "FR",
+            "rank": 8,
+            "percentage": 2.91
+        },
+        {
+            "countryName": "Brazil",
+            "countryCode": "BR",
+            "rank": 9,
+            "percentage": 2.91
+        },
+        {
+            "countryName": "Russia",
+            "countryCode": "RU",
+            "rank": 10,
+            "percentage": 2.91
+        },
+        {
+            "countryName": "Japan",
+            "countryCode": "JP",
+            "rank": 11,
+            "percentage": 2.12
+        },
+        {
+            "countryName": "Netherlands",
+            "countryCode": "NL",
+            "rank": 12,
+            "percentage": 1.59
+        },
+        {
+            "countryName": "South Korea",
+            "countryCode": "KR",
+            "rank": 13,
+            "percentage": 1.32
+        },
+        {
+            "countryName": "Spain",
+            "countryCode": "ES",
+            "rank": 14,
+            "percentage": 1.32
+        },
+        {
+            "countryName": "Argentina",
+            "countryCode": "AR",
+            "rank": 15,
+            "percentage": 1.06
+        },
+        {
+            "countryName": "Denmark",
+            "countryCode": "DK",
+            "rank": 16,
+            "percentage": 1.06
+        },
+        {
+            "countryName": "Turkey",
+            "countryCode": "TR",
+            "rank": 17,
+            "percentage": 0.79
+        },
+        {
+            "countryName": "Peru",
+            "countryCode": "PE",
+            "rank": 18,
+            "percentage": 0.79
+        },
+        {
+            "countryName": "Austria",
+            "countryCode": "AT",
+            "rank": 19,
+            "percentage": 0.79
+        },
+        {
+            "countryName": "Hungary",
+            "countryCode": "HU",
+            "rank": 20,
+            "percentage": 0.53
+        },
+        {
+            "countryName": "Other",
+            "countryCode": null,
+            "rank": 21,
+            "percentage": 11.64
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "nextCursor": 5,
+    "results": [
+        {
+            "vgiCompanyId": 1,
+            "name": "Square Enix",
+            "slug": "square-enix",
+            "vgiUrl": "https://app.sensortower.com/vgi/publisher/1/square-enix"
+        },
+        {
+            "vgiCompanyId": 3,
+            "name": "Konami Digital Entertainment",
+            "slug": "konami-digital-entertainment",
+            "vgiUrl": "https://app.sensortower.com/vgi/publisher/3/konami-digital-entertainment"
+        },
+        {
+            "vgiCompanyId": 5,
+            "name": "Activision",
+            "slug": "activision",
+            "vgiUrl": "https://app.sensortower.com/vgi/publisher/5/activision"
+        }
+    ]
+}

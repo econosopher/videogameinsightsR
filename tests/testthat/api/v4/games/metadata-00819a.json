@@ -1,0 +1,137 @@
+{
+    "nextCursor": 610502,
+    "results": [
+        {
+            "vgiId": 610501,
+            "name": "Exteme School Driving Simulator",
+            "slug": "exteme-school-driving-simulator",
+            "price": {
+                "xbox": null,
+                "steam": 1.99,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2019-02-06",
+                "playstation": null
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Simulation",
+            "subgenre": "Driving & Flight Simulator",
+            "gameEngines": [
+                "Unity"
+            ],
+            "languages": "English",
+            "publisherClassification": "Indie",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Space",
+                "Relaxing",
+                "Family Friendly"
+            ],
+            "character": null,
+            "artStyles": null,
+            "steamTags": [
+                "Indie",
+                "Sports",
+                "Driving",
+                "Singleplayer",
+                "Family Friendly",
+                "Simulation",
+                "Relaxing",
+                "Automobile Sim",
+                "Casual",
+                "Racing",
+                "Horror",
+                "Space",
+                "Action"
+            ],
+            "steamGenres": "Indie, Casual, Sports, Racing",
+            "steamSubgenres": "Horror",
+            "gameModes": [
+                "Single-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/exteme-school-driving-simulator",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/809340",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/14751/a-nostru",
+                    "companyId": 14751,
+                    "companyName": "A Nostru"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/69212/my-way-games",
+                    "companyId": 69212,
+                    "companyName": "My Way Games"
+                }
+            ]
+        },
+        {
+            "vgiId": 610502,
+            "name": "Cosmic Snake 8473/3671",
+            "slug": "cosmic-snake-8473-3671",
+            "price": {
+                "xbox": null,
+                "steam": 9.99,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2018-05-24",
+                "playstation": null
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Arcade",
+            "subgenre": "Arcade (General)",
+            "gameEngines": null,
+            "languages": "English, Japanese",
+            "publisherClassification": "Indie",
+            "publishingType": "Self-Published",
+            "themes": null,
+            "character": null,
+            "artStyles": null,
+            "steamTags": [
+                "Indie",
+                "Casual",
+                "Action"
+            ],
+            "steamGenres": "Action, Indie, Casual",
+            "steamSubgenres": null,
+            "gameModes": [
+                "Single-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/cosmic-snake-8473-3671",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/809360",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20028110/mindware",
+                    "companyId": 20028110,
+                    "companyName": "Mindware"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/20028110/mindware",
+                    "companyId": 20028110,
+                    "companyName": "Mindware"
+                }
+            ]
+        }
+    ]
+}

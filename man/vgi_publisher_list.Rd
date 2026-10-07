@@ -2,80 +2,58 @@
 % Please edit documentation in R/vgi_publisher_list.R
 \name{vgi_publisher_list}
 \alias{vgi_publisher_list}
-\title{Get Publisher List with Filtering}
+\title{Get Publisher Names and IDs}
 \usage{
 vgi_publisher_list(
   search = NULL,
   limit = NULL,
   min_games = NULL,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  vgi_ids = NULL,
+  slugs = NULL,
+  cursor = NULL,
+  all_pages = FALSE,
+  version = c("v4", "v3")
 )
 }
 \arguments{
-\item{search}{Character string. Search term to filter publishers by name. Optional.}
+\item{search}{Character. Optional case-insensitive regular expression
+applied to publisher names after download.}
 
-\item{limit}{Integer. Maximum number of results to return. Optional.}
+\item{limit}{Integer. Records per page (v4; maximum 1000). Ignored by v3.}
 
-\item{min_games}{Integer. Minimum number of games published. Optional.}
+\item{min_games}{Deprecated and ignored.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{vgi_ids}{Integer vector. VGI company IDs to select (v4 only).}
+
+\item{slugs}{Character vector. VGI company slugs to select (v4 only).}
+
+\item{cursor}{Integer. Cursor from a previous page (v4 only).}
+
+\item{all_pages}{Logical. Follow the cursor through every page (v4 only).}
+
+\item{version}{\code{"v4"} (default) or \code{"v3"}.}
 }
 \value{
-A data frame with columns:
-\describe{
-\item{id}{Integer. The company ID}
-\item{name}{Character. The publisher name}
-}
+A \link[tibble:tibble]{tibble} with columns \code{id}, \code{name} and (v4)
+\code{slug}, \code{vgi_url}, sorted by name. The attribute \code{next_cursor} carries
+the v4 cursor for the next page.
 }
 \description{
-Retrieve a filtered list of game publishers from the Video Game Insights database.
-At least one filtering parameter is required to avoid retrieving the entire database.
-}
-\details{
-This endpoint is useful for:
-\itemize{
-\item Discovering publishers matching specific criteria
-\item Building publisher selection interfaces
-\item Finding publisher IDs for further queries
-\item Analyzing the publishing landscape
-}
-
-Note: At least one filtering parameter must be provided to prevent
-accidentally retrieving thousands of publishers.
+Retrieve the publisher directory. The v4 \verb{/companies/publishers/list}
+endpoint (default) pages with a cursor and includes slugs; the v3
+\verb{/publishers/publisher-list} endpoint returns the whole directory in one
+(large) response.
 }
 \examples{
 \dontrun{
-# Search for major publishers
-ea_pubs <- vgi_publisher_list(search = "Electronic Arts")
-print(ea_pubs)
-
-# Get top publishers (limit results)
-top_pubs <- vgi_publisher_list(limit = 100)
-cat("Retrieved", nrow(top_pubs), "publishers\n")
-
-# Find major publishers with many games
-major_pubs <- vgi_publisher_list(min_games = 20, limit = 50)
-print(major_pubs)
-
-# Search for specific publisher
-ubi <- vgi_publisher_list(search = "Ubisoft", limit = 1)
-if (nrow(ubi) > 0) {
-  # Get more info about this publisher
-  ubi_info <- vgi_publisher_info(ubi$id[1])
-  print(ubi_info)
-}
-
-# Find publishers with "Games" in name
-games_pubs <- vgi_publisher_list(search = "Games", limit = 200)
-cat("Publishers with 'Games' in name:", nrow(games_pubs), "\n")
-
-# Export for analysis
-top_100 <- vgi_publisher_list(limit = 100)
-output_file <- file.path(tempdir(), "vgi_top_publishers.csv")
-write.csv(top_100, output_file, row.names = FALSE)
+vgi_publisher_list(search = "valve")
+vgi_publisher_list(slugs = "free-lives")
 }
 }

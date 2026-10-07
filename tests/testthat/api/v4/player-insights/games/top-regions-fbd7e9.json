@@ -1,0 +1,47 @@
+{
+    "nextCursor": 2047657,
+    "results": [
+        {
+            "vgiId": 2047657,
+            "platform": "steam",
+            "externalId": 4019220,
+            "topRegions": [
+                {
+                    "rank": 1,
+                    "percentage": 38.2,
+                    "regionName": "North America"
+                },
+                {
+                    "rank": 2,
+                    "percentage": 32.36,
+                    "regionName": "Europe"
+                },
+                {
+                    "rank": 3,
+                    "percentage": 16.45,
+                    "regionName": "Asia"
+                },
+                {
+                    "rank": 4,
+                    "percentage": 6.63,
+                    "regionName": "South America"
+                },
+                {
+                    "rank": 5,
+                    "percentage": 4.51,
+                    "regionName": "Oceania"
+                },
+                {
+                    "rank": 6,
+                    "percentage": 1.33,
+                    "regionName": "Africa"
+                },
+                {
+                    "rank": 7,
+                    "percentage": 0.53,
+                    "regionName": "Middle East"
+                }
+            ]
+        }
+    ]
+}

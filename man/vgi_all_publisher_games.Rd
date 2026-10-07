@@ -2,11 +2,18 @@
 % Please edit documentation in R/vgi_all_publisher_games.R
 \name{vgi_all_publisher_games}
 \alias{vgi_all_publisher_games}
-\title{Get All Publisher Game IDs}
+\title{Get Game IDs for Publishers}
 \usage{
 vgi_all_publisher_games(
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  vgi_ids = NULL,
+  slugs = NULL,
+  limit = NULL,
+  cursor = NULL,
+  offset = NULL,
+  all_pages = FALSE,
+  version = c("v4", "v3")
 )
 }
 \arguments{
@@ -14,94 +21,36 @@ vgi_all_publisher_games(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{vgi_ids}{Integer vector. VGI company IDs to select (v4 only).}
+
+\item{slugs}{Character vector. VGI company slugs to select (v4 only).}
+
+\item{limit}{Integer. Records per page (maximum 1000).}
+
+\item{cursor}{Integer. Cursor from a previous page (v4 only).}
+
+\item{offset}{Integer. Records to skip (v3 only).}
+
+\item{all_pages}{Logical. Fetch every page.}
+
+\item{version}{\code{"v4"} (default) or \code{"v3"}.}
 }
 \value{
-A data frame with columns:
-\describe{
-\item{publisherId}{Integer. The publisher's company ID}
-\item{gameIds}{List. A list of Steam App IDs for games by this publisher}
-\item{gameCount}{Integer. Number of games by this publisher}
-}
+A \link[tibble:tibble]{tibble} with columns \code{publisher_id}, \code{name}
+(v4), \code{game_ids} (list-column of VGI IDs for v4, Steam App IDs for v3),
+\code{id_type} ("vgi_id" or "steam_app_id") and \code{game_count}, sorted by game
+count. The attribute \code{next_cursor} carries the v4 cursor.
 }
 \description{
-Retrieve a comprehensive mapping of all publishers to their game IDs,
-useful for analyzing publishing portfolios and market dynamics.
-}
-\details{
-This endpoint provides a complete publisher-to-games mapping, enabling:
-\itemize{
-\item Publishing portfolio analysis
-\item Market share calculations
-\item Publisher strategy assessment
-\item Competitive landscape mapping
-\item Publisher ranking by catalog size
-}
-
-Publishers often have larger portfolios than developers as they
-may publish games from multiple development studios.
+Retrieve the game IDs attached to each publisher. The v4
+\verb{/companies/publishers/game-ids} endpoint (default) returns VGI game IDs
+and supports selection by company ID or slug; the v3 \verb{/publishers/game-ids}
+endpoint returns Steam App IDs with offset paging.
 }
 \examples{
 \dontrun{
-# Get all publisher game mappings
-pub_games <- vgi_all_publisher_games()
-
-# Find largest publishers by catalog size
-top_pubs <- head(pub_games[order(-pub_games$gameCount), ], 20)
-cat("Top 20 largest publishers:\n")
-print(top_pubs[, c("publisherId", "gameCount")])
-
-# Get publisher names for context
-pub_list <- vgi_publisher_list()
-top_pubs_named <- merge(top_pubs, pub_list, 
-                       by.x = "publisherId", by.y = "id")
-print(top_pubs_named[, c("name", "gameCount")])
-
-# Compare with developer portfolios
-dev_games <- vgi_all_developer_games()
-cat("Average games per developer:", round(mean(dev_games$gameCount), 1), "\n")
-cat("Average games per publisher:", round(mean(pub_games$gameCount), 1), "\n")
-
-# Find mega-publishers (>100 games)
-mega_pubs <- pub_games[pub_games$gameCount > 100, ]
-cat("Publishers with >100 games:", nrow(mega_pubs), "\n")
-
-# Analyze publisher concentration
-total_pub_games <- sum(pub_games$gameCount)
-top_10_pub_games <- sum(head(pub_games$gameCount, 10))
-concentration <- (top_10_pub_games / total_pub_games) * 100
-cat(sprintf("Top 10 publishers control \%.1f\%\% of published games\n", 
-            concentration))
-
-# Find publishers that also develop
-dev_list <- vgi_developer_list()
-pub_dev_overlap <- intersect(pub_list$name, dev_list$name)
-cat("Companies that both publish and develop:", 
-    length(pub_dev_overlap), "\n")
-
-# Analyze specific publisher's portfolio
-ea_id <- 1  # Example: Electronic Arts
-ea_games <- pub_games$gameIds[pub_games$publisherId == ea_id][[1]]
-if (length(ea_games) > 0) {
-  cat("EA has published", length(ea_games), "games\n")
-  
-  # Get recent EA releases
-  ea_metadata <- vgi_game_metadata_batch(ea_games)
-  recent_ea <- ea_metadata[as.Date(ea_metadata$releaseDate) > 
-                          as.Date("2023-01-01"), ]
-  cat("EA games released since 2023:", nrow(recent_ea), "\n")
-}
-
-# Distribution of publisher sizes
-pub_size_dist <- table(cut(pub_games$gameCount,
-                          breaks = c(1, 2, 5, 10, 20, 50, 100, Inf),
-                          labels = c("1", "2-4", "5-9", "10-19", 
-                                    "20-49", "50-99", "100+"),
-                          right = FALSE))
-
-barplot(pub_size_dist,
-        main = "Distribution of Publishers by Portfolio Size",
-        xlab = "Number of Games Published",
-        ylab = "Number of Publishers",
-        col = "purple")
+vgi_all_publisher_games(vgi_ids = 28663)
+vgi_all_publisher_games(version = "v3", limit = 50)
 }
 }

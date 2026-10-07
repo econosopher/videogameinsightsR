@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgi_developers.R
 \name{vgi_developer_info}
 \alias{vgi_developer_info}
-\title{Get Developer Information}
+\title{Get Developer Information (v3)}
 \usage{
 vgi_developer_info(
   company_id,
@@ -11,7 +11,7 @@ vgi_developer_info(
 )
 }
 \arguments{
-\item{company_id}{Integer. The developer's company ID.}
+\item{company_id}{Integer. The VGI company ID of the developer.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
@@ -19,51 +19,17 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A list containing developer information with fields:
-\describe{
-\item{companyId}{Integer. The company ID}
-\item{name}{Character. Developer name}
-\item{foundedDate}{Character. Date the company was founded}
-\item{headquarters}{Character. Company headquarters location}
-\item{employeeCount}{Integer. Number of employees}
-\item{website}{Character. Company website URL}
-\item{description}{Character. Company description}
-\item{totalGames}{Integer. Total number of games developed}
-\item{activeGames}{Integer. Number of currently active games}
-}
+A one-row \link[tibble:tibble]{tibble} with columns \code{company_id},
+\code{name}, \code{classification}, \code{games_developed}, \code{games_in_development},
+\code{revenue_total}, \code{revenue_avg_per_game}, \code{revenue_median_per_game}.
+Empty when the developer is unknown.
 }
 \description{
-Retrieve detailed information about a game developer.
-}
-\details{
-Developer information can be used to:
-\itemize{
-\item Research company backgrounds and history
-\item Analyze developer portfolio performance
-\item Identify experienced developers in specific genres
-\item Track developer growth over time
-}
+Retrieve a developer's summary metrics from the v3 \verb{/developers/\{companyId\}}
+endpoint. For the multi-platform v4 overview use \code{\link[=vgi_developers_overview]{vgi_developers_overview()}}.
 }
 \examples{
 \dontrun{
-# Get information about a developer
-dev_info <- vgi_developer_info(company_id = 24569)
-
-# Display developer details
-cat("Developer:", dev_info$name, "\n")
-cat("Founded:", dev_info$foundedDate, "\n")
-cat("Total Games:", dev_info$totalGames, "\n")
-cat("Active Games:", dev_info$activeGames, "\n")
-
-# Check developer size
-if (!is.null(dev_info$employeeCount)) {
-  if (dev_info$employeeCount < 10) {
-    cat("This is an indie developer\n")
-  } else if (dev_info$employeeCount < 100) {
-    cat("This is a mid-sized developer\n")
-  } else {
-    cat("This is a large developer\n")
-  }
-}
+vgi_developer_info(28663)
 }
 }

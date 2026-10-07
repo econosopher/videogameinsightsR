@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgi_publishers.R
 \name{vgi_publisher_info}
 \alias{vgi_publisher_info}
-\title{Get Publisher Information}
+\title{Get Publisher Information (v3)}
 \usage{
 vgi_publisher_info(
   company_id,
@@ -11,7 +11,7 @@ vgi_publisher_info(
 )
 }
 \arguments{
-\item{company_id}{Integer. The publisher's company ID.}
+\item{company_id}{Integer. The VGI company ID of the publisher.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
@@ -19,51 +19,17 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A list containing publisher information with fields:
-\describe{
-\item{companyId}{Integer. The company ID}
-\item{name}{Character. Publisher name}
-\item{foundedDate}{Character. Date the company was founded}
-\item{headquarters}{Character. Company headquarters location}
-\item{employeeCount}{Integer. Number of employees}
-\item{website}{Character. Company website URL}
-\item{description}{Character. Company description}
-\item{totalGames}{Integer. Total number of games published}
-\item{activeGames}{Integer. Number of currently active games}
-}
+A one-row \link[tibble:tibble]{tibble} with columns \code{company_id},
+\code{name}, \code{classification}, \code{games_published}, \code{games_in_development},
+\code{revenue_total}, \code{revenue_avg_per_game}, \code{revenue_median_per_game}.
+Empty when the publisher is unknown.
 }
 \description{
-Retrieve detailed information about a specific video game publisher.
-}
-\details{
-Publisher information can be used to:
-\itemize{
-\item Research company backgrounds and portfolios
-\item Analyze publisher market share
-\item Identify publishers specializing in certain genres
-\item Track publisher growth and success metrics
-}
+Retrieve a publisher's summary metrics from the v3 \verb{/publishers/\{companyId\}}
+endpoint. For the multi-platform v4 overview use \code{\link[=vgi_publishers_overview]{vgi_publishers_overview()}}.
 }
 \examples{
 \dontrun{
-# Get information about a publisher
-pub_info <- vgi_publisher_info(company_id = 13190)
-
-# Display publisher details
-cat("Publisher:", pub_info$name, "\n")
-cat("Founded:", pub_info$foundedDate, "\n")
-cat("Total Games Published:", pub_info$totalGames, "\n")
-cat("Currently Active Games:", pub_info$activeGames, "\n")
-
-# Analyze publisher size
-if (!is.null(pub_info$employeeCount)) {
-  if (pub_info$employeeCount > 1000) {
-    cat("This is a major publisher\n")
-  } else if (pub_info$employeeCount > 100) {
-    cat("This is a mid-sized publisher\n")
-  } else {
-    cat("This is a boutique publisher\n")
-  }
-}
+vgi_publisher_info(28663)
 }
 }

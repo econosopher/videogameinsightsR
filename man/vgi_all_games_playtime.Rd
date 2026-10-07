@@ -2,11 +2,19 @@
 % Please edit documentation in R/vgi_all_games_playtime.R
 \name{vgi_all_games_playtime}
 \alias{vgi_all_games_playtime}
-\title{Get Playtime Data for All Games}
+\title{Get Playtime for Many Games (v4)}
 \usage{
 vgi_all_games_playtime(
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  steam_app_ids = NULL,
+  vgi_ids = NULL,
+  slugs = NULL,
+  countries = NULL,
+  regions = NULL,
+  limit = NULL,
+  cursor = NULL,
+  all_pages = FALSE
 )
 }
 \arguments{
@@ -14,89 +22,41 @@ vgi_all_games_playtime(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{steam_app_ids}{Integer vector. Steam App IDs to select. Optional.}
+
+\item{vgi_ids}{Integer vector. VGI internal game IDs to select. Optional.}
+
+\item{slugs}{Character vector. VGI game slugs to select. Optional.}
+
+\item{countries}{Character vector of 2-letter ISO country codes. Limits the
+numbers to players from those countries.}
+
+\item{regions}{Character vector of VGI region slugs. Limits the numbers to
+players from those regions.}
+
+\item{limit}{Integer. Games per page (API default 200, maximum 1000).}
+
+\item{cursor}{Integer. Cursor from a previous page.}
+
+\item{all_pages}{Logical. Follow the cursor through every page.}
 }
 \value{
-A data frame with columns:
-\describe{
-\item{steamAppId}{Integer. The Steam App ID}
-\item{avgPlaytime}{Numeric. Average playtime in hours}
-\item{medianPlaytime}{Numeric. Median playtime in hours}
-\item{totalPlaytime}{Numeric. Total playtime across all players in hours}
-\item{playtimeRank}{Integer. Rank by average playtime}
-}
+A \link[tibble:tibble]{tibble} with one row per game: \code{vgi_id},
+\code{platform}, \code{steam_app_id}, \code{avg_playtime}, \code{median_playtime} (minutes),
+\code{avg_playtime_rank}, \code{avg_playtime_prct}, \code{playtime_ranges} (list-column
+of tibbles with \code{range}, \code{percentage}) and \code{playtime_rank} (rank by
+average playtime within the returned rows). The attribute \code{next_cursor}
+carries the cursor for the next page.
 }
 \description{
-Retrieve playtime statistics for all games in the database, providing
-a comprehensive view of player engagement across the market.
-}
-\details{
-Playtime data is crucial for understanding:
-\itemize{
-\item Game engagement and stickiness
-\item Content depth and replayability
-\item Player satisfaction (high playtime often = high satisfaction)
-\item Genre-specific engagement patterns
-\item Value proposition (playtime per dollar)
-}
-
-Average playtime can be skewed by dedicated players, while median
-provides a better sense of typical player engagement.
+Retrieve playtime statistics for many games from the v4
+\verb{/player-insights/games/playtime} endpoint, optionally restricted to
+players in given countries or regions. For one Steam game use
+\code{\link[=vgi_insights_playtime]{vgi_insights_playtime()}} (v3).
 }
 \examples{
 \dontrun{
-# Get playtime data for all games
-playtime_data <- vgi_all_games_playtime()
-
-# Top 20 most played games by average playtime
-top_played <- head(playtime_data, 20)
-cat("Top 20 games by average playtime:\n")
-print(top_played[, c("steamAppId", "avgPlaytime", "medianPlaytime")])
-
-# Find games with high engagement
-high_engagement <- playtime_data[playtime_data$avgPlaytime > 100, ]
-cat("Games with >100 hours average playtime:", nrow(high_engagement), "\n")
-
-# Analyze playtime distribution
-hist(log10(playtime_data$avgPlaytime + 1),
-     breaks = 40,
-     main = "Distribution of Average Playtime (log scale)",
-     xlab = "Log10(Avg Playtime + 1)",
-     col = "orange")
-
-# Compare average vs median to find games with dedicated players
-playtime_data$avg_median_ratio <- playtime_data$avgPlaytime / 
-                                  (playtime_data$medianPlaytime + 0.1)
-
-# Games where average is much higher than median (cult followings)
-cult_games <- playtime_data[playtime_data$avg_median_ratio > 5 & 
-                           playtime_data$avgPlaytime > 20, ]
-cat("Games with cult followings (avg >> median):", nrow(cult_games), "\n")
-
-# Combine with revenue data for value analysis
-revenue_data <- vgi_revenue_by_date(Sys.Date() - 1)
-value_analysis <- merge(playtime_data, revenue_data, by = "steamAppId")
-
-# Calculate hours per dollar (value metric)
-units_data <- vgi_units_sold_by_date(Sys.Date() - 1)
-value_analysis <- merge(value_analysis, units_data, by = "steamAppId")
-value_analysis$avg_price <- value_analysis$revenue / 
-                           (value_analysis$unitsSold + 1)
-value_analysis$hours_per_dollar <- value_analysis$avgPlaytime / 
-                                   (value_analysis$avg_price + 0.01)
-
-# Best value games (high playtime, reasonable price)
-best_value <- value_analysis[value_analysis$hours_per_dollar > 2 & 
-                            value_analysis$avg_price < 60 &
-                            value_analysis$unitsSold > 10000, ]
-best_value <- head(best_value[order(-best_value$hours_per_dollar), ], 20)
-cat("Best value games (hours per dollar):\n")
-print(best_value[, c("steamAppId", "avgPlaytime", "avg_price", 
-                    "hours_per_dollar")])
-
-# Genre analysis (would need genre data)
-# Multiplayer games typically have higher playtime
-likely_multiplayer <- playtime_data[playtime_data$avgPlaytime > 50 & 
-                                   playtime_data$medianPlaytime > 20, ]
-cat("Likely multiplayer/service games:", nrow(likely_multiplayer), "\n")
+vgi_all_games_playtime(steam_app_ids = 4019220, countries = "US")
 }
 }

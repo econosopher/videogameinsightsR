@@ -2,24 +2,38 @@
 % Please edit documentation in R/vgi_top_regions.R
 \name{vgi_top_regions}
 \alias{vgi_top_regions}
-\title{Get Top Regions for a Game (v4)}
+\title{Get Top Regions for a Game}
 \usage{
 vgi_top_regions(
   steam_app_id,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  version = c("v4", "v3")
 )
 }
 \arguments{
-\item{steam_app_id}{Integer Steam app ID.}
+\item{steam_app_id}{Integer. The Steam App ID of the game.}
 
-\item{auth_token}{Character string. Your VGI API authentication token.}
+\item{auth_token}{Character string. Your VGI API authentication token.
+Defaults to the VGI_AUTH_TOKEN environment variable.}
 
-\item{headers}{List. Optional custom headers.}
+\item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{version}{API generation. \code{"v4"} (default) reads the Steam row of
+the multi-game v4 \verb{/player-insights/games/top-regions} endpoint; \code{"v3"}
+reads \verb{/player-insights/games/\{steamAppId\}/regions}. Both return the same
+figures.}
 }
 \value{
-A data frame with \code{regionName}, \code{rank}, and \code{percentage}.
+A \link[tibble:tibble]{tibble} with columns \code{region_name}, \code{rank} and
+\code{percentage}.
 }
 \description{
-Convenience wrapper around the v4 \code{player-insights/games/top-regions} endpoint.
+Convenience wrapper around \code{\link[=vgi_insights_player_regions]{vgi_insights_player_regions()}} that returns
+only the regions tibble.
+}
+\examples{
+\dontrun{
+vgi_top_regions(steam_app_id = 4019220)
+}
 }

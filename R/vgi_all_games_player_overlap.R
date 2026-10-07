@@ -1,158 +1,55 @@
-#' Get Player Overlap Data for All Games
+#' Get Player Overlap Across the Catalogue (v3)
 #'
-#' Retrieve player overlap statistics for all games, showing which games
-#' share the most players and identifying gaming ecosystem connections.
+#' Retrieve player-overlap lists for many games from the v3
+#' `/player-insights/games/player-overlap` endpoint (offset paging; the API
+#' returns one game per call by default and each row can be large). For one
+#' game use [vgi_player_overlap()].
 #'
+#' @param offset Integer. Games to skip.
+#' @param limit Integer. Games to return (API default 1).
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
 #'
-#' @return A data frame with columns:
-#' \describe{
-#'   \item{steamAppId}{Integer. The Steam App ID}
-#'   \item{topOverlaps}{List. Top overlapping games with overlap metrics}
-#'   \item{overlapCount}{Integer. Number of games with significant overlap}
-#'   \item{topOverlapGame}{Integer. Steam App ID of most overlapping game}
-#'   \item{topOverlapPct}{Numeric. Percentage overlap with top game}
-#' }
-#'
-#' @details
-#' Player overlap data reveals:
-#' \itemize{
-#'   \item Direct competitors (high overlap = similar audience)
-#'   \item Complementary games (moderate overlap = cross-promotion opportunities)
-#'   \item Genre clusters and gaming ecosystems
-#'   \item Sequel/franchise connections
-#'   \item Platform-specific communities
-#' }
-#' 
-#' The topOverlaps list column contains detailed overlap data
-#' that can be analyzed for deeper insights.
+#' @return A [tibble][tibble::tibble] with one row per game: `steam_app_id`,
+#'   `top_overlaps` (list-column of overlap tibbles, see
+#'   [vgi_player_overlap()]), `overlap_count`, `top_overlap_game`,
+#'   `top_overlap_pct`.
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get player overlap data for all games
-#' overlap_data <- vgi_all_games_player_overlap()
-#' 
-#' # Find games with highest overlap percentages
-#' high_overlap <- overlap_data[overlap_data$topOverlapPct > 50, ]
-#' cat("Games with >50% overlap with another game:", nrow(high_overlap), "\n")
-#' 
-#' # These are likely sequels, expansions, or very similar games
-#' print(head(high_overlap[, c("steamAppId", "topOverlapGame", "topOverlapPct")]))
-#' 
-#' # Analyze overlap patterns
-#' hist(overlap_data$topOverlapPct,
-#'      breaks = 50,
-#'      main = "Distribution of Maximum Player Overlap",
-#'      xlab = "Top Overlap Percentage",
-#'      col = "lightcoral")
-#' 
-#' # Find gaming clusters (mutual high overlap)
-#' # Check if game A's top overlap is game B, and vice versa
-#' mutual_overlaps <- overlap_data[
-#'   mapply(function(id, top_id) {
-#'     if (is.na(top_id)) return(FALSE)
-#'     overlap_data$topOverlapGame[overlap_data$steamAppId == top_id] == id
-#'   }, overlap_data$steamAppId, overlap_data$topOverlapGame),
-#' ]
-#' cat("Games with mutual top overlap:", nrow(mutual_overlaps), "\n")
-#' 
-#' # Extract detailed overlap data for analysis
-#' # Find games that overlap with a specific game
-#' target_game <- 730  # Example: Counter-Strike 2
-#' games_overlapping_target <- overlap_data[
-#'   sapply(overlap_data$topOverlaps, function(overlaps) {
-#'     if (is.null(overlaps)) return(FALSE)
-#'     target_game %in% overlaps$steamAppId
-#'   }),
-#' ]
-#' cat("Games with significant overlap with game", target_game, ":", 
-#'     nrow(games_overlapping_target), "\n")
-#' 
-#' # Build a gaming ecosystem map
-#' # Extract all overlap relationships
-#' all_overlaps <- dplyr::bind_rows(lapply(seq_len(nrow(overlap_data)), function(i) {
-#'   game_id <- overlap_data$steamAppId[i]
-#'   overlaps <- overlap_data$topOverlaps[[i]]
-#'   if (is.null(overlaps) || nrow(overlaps) == 0) return(NULL)
-#'   
-#'   tibble::tibble(
-#'     from = game_id,
-#'     to = overlaps$steamAppId[1:min(5, nrow(overlaps))],
-#'     overlap_pct = overlaps$overlapPercentage[1:min(5, nrow(overlaps))]
-#'   )
-#' }))
-#' 
-#' # Find most connected games (hubs in the network)
-#' connection_counts <- table(c(all_overlaps$from, all_overlaps$to))
-#' hubs <- head(sort(connection_counts, decreasing = TRUE), 20)
-#' cat("Most connected games (appear in many overlaps):\n")
-#' print(hubs)
-#' 
-#' # Genre affinity analysis (would need genre data)
-#' # Games with high overlap likely share genres
-#' # Could cluster games based on overlap patterns
-#' 
-#' # Find isolated games (low overlap with any other game)
-#' isolated_games <- overlap_data[overlap_data$topOverlapPct < 5 | 
-#'                                is.na(overlap_data$topOverlapPct), ]
-#' cat("Games with <5% overlap (unique/niche):", nrow(isolated_games), "\n")
+#' vgi_all_games_player_overlap(limit = 5)
 #' }
 vgi_all_games_player_overlap <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                        headers = list()) {
-  
-  # Make API request
-  result <- make_api_request(
-    endpoint = "player-overlap",
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
-  )
+                                         headers = list(),
+                                         offset = NULL,
+                                         limit = NULL) {
+  if (!is.null(offset)) validate_numeric(offset, "offset", min_val = 0)
+  if (!is.null(limit)) validate_numeric(limit, "limit", min_val = 1)
+  qp <- list()
+  if (!is.null(offset)) qp$offset <- as.integer(offset)
+  if (!is.null(limit)) qp$limit <- as.integer(limit)
 
-  rows <- .vgi_unwrap_results(result)
+  rows <- make_api_request(
+    endpoint = "player-insights/games/player-overlap", query_params = qp,
+    auth_token = auth_token, method = "GET", headers = headers, version = "v3"
+  )
   if (!is.data.frame(rows) || nrow(rows) == 0) {
     return(.vgi_clean_names(tibble::tibble(
-      steamAppId = integer(),
-      topOverlaps = I(list()),
-      overlapCount = integer(),
-      topOverlapGame = integer(),
-      topOverlapPct = numeric(),
-
+      steamAppId = integer(), topOverlaps = I(list()), overlapCount = integer(),
+      topOverlapGame = integer(), topOverlapPct = numeric()
     )))
   }
-
-  df <- dplyr::bind_rows(lapply(seq_len(nrow(rows)), function(i) {
-    overlaps <- if ("playerOverlaps" %in% names(rows)) rows$playerOverlaps[[i]] else NULL
-    if (is.data.frame(overlaps) && nrow(overlaps) > 0) {
-      overlap_df <- tibble::tibble(
-        steamAppId = as.integer(overlaps$externalId %||% NA),
-        overlapPercentage = as.numeric(overlaps$unitsSoldOverlapPercentage %||% NA),
-        overlapIndex = as.numeric(overlaps$unitsSoldOverlapIndex %||% NA),
-
-      )
-      overlap_count <- nrow(overlap_df)
-      top_overlap_game <- overlap_df$steamAppId[1]
-      top_overlap_pct <- overlap_df$overlapPercentage[1]
-    } else {
-      overlap_df <- NULL
-      overlap_count <- 0
-      top_overlap_game <- NA_integer_
-      top_overlap_pct <- NA_real_
-    }
-
-    tibble::tibble(
-      steamAppId = as.integer(rows$externalId[i] %||% NA),
-      topOverlaps = I(list(overlap_df)),
-      overlapCount = as.integer(overlap_count),
-      topOverlapGame = as.integer(top_overlap_game),
-      topOverlapPct = as.numeric(top_overlap_pct),
-
-    )
-  }))
-
-  df <- df[!is.na(df$steamAppId), , drop = FALSE]
-  df <- df[order(-df$topOverlapPct, na.last = TRUE), , drop = FALSE]
-  .vgi_clean_names(df)
+  nested <- if ("playerOverlaps" %in% names(rows)) rows$playerOverlaps else replicate(nrow(rows), NULL, simplify = FALSE)
+  tbls <- lapply(nested, .vgi_overlap_rows)
+  out <- tibble::tibble(
+    steamAppId = .vgi_steam_ids(rows),
+    topOverlaps = I(tbls),
+    overlapCount = vapply(tbls, nrow, integer(1)),
+    topOverlapGame = vapply(tbls, function(t) if (nrow(t) > 0) t$steam_app_id[1] else NA_integer_, integer(1)),
+    topOverlapPct = vapply(tbls, function(t) if (nrow(t) > 0) t$units_sold_overlap_percentage[1] else NA_real_, numeric(1))
+  )
+  out <- out[!is.na(out$steamAppId), , drop = FALSE]
+  .vgi_clean_names(out[order(-out$topOverlapPct, na.last = TRUE), , drop = FALSE])
 }

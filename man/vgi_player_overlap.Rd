@@ -2,99 +2,73 @@
 % Please edit documentation in R/vgi_player_overlap.R
 \name{vgi_player_overlap}
 \alias{vgi_player_overlap}
-\title{Get Player Overlap Data}
+\title{Get Player Overlap for a Game}
 \usage{
 vgi_player_overlap(
-  steam_app_id,
+  steam_app_id = NULL,
   limit = 10,
   offset = 0,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  vgi_id = NULL,
+  slug = NULL,
+  version = c("v3", "v4")
 )
 }
 \arguments{
-\item{steam_app_id}{Integer. The Steam App ID of the main game.}
+\item{steam_app_id}{Integer. The Steam App ID of the game.}
 
-\item{limit}{Integer. Maximum number of overlapping games to return (default 10).}
+\item{limit}{Integer. Maximum number of overlapping games to return. In
+v3 this is the API page size: the API lists overlapping games in Steam
+App ID order, so to find the largest overlaps request a large \code{limit}
+(Dressmaker has about 3,900 rows); returned rows are sorted by units
+overlap.}
 
-\item{offset}{Integer. Number of records to skip for pagination (default 0).}
+\item{offset}{Integer. Records to skip (v3 only).}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{vgi_id}{Integer. VGI internal game ID (v4 only).}
+
+\item{slug}{Character. VGI game slug (v4 only).}
+
+\item{version}{\code{"v3"} or \code{"v4"}. Inferred as \code{"v4"} when \code{vgi_id} or
+\code{slug} is supplied.}
 }
 \value{
 A list containing:
 \describe{
-\item{steamAppId}{Integer. The Steam App ID of the main game}
-\item{playerOverlaps}{Data frame with columns for each overlapping game:
-\itemize{
-\item steamAppId: ID of the overlapping game
-\item medianPlaytime: Median hours played of main game by overlap players
-\item unitsSoldOverlap: Number of players who own both games
-\item unitsSoldOverlapPercentage: Percent of main game owners who own this game
-\item unitsSoldOverlapIndex: How much more likely to own vs average Steam user
-\item mauOverlap: Monthly active users who play both games
-\item mauOverlapPercentage: Percent of main game MAU who play this game
-\item mauOverlapIndex: How much more likely to play vs average Steam user
-\item wishlistOverlap: Number who wishlist both games
-\item wishlistOverlapPercentage: Percent of main game wishlisters who wishlist this
-\item wishlistOverlapIndex: How much more likely to wishlist vs average
-}
-}
+\item{steam_app_id}{Integer. The requested game (NA for non-Steam v4 lookups)}
+\item{vgi_id}{Integer. VGI ID of the requested game (v4 only, else NA)}
+\item{player_overlaps}{Tibble with one row per overlapping game:
+\code{steam_app_id}, \code{vgi_id} (v4), \code{median_playtime}, \code{units_sold_overlap},
+\code{units_sold_overlap_percentage}, \code{units_sold_overlap_index},
+\code{mau_overlap}, \code{mau_overlap_percentage}, \code{mau_overlap_index},
+\code{wishlist_overlap}, \code{wishlist_overlap_percentage},
+\code{wishlist_overlap_index}}
 }
 }
 \description{
-Retrieve player overlap data showing which other games are played by players
-of a specific game. This helps identify similar games and player preferences.
+Retrieve the games whose audiences overlap most with a given game. The v3
+endpoint \verb{/player-insights/games/\{steamAppId\}/player-overlap} is used when
+a \code{steam_app_id} is given and \code{version = "v3"} (the default). Supplying
+\code{vgi_id} or \code{slug}, or \code{version = "v4"}, uses the multi-platform v4
+\verb{/player-overlap} endpoint.
 }
 \details{
-Player overlap data is valuable for:
-\itemize{
-\item Competitive analysis - Identify direct competitors
-\item Marketing - Find games with similar audiences for cross-promotion
-\item Game design - Understand what other games your players enjoy
-\item Platform strategy - Identify bundle opportunities
-}
-
-The overlap index is particularly useful:
-\itemize{
-\item Index > 2.0: Strong overlap, very similar audience
-\item Index 1.5-2.0: Moderate overlap, some audience similarity
-\item Index 1.0-1.5: Slight overlap, minimal similarity
-\item Index < 1.0: Below average overlap
-}
+v3 stays the default here, unlike the other per-game functions: as of
+October 2026 the v4 endpoint lists the overlapping games but returns only
+\code{null} overlap percentages and no counts or indices (checked for Steam
+4019220, 730 and 892970), while v3 returns the full figures.
 }
 \examples{
 \dontrun{
-# Get player overlap for a game
-overlap <- vgi_player_overlap(steam_app_id = 892970, limit = 20)
+ov <- vgi_player_overlap(4019220, limit = 20)
+head(ov$player_overlaps)
 
-# Find games with strongest overlap
-strong_overlap <- overlap$playerOverlaps[
-  overlap$playerOverlaps$unitsSoldOverlapIndex > 2.0,
-]
-print(paste("Games with strong overlap:", nrow(strong_overlap)))
-
-# Analyze competitor landscape
-competitors <- head(overlap$playerOverlaps[
-  order(-overlap$playerOverlaps$unitsSoldOverlapPercentage),
-], 5)
-print("Top 5 competitors by player overlap:")
-print(competitors[, c("steamAppId", "unitsSoldOverlapPercentage", 
-                      "unitsSoldOverlapIndex")])
-
-# Find games where overlap players are highly engaged
-engaged_overlap <- overlap$playerOverlaps[
-  overlap$playerOverlaps$medianPlaytime > 50,
-]
-print(paste("Games where overlap players spend 50+ hours:", 
-            nrow(engaged_overlap)))
-
-# Calculate total addressable market from overlap
-total_overlap_players <- sum(overlap$playerOverlaps$unitsSoldOverlap)
-print(paste("Total unique players across all overlaps:", 
-            format(total_overlap_players, big.mark = ",")))
+vgi_player_overlap(slug = "dressmaker")
 }
 }

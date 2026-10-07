@@ -1,0 +1,1062 @@
+[
+    {
+        "platform": "steam",
+        "period": "2018-01-01",
+        "unitsTotal": 46705118,
+        "revenueTotal": 522460986,
+        "releasesTotal": 511,
+        "usersOnline": 18537490,
+        "usersIngame": 7188164,
+        "accountsTotal": 850544000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-02-01",
+        "unitsTotal": 37837920,
+        "revenueTotal": 461808254,
+        "releasesTotal": 650,
+        "usersOnline": 18362183,
+        "usersIngame": 6777433,
+        "accountsTotal": 858818000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-03-01",
+        "unitsTotal": 38001775,
+        "revenueTotal": 493216594,
+        "releasesTotal": 779,
+        "usersOnline": 18521247,
+        "usersIngame": 6760211,
+        "accountsTotal": 867014000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-04-01",
+        "unitsTotal": 31358286,
+        "revenueTotal": 396396957,
+        "releasesTotal": 667,
+        "usersOnline": 17200551,
+        "usersIngame": 5929288,
+        "accountsTotal": 873333000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-05-01",
+        "unitsTotal": 34837227,
+        "revenueTotal": 430254831,
+        "releasesTotal": 715,
+        "usersOnline": 16765372,
+        "usersIngame": 5582922,
+        "accountsTotal": 878797000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-06-01",
+        "unitsTotal": 41460043,
+        "revenueTotal": 409536680,
+        "releasesTotal": 608,
+        "usersOnline": 17227237,
+        "usersIngame": 5627170,
+        "accountsTotal": 885298000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-07-01",
+        "unitsTotal": 35777079,
+        "revenueTotal": 394640902,
+        "releasesTotal": 667,
+        "usersOnline": 16358317,
+        "usersIngame": 5134961,
+        "accountsTotal": 890838000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-08-01",
+        "unitsTotal": 32409767,
+        "revenueTotal": 469822492,
+        "releasesTotal": 678,
+        "usersOnline": 16032027,
+        "usersIngame": 5052835,
+        "accountsTotal": 897142000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-09-01",
+        "unitsTotal": 26901077,
+        "revenueTotal": 353650519,
+        "releasesTotal": 691,
+        "usersOnline": 16802771,
+        "usersIngame": 5273072,
+        "accountsTotal": 903052000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-10-01",
+        "unitsTotal": 25733826,
+        "revenueTotal": 329270671,
+        "releasesTotal": 673,
+        "usersOnline": 16304864,
+        "usersIngame": 4971809,
+        "accountsTotal": 908371000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-11-01",
+        "unitsTotal": 81630607,
+        "revenueTotal": 709927144,
+        "releasesTotal": 780,
+        "usersOnline": 16607492,
+        "usersIngame": 4946036,
+        "accountsTotal": 913493000
+    },
+    {
+        "platform": "steam",
+        "period": "2018-12-01",
+        "unitsTotal": 36501330,
+        "revenueTotal": 353272833,
+        "releasesTotal": 637,
+        "usersOnline": 16966739,
+        "usersIngame": 5349596,
+        "accountsTotal": 922752000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-01-01",
+        "unitsTotal": 33210176,
+        "revenueTotal": 399505977,
+        "releasesTotal": 616,
+        "usersOnline": 17532448,
+        "usersIngame": 5555946,
+        "accountsTotal": 935163000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-02-01",
+        "unitsTotal": 29855613,
+        "revenueTotal": 340767504,
+        "releasesTotal": 635,
+        "usersOnline": 17615173,
+        "usersIngame": 5339890,
+        "accountsTotal": 968900000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-03-01",
+        "unitsTotal": 28661907,
+        "revenueTotal": 375641021,
+        "releasesTotal": 657,
+        "usersOnline": 17283096,
+        "usersIngame": 5427382,
+        "accountsTotal": 988009000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-04-01",
+        "unitsTotal": 25542001,
+        "revenueTotal": 325705102,
+        "releasesTotal": 681,
+        "usersOnline": 17125670,
+        "usersIngame": 5266796,
+        "accountsTotal": 1001409000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-05-01",
+        "unitsTotal": 28361921,
+        "revenueTotal": 367294312,
+        "releasesTotal": 716,
+        "usersOnline": 16978564,
+        "usersIngame": 5185843,
+        "accountsTotal": 1007516000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-06-01",
+        "unitsTotal": 34562701,
+        "revenueTotal": 341691764,
+        "releasesTotal": 564,
+        "usersOnline": 16492721,
+        "usersIngame": 5115578,
+        "accountsTotal": 1014345000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-07-01",
+        "unitsTotal": 40675042,
+        "revenueTotal": 369038566,
+        "releasesTotal": 614,
+        "usersOnline": 16531494,
+        "usersIngame": 5241697,
+        "accountsTotal": 1021503000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-08-01",
+        "unitsTotal": 24774468,
+        "revenueTotal": 285752731,
+        "releasesTotal": 750,
+        "usersOnline": 15991266,
+        "usersIngame": 4923539,
+        "accountsTotal": 1027741000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-09-01",
+        "unitsTotal": 22026001,
+        "revenueTotal": 280346155,
+        "releasesTotal": 673,
+        "usersOnline": 16543926,
+        "usersIngame": 4856290,
+        "accountsTotal": 1034254000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-10-01",
+        "unitsTotal": 27943607,
+        "revenueTotal": 303038640,
+        "releasesTotal": 715,
+        "usersOnline": 16828846,
+        "usersIngame": 5065579,
+        "accountsTotal": 1040567000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-11-01",
+        "unitsTotal": 51691929,
+        "revenueTotal": 586857280,
+        "releasesTotal": 669,
+        "usersOnline": 16974394,
+        "usersIngame": 5252907,
+        "accountsTotal": 1046877000
+    },
+    {
+        "platform": "steam",
+        "period": "2019-12-01",
+        "unitsTotal": 47552051,
+        "revenueTotal": 545559502,
+        "releasesTotal": 611,
+        "usersOnline": 17600742,
+        "usersIngame": 5666621,
+        "accountsTotal": 1055525000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-01-01",
+        "unitsTotal": 39140047,
+        "revenueTotal": 534613048,
+        "releasesTotal": 690,
+        "usersOnline": 18334908,
+        "usersIngame": 5742563,
+        "accountsTotal": 1063410000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-02-01",
+        "unitsTotal": 34742697,
+        "revenueTotal": 489914105,
+        "releasesTotal": 695,
+        "usersOnline": 19107803,
+        "usersIngame": 6079346,
+        "accountsTotal": 1070502000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-03-01",
+        "unitsTotal": 45285284,
+        "revenueTotal": 645599657,
+        "releasesTotal": 658,
+        "usersOnline": 23635201,
+        "usersIngame": 7248887,
+        "accountsTotal": 1081248000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-04-01",
+        "unitsTotal": 47591484,
+        "revenueTotal": 659662030,
+        "releasesTotal": 761,
+        "usersOnline": 24535923,
+        "usersIngame": 8171592,
+        "accountsTotal": 1093114000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-05-01",
+        "unitsTotal": 40969400,
+        "revenueTotal": 527009627,
+        "releasesTotal": 780,
+        "usersOnline": 23515387,
+        "usersIngame": 6862591,
+        "accountsTotal": 1102668000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-06-01",
+        "unitsTotal": 39092503,
+        "revenueTotal": 430008868,
+        "releasesTotal": 745,
+        "usersOnline": 21634761,
+        "usersIngame": 6098710,
+        "accountsTotal": 1110860000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-07-01",
+        "unitsTotal": 43919228,
+        "revenueTotal": 528710223,
+        "releasesTotal": 847,
+        "usersOnline": 20846287,
+        "usersIngame": 6124183,
+        "accountsTotal": 1118556000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-08-01",
+        "unitsTotal": 41704171,
+        "revenueTotal": 600169116,
+        "releasesTotal": 826,
+        "usersOnline": 20873904,
+        "usersIngame": 5912438,
+        "accountsTotal": 1127299000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-09-01",
+        "unitsTotal": 37855912,
+        "revenueTotal": 538443905,
+        "releasesTotal": 793,
+        "usersOnline": 21973839,
+        "usersIngame": 6086375,
+        "accountsTotal": 1134954000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-10-01",
+        "unitsTotal": 39727598,
+        "revenueTotal": 523471243,
+        "releasesTotal": 947,
+        "usersOnline": 23194519,
+        "usersIngame": 6244411,
+        "accountsTotal": 1143187000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-11-01",
+        "unitsTotal": 64883457,
+        "revenueTotal": 730084824,
+        "releasesTotal": 841,
+        "usersOnline": 23934501,
+        "usersIngame": 6738766,
+        "accountsTotal": 1152706000
+    },
+    {
+        "platform": "steam",
+        "period": "2020-12-01",
+        "unitsTotal": 57270889,
+        "revenueTotal": 978305448,
+        "releasesTotal": 872,
+        "usersOnline": 24804148,
+        "usersIngame": 7170724,
+        "accountsTotal": 1165075000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-01-01",
+        "unitsTotal": 49224536,
+        "revenueTotal": 586600327,
+        "releasesTotal": 727,
+        "usersOnline": 25425816,
+        "usersIngame": 7413419,
+        "accountsTotal": 1176329000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-02-01",
+        "unitsTotal": 48210635,
+        "revenueTotal": 561329425,
+        "releasesTotal": 814,
+        "usersOnline": 26401443,
+        "usersIngame": 7444976,
+        "accountsTotal": 1186590000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-03-01",
+        "unitsTotal": 44937162,
+        "revenueTotal": 509185499,
+        "releasesTotal": 898,
+        "usersOnline": 26850811,
+        "usersIngame": 7389210,
+        "accountsTotal": 1197182000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-04-01",
+        "unitsTotal": 41965422,
+        "revenueTotal": 514073891,
+        "releasesTotal": 849,
+        "usersOnline": 26922926,
+        "usersIngame": 7370871,
+        "accountsTotal": 1206051000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-05-01",
+        "unitsTotal": 43817291,
+        "revenueTotal": 564294403,
+        "releasesTotal": 876,
+        "usersOnline": 25465755,
+        "usersIngame": 7011134,
+        "accountsTotal": 1216380000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-06-01",
+        "unitsTotal": 44536434,
+        "revenueTotal": 543313712,
+        "releasesTotal": 873,
+        "usersOnline": 25202227,
+        "usersIngame": 6959948,
+        "accountsTotal": 1225844000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-07-01",
+        "unitsTotal": 49017329,
+        "revenueTotal": 630090652,
+        "releasesTotal": 877,
+        "usersOnline": 25085615,
+        "usersIngame": 7115258,
+        "accountsTotal": 1235203000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-08-01",
+        "unitsTotal": 46557173,
+        "revenueTotal": 595249273,
+        "releasesTotal": 879,
+        "usersOnline": 25145170,
+        "usersIngame": 7034555,
+        "accountsTotal": 1244062000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-09-01",
+        "unitsTotal": 40795093,
+        "revenueTotal": 596533580,
+        "releasesTotal": 922,
+        "usersOnline": 25948693,
+        "usersIngame": 7455143,
+        "accountsTotal": 1252006000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-10-01",
+        "unitsTotal": 40282306,
+        "revenueTotal": 620606806,
+        "releasesTotal": 1119,
+        "usersOnline": 26579995,
+        "usersIngame": 7631765,
+        "accountsTotal": 1258626000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-11-01",
+        "unitsTotal": 66365923,
+        "revenueTotal": 919289259,
+        "releasesTotal": 932,
+        "usersOnline": 27384959,
+        "usersIngame": 7835499,
+        "accountsTotal": 1264915000
+    },
+    {
+        "platform": "steam",
+        "period": "2021-12-01",
+        "unitsTotal": 48630377,
+        "revenueTotal": 637326254,
+        "releasesTotal": 998,
+        "usersOnline": 27167225,
+        "usersIngame": 7670244,
+        "accountsTotal": 1271657000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-01-01",
+        "unitsTotal": 50454994,
+        "revenueTotal": 677721999,
+        "releasesTotal": 845,
+        "usersOnline": 29201174,
+        "usersIngame": 8505375,
+        "accountsTotal": 1280459000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-02-01",
+        "unitsTotal": 47016768,
+        "revenueTotal": 758530423,
+        "releasesTotal": 851,
+        "usersOnline": 29604837,
+        "usersIngame": 9278977,
+        "accountsTotal": 1288416000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-03-01",
+        "unitsTotal": 42331823,
+        "revenueTotal": 761585004,
+        "releasesTotal": 1047,
+        "usersOnline": 29769378,
+        "usersIngame": 9245888,
+        "accountsTotal": 1300663000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-04-01",
+        "unitsTotal": 37685619,
+        "revenueTotal": 582518005,
+        "releasesTotal": 848,
+        "usersOnline": 29986681,
+        "usersIngame": 8923219,
+        "accountsTotal": 1315889000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-05-01",
+        "unitsTotal": 37314120,
+        "revenueTotal": 512458504,
+        "releasesTotal": 1020,
+        "usersOnline": 28368563,
+        "usersIngame": 8365713,
+        "accountsTotal": 1349290000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-06-01",
+        "unitsTotal": 37989266,
+        "revenueTotal": 450311125,
+        "releasesTotal": 866,
+        "usersOnline": 28094001,
+        "usersIngame": 8318044,
+        "accountsTotal": 1401301000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-07-01",
+        "unitsTotal": 44154425,
+        "revenueTotal": 583298074,
+        "releasesTotal": 989,
+        "usersOnline": 27678329,
+        "usersIngame": 8166327,
+        "accountsTotal": 1420265000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-08-01",
+        "unitsTotal": 38741953,
+        "revenueTotal": 528716383,
+        "releasesTotal": 999,
+        "usersOnline": 27694681,
+        "usersIngame": 8177516,
+        "accountsTotal": 1428372000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-09-01",
+        "unitsTotal": 36124839,
+        "revenueTotal": 481716145,
+        "releasesTotal": 1027,
+        "usersOnline": 29120751,
+        "usersIngame": 8627087,
+        "accountsTotal": 1443692000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-10-01",
+        "unitsTotal": 37744400,
+        "revenueTotal": 593090365,
+        "releasesTotal": 1135,
+        "usersOnline": 30239878,
+        "usersIngame": 8920824,
+        "accountsTotal": 1465806000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-11-01",
+        "unitsTotal": 66235987,
+        "revenueTotal": 1080213857,
+        "releasesTotal": 1100,
+        "usersOnline": 31906400,
+        "usersIngame": 9423733,
+        "accountsTotal": 1480517000
+    },
+    {
+        "platform": "steam",
+        "period": "2022-12-01",
+        "unitsTotal": 50603220,
+        "revenueTotal": 745665171,
+        "releasesTotal": 1050,
+        "usersOnline": 31602926,
+        "usersIngame": 9385267,
+        "accountsTotal": 1507239000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-01-01",
+        "unitsTotal": 50353416,
+        "revenueTotal": 709155848,
+        "releasesTotal": 953,
+        "usersOnline": 33081778,
+        "usersIngame": 10286978,
+        "accountsTotal": 1515273000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-02-01",
+        "unitsTotal": 48750201,
+        "revenueTotal": 1034209980,
+        "releasesTotal": 1019,
+        "usersOnline": 33160236,
+        "usersIngame": 10143376,
+        "accountsTotal": 1523186000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-03-01",
+        "unitsTotal": 45963185,
+        "revenueTotal": 734756008,
+        "releasesTotal": 1178,
+        "usersOnline": 33598520,
+        "usersIngame": 10131254,
+        "accountsTotal": 1531375000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-04-01",
+        "unitsTotal": 39181264,
+        "revenueTotal": 606863934,
+        "releasesTotal": 1102,
+        "usersOnline": 33397782,
+        "usersIngame": 9904988,
+        "accountsTotal": 1541244000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-05-01",
+        "unitsTotal": 37355651,
+        "revenueTotal": 561130148,
+        "releasesTotal": 1122,
+        "usersOnline": 32265892,
+        "usersIngame": 9533835,
+        "accountsTotal": 1551105000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-06-01",
+        "unitsTotal": 38394550,
+        "revenueTotal": 545141257,
+        "releasesTotal": 1060,
+        "usersOnline": 32160794,
+        "usersIngame": 8926638,
+        "accountsTotal": 1562742000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-07-01",
+        "unitsTotal": 51222364,
+        "revenueTotal": 634262128,
+        "releasesTotal": 1065,
+        "usersOnline": 30342770,
+        "usersIngame": 9111056,
+        "accountsTotal": 1573517000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-08-01",
+        "unitsTotal": 55120520,
+        "revenueTotal": 861928825,
+        "releasesTotal": 1144,
+        "usersOnline": 29888734,
+        "usersIngame": 9715473,
+        "accountsTotal": 1587740000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-09-01",
+        "unitsTotal": 43971264,
+        "revenueTotal": 801502610,
+        "releasesTotal": 1129,
+        "usersOnline": 31272321,
+        "usersIngame": 9966162,
+        "accountsTotal": 1598146000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-10-01",
+        "unitsTotal": 42581039,
+        "revenueTotal": 707874184,
+        "releasesTotal": 1271,
+        "usersOnline": 31364841,
+        "usersIngame": 9942395,
+        "accountsTotal": 1608059000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-11-01",
+        "unitsTotal": 70488800,
+        "revenueTotal": 906133679,
+        "releasesTotal": 1198,
+        "usersOnline": 32106531,
+        "usersIngame": 9880930,
+        "accountsTotal": 1617479000
+    },
+    {
+        "platform": "steam",
+        "period": "2023-12-01",
+        "unitsTotal": 62232404,
+        "revenueTotal": 662038720,
+        "releasesTotal": 1169,
+        "usersOnline": 32670687,
+        "usersIngame": 10499708,
+        "accountsTotal": 1633857000
+    },
+    {
+        "platform": "steam",
+        "period": "2024-01-01",
+        "unitsTotal": 64099326,
+        "revenueTotal": 1009730040,
+        "releasesTotal": 1191,
+        "usersOnline": 33677932,
+        "usersIngame": 11582879,
+        "accountsTotal": 1669238000
+    },
+    {
+        "platform": "steam",
+        "period": "2024-02-01",
+        "unitsTotal": 56864695,
+        "revenueTotal": 995485645,
+        "releasesTotal": 1395,
+        "usersOnline": 33393132,
+        "usersIngame": 11120696,
+        "accountsTotal": 1687301000
+    },
+    {
+        "platform": "steam",
+        "period": "2024-03-01",
+        "unitsTotal": 55712122,
+        "revenueTotal": 858855626,
+        "releasesTotal": 1365,
+        "usersOnline": 36356579,
+        "usersIngame": 11796666,
+        "accountsTotal": 1703476000
+    },
+    {
+        "platform": "steam",
+        "period": "2024-04-01",
+        "unitsTotal": 55364349,
+        "revenueTotal": 723032777,
+        "releasesTotal": 1322,
+        "usersOnline": 36300119,
+        "usersIngame": 11594726,
+        "accountsTotal": 1721412000
+    },
+    {
+        "platform": "steam",
+        "period": "2024-05-01",
+        "unitsTotal": 50637843,
+        "revenueTotal": 742445058,
+        "releasesTotal": 1509,
+        "usersOnline": 35552327,
+        "usersIngame": 11138417,
+        "accountsTotal": 1737811700
+    },
+    {
+        "platform": "steam",
+        "period": "2024-06-01",
+        "unitsTotal": 72831329,
+        "revenueTotal": 648584615,
+        "releasesTotal": 1415,
+        "usersOnline": 36931495,
+        "usersIngame": 11712614,
+        "accountsTotal": 1767410900
+    },
+    {
+        "platform": "steam",
+        "period": "2024-07-01",
+        "unitsTotal": 76266113,
+        "revenueTotal": 671565650,
+        "releasesTotal": 1524,
+        "usersOnline": 36612810,
+        "usersIngame": 11663520,
+        "accountsTotal": 1792909900
+    },
+    {
+        "platform": "steam",
+        "period": "2024-08-01",
+        "unitsTotal": 79162046,
+        "revenueTotal": 1259294393,
+        "releasesTotal": 1622,
+        "usersOnline": 37268019,
+        "usersIngame": 12536449,
+        "accountsTotal": 1808508400
+    },
+    {
+        "platform": "steam",
+        "period": "2024-09-01",
+        "unitsTotal": 64585392,
+        "revenueTotal": 892254777,
+        "releasesTotal": 1397,
+        "usersOnline": 38373757,
+        "usersIngame": 12272435,
+        "accountsTotal": 1828047100
+    },
+    {
+        "platform": "steam",
+        "period": "2024-10-01",
+        "unitsTotal": 61673992,
+        "revenueTotal": 779693214,
+        "releasesTotal": 1796,
+        "usersOnline": 38105958,
+        "usersIngame": 11922113,
+        "accountsTotal": 1840365100
+    },
+    {
+        "platform": "steam",
+        "period": "2024-11-01",
+        "unitsTotal": 66277948,
+        "revenueTotal": 776903162,
+        "releasesTotal": 1775,
+        "usersOnline": 38283421,
+        "usersIngame": 11848438,
+        "accountsTotal": 1846472800
+    },
+    {
+        "platform": "steam",
+        "period": "2024-12-01",
+        "unitsTotal": 88965193,
+        "revenueTotal": 765808805,
+        "releasesTotal": 1566,
+        "usersOnline": 39325615,
+        "usersIngame": 12519425,
+        "accountsTotal": 1854760500
+    },
+    {
+        "platform": "steam",
+        "period": "2025-01-01",
+        "unitsTotal": 65553593,
+        "revenueTotal": 850134199,
+        "releasesTotal": 1411,
+        "usersOnline": 39342021,
+        "usersIngame": 12485275,
+        "accountsTotal": 1863538300
+    },
+    {
+        "platform": "steam",
+        "period": "2025-02-01",
+        "unitsTotal": 67913108,
+        "revenueTotal": 1007875256,
+        "releasesTotal": 1371,
+        "usersOnline": 39926476,
+        "usersIngame": 12289203,
+        "accountsTotal": 1871816900
+    },
+    {
+        "platform": "steam",
+        "period": "2025-03-01",
+        "unitsTotal": 84215729,
+        "revenueTotal": 1180834274,
+        "releasesTotal": 1831,
+        "usersOnline": 41239880,
+        "usersIngame": 13198284,
+        "accountsTotal": 1882587400
+    },
+    {
+        "platform": "steam",
+        "period": "2025-04-01",
+        "unitsTotal": 65513810,
+        "revenueTotal": 904887412,
+        "releasesTotal": 1745,
+        "usersOnline": 40490922,
+        "usersIngame": 12517093,
+        "accountsTotal": 1892516000
+    },
+    {
+        "platform": "steam",
+        "period": "2025-05-01",
+        "unitsTotal": 56566540,
+        "revenueTotal": 789740524,
+        "releasesTotal": 1626,
+        "usersOnline": 39982915,
+        "usersIngame": 11785188,
+        "accountsTotal": 1902764900
+    },
+    {
+        "platform": "steam",
+        "period": "2025-06-01",
+        "unitsTotal": 69503792,
+        "revenueTotal": 916402650,
+        "releasesTotal": 1655,
+        "usersOnline": 40084532,
+        "usersIngame": 12029585,
+        "accountsTotal": 1910864700
+    },
+    {
+        "platform": "steam",
+        "period": "2025-07-01",
+        "unitsTotal": 66872905,
+        "revenueTotal": 809099648,
+        "releasesTotal": 1812,
+        "usersOnline": 38826331,
+        "usersIngame": 12006263,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2025-08-01",
+        "unitsTotal": 58148230,
+        "revenueTotal": 751276214,
+        "releasesTotal": 1719,
+        "usersOnline": 38805229,
+        "usersIngame": 11705968,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2025-09-01",
+        "unitsTotal": 61930650,
+        "revenueTotal": 901651599,
+        "releasesTotal": 1589,
+        "usersOnline": 40522969,
+        "usersIngame": 12421593,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2025-10-01",
+        "unitsTotal": 72688464,
+        "revenueTotal": 1262880507,
+        "releasesTotal": 2007,
+        "usersOnline": 41666455,
+        "usersIngame": 13029452,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2025-11-01",
+        "unitsTotal": 78066446,
+        "revenueTotal": 1166053557,
+        "releasesTotal": 2053,
+        "usersOnline": 41450904,
+        "usersIngame": 12677930,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2025-12-01",
+        "unitsTotal": 73712283,
+        "revenueTotal": 840370216,
+        "releasesTotal": 1647,
+        "usersOnline": 41330487,
+        "usersIngame": 13179797,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2026-01-01",
+        "unitsTotal": 67095359,
+        "revenueTotal": 834543710,
+        "releasesTotal": 1554,
+        "usersOnline": 42043291,
+        "usersIngame": 13403135,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2026-02-01",
+        "unitsTotal": 57690107,
+        "revenueTotal": 844251384,
+        "releasesTotal": 1691,
+        "usersOnline": 41301571,
+        "usersIngame": 12746972,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2026-03-01",
+        "unitsTotal": 72480327,
+        "revenueTotal": 1058216685,
+        "releasesTotal": 2353,
+        "usersOnline": 42690788,
+        "usersIngame": 13820563,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2026-04-01",
+        "unitsTotal": 61281674,
+        "revenueTotal": 832301500,
+        "releasesTotal": 2121,
+        "usersOnline": 42349867,
+        "usersIngame": 13233772,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2026-05-01",
+        "unitsTotal": 68511755,
+        "revenueTotal": 1120900341,
+        "releasesTotal": 1836,
+        "usersOnline": 41209542,
+        "usersIngame": 12937015,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2026-06-01",
+        "unitsTotal": 73255012,
+        "revenueTotal": 801206389,
+        "releasesTotal": 2010,
+        "usersOnline": 41782300,
+        "usersIngame": 13801134,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2026-07-01",
+        "unitsTotal": 71512911,
+        "revenueTotal": 853169098,
+        "releasesTotal": 2503,
+        "usersOnline": 41322561,
+        "usersIngame": 13935657,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2026-08-01",
+        "unitsTotal": 74252571,
+        "revenueTotal": 917991139,
+        "releasesTotal": 2626,
+        "usersOnline": 40793883,
+        "usersIngame": 13296207,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2026-09-01",
+        "unitsTotal": 60923298,
+        "revenueTotal": 904504889,
+        "releasesTotal": 2728,
+        "usersOnline": 41729436,
+        "usersIngame": 13520627,
+        "accountsTotal": 1923864800
+    },
+    {
+        "platform": "steam",
+        "period": "2026-10-01",
+        "unitsTotal": 13960197,
+        "revenueTotal": 148440116,
+        "releasesTotal": 372,
+        "usersOnline": 42272183,
+        "usersIngame": 13996709,
+        "accountsTotal": 1923864800
+    }
+]

@@ -2,69 +2,36 @@
 % Please edit documentation in R/vgi_game_list.R
 \name{vgi_game_list}
 \alias{vgi_game_list}
-\title{Get Complete Game List}
+\title{Get the Full Game List}
 \usage{
-vgi_game_list(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), headers = list())
+vgi_game_list(
+  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+  headers = list(),
+  version = c("v4", "v3")
+)
 }
 \arguments{
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{version}{\code{"v4"} (default) or \code{"v3"}.}
 }
 \value{
-A tibble with columns:
-\describe{
-\item{steamAppId}{Integer. The Steam App ID}
-\item{name}{Character. The game name}
-}
+A \link[tibble:tibble]{tibble} with columns \code{steam_app_id}, \code{name},
+\code{id} (alias of \code{steam_app_id}, kept for backwards compatibility) and
+(v4) \code{vgi_id}, sorted by Steam App ID.
 }
 \description{
-Retrieve the complete list of games from the Video Game Insights database.
-Note: This endpoint returns ALL games and does not support filtering parameters.
-}
-\details{
-This endpoint returns the complete game list from the API. According to the
-API specification, no filtering parameters are supported. The API will return
-all games in its database.
-
-WARNING: This may return a very large dataset (potentially 100,000+ games).
-Consider caching the results locally to avoid repeated API calls.
-
-For filtering games, you'll need to:
-\enumerate{
-\item Fetch the complete list with this function
-\item Filter the results locally in R
-\item Cache the filtered results for future use
-}
+Retrieve the catalogue of games known to VGI from \verb{/games/game-list}. The
+v4 endpoint (default) returns the VGI ID alongside the Steam App ID; the v3
+endpoint returns Steam App IDs and names only. Both responses are large
+(several MB) and unpaginated; consider caching the result.
 }
 \examples{
 \dontrun{
-# Get all games (WARNING: Large dataset)
-all_games <- vgi_game_list()
-cat("Total games in database:", nrow(all_games), "\n")
-
-# Filter locally for shooter games
-# (Requires fetching metadata for each game to get genre)
-
-# Search for games by name locally
-cs_games <- all_games[grepl("Counter-Strike", all_games$name, ignore.case = TRUE), ]
-print(cs_games)
-
-# Cache the complete list for future use
-cache_file <- file.path(tempdir(), "vgi_all_games_cache.rds")
-saveRDS(all_games, cache_file)
-
-# Later, load from cache instead of API
-if (file.exists(cache_file)) {
-  all_games <- readRDS(cache_file)
-} else {
-  all_games <- vgi_game_list()
-  saveRDS(all_games, cache_file)
-}
-
-# Get a sample of games
-sample_games <- all_games[sample(nrow(all_games), 10), ]
-print(sample_games)
+games <- vgi_game_list()
+nrow(games)
 }
 }

@@ -1,165 +1,112 @@
-#' Get Publisher Information
+#' Get Publisher Information (v3)
 #'
-#' Retrieve detailed information about a specific video game publisher.
+#' Retrieve a publisher's summary metrics from the v3 `/publishers/{companyId}`
+#' endpoint. For the multi-platform v4 overview use [vgi_publishers_overview()].
 #'
-#' @param company_id Integer. The publisher's company ID.
+#' @param company_id Integer. The VGI company ID of the publisher.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
 #'
-#' @return A list containing publisher information with fields:
-#' \describe{
-#'   \item{companyId}{Integer. The company ID}
-#'   \item{name}{Character. Publisher name}
-#'   \item{foundedDate}{Character. Date the company was founded}
-#'   \item{headquarters}{Character. Company headquarters location}
-#'   \item{employeeCount}{Integer. Number of employees}
-#'   \item{website}{Character. Company website URL}
-#'   \item{description}{Character. Company description}
-#'   \item{totalGames}{Integer. Total number of games published}
-#'   \item{activeGames}{Integer. Number of currently active games}
-#' }
-#'
-#' @details
-#' Publisher information can be used to:
-#' \itemize{
-#'   \item Research company backgrounds and portfolios
-#'   \item Analyze publisher market share
-#'   \item Identify publishers specializing in certain genres
-#'   \item Track publisher growth and success metrics
-#' }
+#' @return A one-row [tibble][tibble::tibble] with columns `company_id`,
+#'   `name`, `classification`, `games_published`, `games_in_development`,
+#'   `revenue_total`, `revenue_avg_per_game`, `revenue_median_per_game`.
+#'   Empty when the publisher is unknown.
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get information about a publisher
-#' pub_info <- vgi_publisher_info(company_id = 13190)
-#' 
-#' # Display publisher details
-#' cat("Publisher:", pub_info$name, "\n")
-#' cat("Founded:", pub_info$foundedDate, "\n")
-#' cat("Total Games Published:", pub_info$totalGames, "\n")
-#' cat("Currently Active Games:", pub_info$activeGames, "\n")
-#' 
-#' # Analyze publisher size
-#' if (!is.null(pub_info$employeeCount)) {
-#'   if (pub_info$employeeCount > 1000) {
-#'     cat("This is a major publisher\n")
-#'   } else if (pub_info$employeeCount > 100) {
-#'     cat("This is a mid-sized publisher\n")
-#'   } else {
-#'     cat("This is a boutique publisher\n")
-#'   }
-#' }
+#' vgi_publisher_info(28663)
 #' }
 vgi_publisher_info <- function(company_id,
                               auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                               headers = list()) {
-  
-  # Validate inputs
   validate_numeric(company_id, "company_id")
-  
-  # Make API request
   result <- make_api_request(
-    endpoint = "companies/publishers",
-    query_params = list(vgiIds = as.character(company_id), limit = 1),
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
+    endpoint = sprintf("publishers/%s", as.integer(company_id)),
+    auth_token = auth_token, method = "GET", headers = headers, version = "v3"
   )
-
-  rows <- .vgi_unwrap_results(result)
-  if (!is.data.frame(rows) || nrow(rows) == 0) return(list())
-  as.list(rows[1, , drop = FALSE])
+  .vgi_company_rows(result, "gamesPublished")
 }
 
-#' Get Game IDs by Publisher
+#' Get a Publisher's Steam Games (v3)
 #'
-#' Retrieve a list of Steam App IDs for all games by a specific publisher.
+#' Retrieve the Steam App IDs published by a company from the v3
+#' `/publishers/{companyId}/game-ids` endpoint.
 #'
-#' @param company_id Integer. The publisher's company ID.
-#' @param auth_token Character string. Your VGI API authentication token.
-#'   Defaults to the VGI_AUTH_TOKEN environment variable.
-#' @param headers List. Optional custom headers to include in the API request.
-#'
-#' @return A numeric vector of Steam App IDs for games published by this company.
-#'
-#' @details
-#' This endpoint now returns only game IDs instead of full game metadata.
-#' To get detailed information about each game, use \code{vgi_game_metadata()}
-#' with the returned IDs.
-#' 
-#' This approach is more efficient when you only need to:
-#' \itemize{
-#'   \item Count the number of games by a publisher
-#'   \item Check if a publisher released a specific game
-#'   \item Get a subset of games for detailed analysis
-#' }
-#'
+#' @inheritParams vgi_publisher_info
+#' @return An integer vector of Steam App IDs (empty when none).
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get all game IDs for a publisher
-#' game_ids <- vgi_publisher_games(company_id = 13190)
-#' 
-#' # Count games by this publisher
-#' cat("Total games published:", length(game_ids), "\n")
-#' 
-#' # Get detailed info for the first 5 games
-#' if (length(game_ids) > 0) {
-#'   first_five <- head(game_ids, 5)
-#'   game_details <- lapply(first_five, vgi_game_metadata)
-#'   
-#'   # Display game names
-#'   for (game in game_details) {
-#'     cat(game$name, "(", game$steamAppId, ")\n")
-#'   }
-#' }
-#' 
-#' # Analyze publisher's portfolio
-#' if (length(game_ids) > 0) {
-#'   # Get metadata for all games
-#'   all_games <- vgi_game_metadata_batch(game_ids)
-#'   
-#'   # Group by genre
-#'   genre_counts <- table(unlist(lapply(all_games$genres, function(x) x)))
-#'   print("Publisher's genre distribution:")
-#'   print(sort(genre_counts, decreasing = TRUE))
-#' }
-#' 
-#' # Find publisher's most successful games
-#' if (length(game_ids) > 10) {
-#'   # Get revenue data for top games
-#'   revenues <- lapply(head(game_ids, 10), function(id) {
-#'     tryCatch({
-#'       rev_data <- vgi_insights_revenue(id)
-#'       list(id = id, revenue = rev_data$revenueTotal)
-#'     }, error = function(e) NULL)
-#'   })
-#'   
-#'   # Filter out NULLs and sort by revenue
-#'   revenues <- revenues[!sapply(revenues, is.null)]
-#'   revenues <- revenues[order(sapply(revenues, function(x) x$revenue), 
-#'                             decreasing = TRUE)]
-#' }
+#' vgi_publisher_games(28663)
 #' }
 vgi_publisher_games <- function(company_id,
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                headers = list()) {
-  
-  # Validate inputs
   validate_numeric(company_id, "company_id")
-  
-  # Make API request
   result <- make_api_request(
-    endpoint = "companies/publishers/game-ids",
-    query_params = list(vgiIds = as.character(company_id), limit = 1),
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
+    endpoint = sprintf("publishers/%s/game-ids", as.integer(company_id)),
+    auth_token = auth_token, method = "GET", headers = headers, version = "v3"
   )
+  as.integer(unlist(result$steamAppIds))
+}
 
-  rows <- .vgi_unwrap_results(result)
-  if (!is.data.frame(rows) || nrow(rows) == 0) return(numeric(0))
-  as.numeric(unlist(rows$vgiGameIds[[1]]))
+#' List Publishers with Summary Metrics (v3)
+#'
+#' Page through the v3 `/publishers` catalogue. For the multi-platform v4
+#' overview (with per-platform genre breakdowns) use
+#' [vgi_publishers_overview()].
+#'
+#' @param offset Integer. Records to skip.
+#' @param limit Integer. Records to return (API default 5, maximum 1000).
+#' @param all_pages Logical. Page through the whole catalogue.
+#' @inheritParams vgi_publisher_info
+#' @return A [tibble][tibble::tibble] with the columns of [vgi_publisher_info()].
+#' @export
+#' @examples
+#' \dontrun{
+#' vgi_publishers(limit = 100)
+#' }
+vgi_publishers <- function(offset = NULL, limit = NULL, all_pages = FALSE,
+                           auth_token = Sys.getenv("VGI_AUTH_TOKEN"), headers = list()) {
+  .vgi_company_catalogue("publishers", "gamesPublished", offset, limit, all_pages, auth_token, headers)
+}
+
+# --- shared company helpers ---
+
+.vgi_company_rows <- function(rows, games_col) {
+  if (is.list(rows) && !is.data.frame(rows)) {
+    if (length(rows) == 0 || is.null(rows$companyId)) rows <- NULL
+    else rows <- as.data.frame(lapply(rows, function(x) if (is.null(x)) NA else x), stringsAsFactors = FALSE)
+  }
+  if (!is.data.frame(rows) || nrow(rows) == 0) {
+    out <- tibble::tibble(companyId = integer(), name = character(), classification = character())
+    out[[games_col]] <- integer()
+    out$gamesInDevelopment <- integer()
+    out$revenueTotal <- numeric(); out$revenueAvgPerGame <- numeric(); out$revenueMedianPerGame <- numeric()
+    return(.vgi_clean_names(out))
+  }
+  out <- tibble::tibble(
+    companyId = as.integer(rows$companyId),
+    name = as.character(.vgi_col(rows, "name", NA_character_)),
+    classification = as.character(.vgi_col(rows, "classification", NA_character_))
+  )
+  out[[games_col]] <- as.integer(.vgi_col(rows, games_col))
+  out$gamesInDevelopment <- as.integer(.vgi_col(rows, "gamesInDevelopment"))
+  out$revenueTotal <- as.numeric(.vgi_col(rows, "revenueTotal"))
+  out$revenueAvgPerGame <- as.numeric(.vgi_col(rows, "revenueAvgPerGame"))
+  out$revenueMedianPerGame <- as.numeric(.vgi_col(rows, "revenueMedianPerGame"))
+  .vgi_clean_names(out)
+}
+
+.vgi_company_catalogue <- function(endpoint, games_col, offset, limit, all_pages, auth_token, headers) {
+  if (!is.null(offset)) validate_numeric(offset, "offset", min_val = 0)
+  if (!is.null(limit)) validate_numeric(limit, "limit", min_val = 1, max_val = 1000)
+  qp <- list()
+  if (!is.null(offset)) qp$offset <- as.integer(offset)
+  if (!is.null(limit)) qp$limit <- as.integer(limit)
+  rows <- .vgi_fetch_v3_pages(endpoint, qp, auth_token = auth_token, headers = headers,
+                              all_pages = all_pages, page_size = as.integer(limit %||% 1000))
+  .vgi_company_rows(rows, games_col)
 }

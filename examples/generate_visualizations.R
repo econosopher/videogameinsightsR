@@ -18,9 +18,7 @@ pacman::p_load(
 # Set API token
 api_token <- Sys.getenv("VGI_AUTH_TOKEN")
 if (api_token == "") {
-  # Set the token directly if not in environment
-  Sys.setenv(VGI_AUTH_TOKEN = "000008b2789cfb1597708ca43de8600d2cba0ed3ae")
-  api_token <- Sys.getenv("VGI_AUTH_TOKEN")
+  stop("Set the VGI_AUTH_TOKEN environment variable before running this example.")
 }
 
 # Set theme for consistent chart appearance

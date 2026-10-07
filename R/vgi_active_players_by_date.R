@@ -134,7 +134,7 @@ vgi_active_players_by_date <- function(date,
   } else if (!is.null(steam_app_ids)) {
     max(50, length(steam_app_ids) * 5)
   } else {
-    2000
+    1000
   }
 
   result <- .vgi_historical_results(

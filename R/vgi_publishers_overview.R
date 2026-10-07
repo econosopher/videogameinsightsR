@@ -1,41 +1,50 @@
-#' Get v4 Publisher Overview Data
+#' Get Publisher Overview (v4, multi-platform)
 #'
-#' Fetches publisher overview rows from the v4 `companies/publishers` endpoint.
+#' Retrieve publisher summaries from the v4 `/companies/publishers` endpoint,
+#' including per-platform revenue, release counts and genre breakdowns.
 #'
-#' @param vgi_ids Optional numeric/integer vector of VGI company IDs.
-#' @param slugs Optional character vector of publisher slugs.
-#' @param cursor Optional cursor for pagination.
-#' @param limit Optional page size (1-1000).
+#' @param vgi_ids Integer vector. VGI company IDs to select. Optional.
+#' @param slugs Character vector. VGI company slugs to select. Optional.
+#' @param cursor Integer. Cursor from a previous page.
+#' @param limit Integer. Records per page (API default 200, maximum 1000).
+#' @param all_pages Logical. Follow the cursor through every page.
 #' @param auth_token Character string. Your VGI API authentication token.
-#'   Defaults to `VGI_AUTH_TOKEN`.
-#' @param headers List. Optional custom headers.
+#'   Defaults to the VGI_AUTH_TOKEN environment variable.
+#' @param headers List. Optional custom headers to include in the API request.
 #'
-#' @return A data frame of publisher overview records.
+#' @return A [tibble][tibble::tibble] with one row per publisher:
+#'   `vgi_company_id`, `name`, `slug`, `classification`, `country`, `vgi_url`
+#'   and the flattened `platform_data.<platform>.<metric>` columns (for
+#'   example `platform_data.steam.revenue_total`,
+#'   `platform_data.steam.genre_breakdown.rpg`). The attribute `next_cursor`
+#'   carries the cursor for the next page.
+#'
 #' @export
+#' @examples
+#' \dontrun{
+#' vgi_publishers_overview(vgi_ids = 28663)
+#' vgi_publishers_overview(limit = 500)
+#' }
 vgi_publishers_overview <- function(vgi_ids = NULL,
                                     slugs = NULL,
                                     cursor = NULL,
                                     limit = 100,
                                     auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                    headers = list()) {
-  if (!is.null(limit)) validate_numeric(limit, "limit", min_val = 1, max_val = 1000)
-  if (!is.null(cursor)) validate_numeric(cursor, "cursor", min_val = 0)
+                                    headers = list(),
+                                    all_pages = FALSE) {
+  .vgi_company_overview("publishers", vgi_ids, slugs, cursor, limit, all_pages, auth_token, headers)
+}
 
-  query_params <- list()
-  if (!is.null(limit)) query_params$limit <- as.integer(limit)
-  if (!is.null(cursor)) query_params$cursor <- as.integer(cursor)
-  if (!is.null(vgi_ids) && length(vgi_ids) > 0) query_params$vgiIds <- .vgi_to_csv_ids(as.integer(vgi_ids))
-  if (!is.null(slugs) && length(slugs) > 0) query_params$slugs <- paste(unique(slugs[!is.na(slugs)]), collapse = ",")
-
-  result <- make_api_request(
-    endpoint = "companies/publishers",
-    query_params = query_params,
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
-  )
-
-  rows <- .vgi_unwrap_results(result)
-  if (is.data.frame(rows)) return(.vgi_clean_names(rows))
-  .vgi_clean_names(tibble::tibble())
+.vgi_company_overview <- function(kind, vgi_ids, slugs, cursor, limit, all_pages, auth_token, headers) {
+  qp <- .vgi_v4_query(vgi_ids = vgi_ids, slugs = slugs, limit = limit, cursor = cursor)
+  page <- .vgi_fetch_v4_pages(sprintf("companies/%s", kind), qp, auth_token = auth_token,
+                              headers = headers, all_pages = all_pages)
+  rows <- page$results
+  out <- if (is.data.frame(rows) && nrow(rows) > 0) {
+    .vgi_clean_names(tibble::as_tibble(rows))
+  } else {
+    .vgi_clean_names(tibble::tibble(vgiCompanyId = integer(), name = character(), slug = character()))
+  }
+  attr(out, "next_cursor") <- page$next_cursor
+  out
 }

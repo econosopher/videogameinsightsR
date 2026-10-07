@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgi_developers_overview.R
 \name{vgi_developers_overview}
 \alias{vgi_developers_overview}
-\title{Get v4 Developer Overview Data}
+\title{Get Developer Overview (v4, multi-platform)}
 \usage{
 vgi_developers_overview(
   vgi_ids = NULL,
@@ -10,26 +10,40 @@ vgi_developers_overview(
   cursor = NULL,
   limit = 100,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  all_pages = FALSE
 )
 }
 \arguments{
-\item{vgi_ids}{Optional numeric/integer vector of VGI company IDs.}
+\item{vgi_ids}{Integer vector. VGI company IDs to select. Optional.}
 
-\item{slugs}{Optional character vector of developer slugs.}
+\item{slugs}{Character vector. VGI company slugs to select. Optional.}
 
-\item{cursor}{Optional cursor for pagination.}
+\item{cursor}{Integer. Cursor from a previous page.}
 
-\item{limit}{Optional page size (1-1000).}
+\item{limit}{Integer. Records per page (API default 200, maximum 1000).}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
-Defaults to \code{VGI_AUTH_TOKEN}.}
+Defaults to the VGI_AUTH_TOKEN environment variable.}
 
-\item{headers}{List. Optional custom headers.}
+\item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{all_pages}{Logical. Follow the cursor through every page.}
 }
 \value{
-A data frame of developer overview records.
+A \link[tibble:tibble]{tibble} with one row per publisher:
+\code{vgi_company_id}, \code{name}, \code{slug}, \code{classification}, \code{country}, \code{vgi_url}
+and the flattened \verb{platform_data.<platform>.<metric>} columns (for
+example \code{platform_data.steam.revenue_total},
+\code{platform_data.steam.genre_breakdown.rpg}). The attribute \code{next_cursor}
+carries the cursor for the next page.
 }
 \description{
-Fetches developer overview rows from the v4 \code{companies/developers} endpoint.
+Retrieve developer summaries from the v4 \verb{/companies/developers} endpoint,
+including per-platform revenue, release counts and genre breakdowns.
+}
+\examples{
+\dontrun{
+vgi_developers_overview(slugs = "free-lives")
+}
 }

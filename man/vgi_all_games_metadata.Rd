@@ -2,93 +2,41 @@
 % Please edit documentation in R/vgi_all_games_metadata.R
 \name{vgi_all_games_metadata}
 \alias{vgi_all_games_metadata}
-\title{Get Metadata for All Games}
+\title{Get Metadata for Many Games (v3 catalogue pages)}
 \usage{
 vgi_all_games_metadata(
   limit = 1000,
   offset = 0,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  all_pages = FALSE
 )
 }
 \arguments{
-\item{limit}{Integer. Maximum number of games to return (default 1000).
-Use NULL to return all games (may be very large).}
+\item{limit}{Integer. Number of games to return (API default 5, maximum 1000).}
 
-\item{offset}{Integer. Number of games to skip for pagination (default 0).}
+\item{offset}{Integer. Number of games to skip.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{all_pages}{Logical. Walk the whole catalogue in pages of \code{limit}.
+This is a large download (tens of thousands of games).}
 }
 \value{
-A data frame with columns:
-\describe{
-\item{steamAppId}{Integer. The Steam App ID}
-\item{name}{Character. Game title}
-\item{releaseDate}{Character. Release date}
-\item{developer}{Character. Primary developer name}
-\item{publisher}{Character. Primary publisher name}
-\item{genres}{List. Game genres}
-\item{tags}{List. Steam tags}
-\item{price}{Numeric. Current price in USD}
-\item{description}{Character. Game description}
-}
+A \link[tibble:tibble]{tibble} with one row per game; see
+\code{\link[=vgi_game_metadata]{vgi_game_metadata()}} for the columns.
 }
 \description{
-Retrieve comprehensive metadata for all games in the database, providing
-essential information for game identification and categorization.
-}
-\details{
-This endpoint provides the foundation for:
-\itemize{
-\item Building game catalogs and databases
-\item Genre and tag analysis
-\item Release pattern studies
-\item Price point analysis
-\item Developer/publisher relationships
-}
-
-Note: This endpoint may return a very large dataset. Consider using
-pagination or caching the results for repeated use.
+Page through the v3 \verb{/games/metadata} catalogue with \code{offset} / \code{limit}.
+The rows have the same shape as \code{\link[=vgi_game_metadata]{vgi_game_metadata()}}. For identifier-based
+selection or multi-platform fields use \code{\link[=vgi_games_metadata]{vgi_games_metadata()}} (v4).
 }
 \examples{
 \dontrun{
-# Get first 1000 games
-games_metadata <- vgi_all_games_metadata(limit = 1000)
-
-# Basic statistics
-nrow(games_metadata)
-range(as.Date(games_metadata$releaseDate), na.rm = TRUE)
-
-# Price analysis
-summary(games_metadata$price)
-
-# Free vs paid games
-free_games <- sum(games_metadata$price == 0, na.rm = TRUE)
-free_share <- free_games / nrow(games_metadata)
-c(free_games = free_games, free_share = free_share)
-
-# Genre analysis
-all_genres <- unlist(games_metadata$genres)
-genre_counts <- sort(table(all_genres), decreasing = TRUE)
-head(genre_counts, 10)
-
-# Tag analysis for trends
-all_tags <- unlist(games_metadata$tags)
-tag_counts <- sort(table(all_tags), decreasing = TRUE)
-head(tag_counts, 20)
-
-# Release patterns by year
-games_metadata$year <- format(as.Date(games_metadata$releaseDate), "\%Y")
-yearly_releases <- table(games_metadata$year)
-
-barplot(yearly_releases[names(yearly_releases) >= "2015"],
-        main = "Games Released per Year",
-        xlab = "Year",
-        ylab = "Number of Games",
-        las = 2,
-        col = "steelblue")
+vgi_all_games_metadata(limit = 100)
+vgi_all_games_metadata(limit = 100, offset = 100)
 }
 }

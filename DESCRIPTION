@@ -1,6 +1,6 @@
 Package: VideoGameInsightsR
 Title: Interface to 'Video Game Insights' API for Gaming Market Analytics
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: 
     person("Phillip", "Black",
            email = "pblack@gameeconomistconsulting.com",
@@ -8,8 +8,8 @@ Authors@R:
 Author: Phillip Black [aut, cre]
 Maintainer: Phillip Black <pblack@gameeconomistconsulting.com>
 Description: Interface to the 'Video Game Insights' API
-    <https://app.sensortower.com/vgi/> for video game market analytics and
-    intelligence. Provides functions to retrieve game metadata, developer and
+    <https://app.sensortower.com/vgi/> (API v3 and v4) for video game market
+    analytics and intelligence. Provides functions to retrieve game metadata, developer and
     publisher information, player statistics (concurrent players, daily and monthly
     active users), revenue and sales data, review analytics, wish-list tracking,
     and platform-specific rankings. The package includes data processing utilities

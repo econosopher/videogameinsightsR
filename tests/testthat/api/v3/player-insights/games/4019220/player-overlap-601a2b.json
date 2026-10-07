@@ -1,0 +1,70 @@
+{
+    "steamAppId": 4019220,
+    "playerOverlaps": [
+        {
+            "steamAppId": 10,
+            "medianPlaytime": 3.4,
+            "unitsSoldOverlap": 10174,
+            "unitsSoldOverlapPercentage": 4,
+            "unitsSoldOverlapIndex": 0.3,
+            "mauOverlap": null,
+            "mauOverlapPercentage": 0,
+            "mauOverlapIndex": null,
+            "wishlistOverlap": 54897,
+            "wishlistOverlapPercentage": 11.799999999999999,
+            "wishlistOverlapIndex": 1
+        },
+        {
+            "steamAppId": 20,
+            "medianPlaytime": 3,
+            "unitsSoldOverlap": 1433,
+            "unitsSoldOverlapPercentage": 0.6,
+            "unitsSoldOverlapIndex": 0.1,
+            "mauOverlap": null,
+            "mauOverlapPercentage": 0,
+            "mauOverlapIndex": null,
+            "wishlistOverlap": 22458,
+            "wishlistOverlapPercentage": 4.8,
+            "wishlistOverlapIndex": 0.8
+        },
+        {
+            "steamAppId": 30,
+            "medianPlaytime": 2.2,
+            "unitsSoldOverlap": 1077,
+            "unitsSoldOverlapPercentage": 0.4,
+            "unitsSoldOverlapIndex": 0.1,
+            "mauOverlap": null,
+            "mauOverlapPercentage": 0,
+            "mauOverlapIndex": null,
+            "wishlistOverlap": 11407,
+            "wishlistOverlapPercentage": 2.4,
+            "wishlistOverlapIndex": 0.5
+        },
+        {
+            "steamAppId": 40,
+            "medianPlaytime": 1.5,
+            "unitsSoldOverlap": 527,
+            "unitsSoldOverlapPercentage": 0.2,
+            "unitsSoldOverlapIndex": 0,
+            "mauOverlap": null,
+            "mauOverlapPercentage": 0,
+            "mauOverlapIndex": null,
+            "wishlistOverlap": 9268,
+            "wishlistOverlapPercentage": 2,
+            "wishlistOverlapIndex": 0.4
+        },
+        {
+            "steamAppId": 50,
+            "medianPlaytime": 2.8,
+            "unitsSoldOverlap": 1376,
+            "unitsSoldOverlapPercentage": 0.5,
+            "unitsSoldOverlapIndex": 0.1,
+            "mauOverlap": null,
+            "mauOverlapPercentage": 0,
+            "mauOverlapIndex": null,
+            "wishlistOverlap": 21032,
+            "wishlistOverlapPercentage": 4.5,
+            "wishlistOverlapIndex": 0.7
+        }
+    ]
+}

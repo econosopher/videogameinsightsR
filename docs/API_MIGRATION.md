@@ -1,3 +1,7 @@
+> **Superseded (2026-10):** this document describes the 2025 move from the
+> original `/insights/*` routes to the v3 API. The current endpoint-by-endpoint
+> mapping, including v4, is maintained in `dev/api_coverage_2026-10.md`.
+
 # Video Game Insights API Migration Guide
 
 ## Overview

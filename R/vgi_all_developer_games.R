@@ -1,116 +1,28 @@
-#' Get All Developer Game IDs
+#' Get Game IDs for Developers
 #'
-#' Retrieve a comprehensive mapping of all developers to their game IDs,
-#' useful for bulk analysis of developer portfolios.
+#' Retrieve the game IDs attached to each developer. The v4
+#' `/companies/developers/game-ids` endpoint (default) returns VGI game IDs
+#' and supports selection by company ID or slug; the v3 `/developers/game-ids`
+#' endpoint returns Steam App IDs with offset paging.
 #'
-#' @param auth_token Character string. Your VGI API authentication token.
-#'   Defaults to the VGI_AUTH_TOKEN environment variable.
-#' @param headers List. Optional custom headers to include in the API request.
-#'
-#' @return A data frame with columns:
-#' \describe{
-#'   \item{developerId}{Integer. The developer's company ID}
-#'   \item{gameIds}{List. A list of Steam App IDs for games by this developer}
-#'   \item{gameCount}{Integer. Number of games by this developer}
-#' }
-#'
-#' @details
-#' This endpoint provides a complete developer-to-games mapping, enabling:
-#' \itemize{
-#'   \item Portfolio size analysis across all developers
-#'   \item Developer productivity metrics
-#'   \item Market concentration studies
-#'   \item Genre specialization analysis
-#'   \item Developer ranking by output
-#' }
-#' 
-#' Note: The gameIds column contains lists, which may need special handling
-#' for certain analyses.
-#'
+#' @inheritParams vgi_all_publisher_games
+#' @return A [tibble][tibble::tibble] with columns `developer_id`, `name`
+#'   (v4), `game_ids` (list-column), `id_type` and `game_count`; see
+#'   [vgi_all_publisher_games()].
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get all developer game mappings
-#' dev_games <- vgi_all_developer_games()
-#' 
-#' # Find most prolific developers
-#' top_devs <- head(dev_games[order(-dev_games$gameCount), ], 20)
-#' cat("Top 20 most prolific developers:\n")
-#' print(top_devs[, c("developerId", "gameCount")])
-#' 
-#' # Get developer names for context
-#' dev_list <- vgi_developer_list()
-#' top_devs_named <- merge(top_devs, dev_list, 
-#'                        by.x = "developerId", by.y = "id")
-#' print(top_devs_named[, c("name", "gameCount")])
-#' 
-#' # Analyze developer portfolio sizes
-#' hist(dev_games$gameCount[dev_games$gameCount <= 50],
-#'      breaks = 50,
-#'      main = "Distribution of Developer Portfolio Sizes",
-#'      xlab = "Number of Games",
-#'      col = "lightblue")
-#' 
-#' # Find single-game developers
-#' single_game_devs <- dev_games[dev_games$gameCount == 1, ]
-#' cat("Developers with only one game:", nrow(single_game_devs), "\n")
-#' cat("Percentage of single-game developers:", 
-#'     round(nrow(single_game_devs) / nrow(dev_games) * 100, 1), "%\n")
-#' 
-#' # Analyze specific developer's portfolio
-#' valve_id <- 8  # Example: Valve's ID
-#' valve_games <- dev_games$gameIds[dev_games$developerId == valve_id][[1]]
-#' if (length(valve_games) > 0) {
-#'   cat("Valve has", length(valve_games), "games\n")
-#'   
-#'   # Get metadata for all Valve games
-#'   valve_metadata <- vgi_game_metadata_batch(valve_games)
-#'   print(valve_metadata[, c("name", "releaseDate")])
-#' }
-#' 
-#' # Find developers with similar portfolio sizes
-#' target_size <- 10
-#' similar_devs <- dev_games[dev_games$gameCount >= target_size - 2 & 
-#'                          dev_games$gameCount <= target_size + 2, ]
-#' cat("Developers with 8-12 games:", nrow(similar_devs), "\n")
-#' 
-#' # Calculate total games in database
-#' total_games <- sum(dev_games$gameCount)
-#' unique_games <- length(unique(unlist(dev_games$gameIds)))
-#' cat("Total developer-game relationships:", total_games, "\n")
-#' cat("Unique games:", unique_games, "\n")
-#' cat("Average developers per game:", round(total_games / unique_games, 2), "\n")
+#' vgi_all_developer_games(vgi_ids = 28663)
 #' }
 vgi_all_developer_games <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                   headers = list()) {
-  
-  # Make API request
-  result <- make_api_request(
-    endpoint = "companies/developers/game-ids",
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
-  )
-
-  rows <- .vgi_unwrap_results(result)
-  if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(.vgi_clean_names(tibble::tibble(
-      developerId = integer(),
-      gameIds = I(list()),
-      gameCount = integer(),
-
-    )))
-  }
-
-  df <- dplyr::bind_rows(lapply(seq_len(nrow(rows)), function(i) {
-    game_ids <- as.integer(unlist(rows$vgiGameIds[[i]]))
-    tibble::tibble(
-      developerId = as.integer(rows$vgiCompanyId[i]),
-      gameIds = I(list(game_ids)),
-      gameCount = length(game_ids),
-
-    )
-  }))
-  df <- df[order(-df$gameCount), , drop = FALSE]
-  .vgi_clean_names(df)
+                                    headers = list(),
+                                    vgi_ids = NULL,
+                                    slugs = NULL,
+                                    limit = NULL,
+                                    cursor = NULL,
+                                    offset = NULL,
+                                    all_pages = FALSE,
+                                    version = c("v4", "v3")) {
+  .vgi_company_game_ids("developers", "developerId", vgi_ids, slugs, limit, cursor, offset,
+                        all_pages, match.arg(version), auth_token, headers)
 }

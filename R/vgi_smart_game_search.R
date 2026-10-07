@@ -131,14 +131,10 @@ vgi_smart_game_search <- function(query,
     message("  Fetching all games from this publisher...")
     
     # Get publisher's game IDs
-    pub_games <- vgi_all_publisher_games(auth_token = auth_token, headers = headers)
-    pub_row <- pub_games[pub_games$publisher_id == publisher_id, ]
-    
-    if (nrow(pub_row) == 0) {
+    game_ids <- vgi_publisher_games(publisher_id, auth_token = auth_token, headers = headers)
+    if (length(game_ids) == 0) {
       stop("No games found for publisher ID ", publisher_id)
     }
-    
-    game_ids <- unlist(pub_row$game_ids)
     message(sprintf("  Found %d games from %s", length(game_ids), publisher_name))
     
     if (length(game_ids) > limit) {
@@ -198,14 +194,10 @@ vgi_smart_game_search <- function(query,
     message("  Fetching all games from this developer...")
     
     # Get developer's game IDs
-    dev_games <- vgi_all_developer_games(auth_token = auth_token, headers = headers)
-    dev_row <- dev_games[dev_games$developer_id == developer_id, ]
-    
-    if (nrow(dev_row) == 0) {
+    game_ids <- vgi_developer_games(developer_id, auth_token = auth_token, headers = headers)
+    if (length(game_ids) == 0) {
       stop("No games found for developer ID ", developer_id)
     }
-    
-    game_ids <- unlist(dev_row$game_ids)
     message(sprintf("  Found %d games from %s", length(game_ids), developer_name))
     
     if (length(game_ids) > limit) {

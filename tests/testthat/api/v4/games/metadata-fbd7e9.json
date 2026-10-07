@@ -1,0 +1,106 @@
+{
+    "nextCursor": 2047657,
+    "results": [
+        {
+            "vgiId": 2047657,
+            "name": "Dressmaker",
+            "slug": "dressmaker",
+            "price": {
+                "xbox": null,
+                "steam": 14.99,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2026-09-21",
+                "playstation": null
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Simulation",
+            "subgenre": "Job Simulator",
+            "gameEngines": null,
+            "languages": "English, Japanese, Simplified Chinese",
+            "publisherClassification": "Indie",
+            "publishingType": "Self-Published",
+            "themes": [
+                "Cute",
+                "Relaxing",
+                "Family Friendly"
+            ],
+            "character": null,
+            "artStyles": [
+                "Colorful"
+            ],
+            "steamTags": [
+                "Crafting",
+                "Cozy",
+                "Design & Illustration",
+                "Job Simulator",
+                "Simulation",
+                "Relaxing",
+                "Life Sim",
+                "Management",
+                "Casual",
+                "Singleplayer",
+                "Colorful",
+                "Cute",
+                "Stylized",
+                "Resource Management",
+                "Shop Keeper",
+                "Family Friendly",
+                "Immersive Sim",
+                "Indie",
+                "LGBTQ+",
+                "Historical"
+            ],
+            "steamGenres": "Simulation, Casual",
+            "steamSubgenres": "Crafting, Management, Resource Management",
+            "gameModes": [
+                "Single-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/dressmaker",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/4019220",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20041781/cozy-lives",
+                    "companyId": 20041781,
+                    "companyName": "Cozy Lives"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20041798/oomsarel",
+                    "companyId": 20041798,
+                    "companyName": "oomsarel"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20041830/raithza",
+                    "companyId": 20041830,
+                    "companyName": "raithza"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20041852/elyaradine",
+                    "companyId": 20041852,
+                    "companyName": "elyaradine"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/20041781/cozy-lives",
+                    "companyId": 20041781,
+                    "companyName": "Cozy Lives"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ]
+        }
+    ]
+}

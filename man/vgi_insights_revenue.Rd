@@ -2,49 +2,45 @@
 % Please edit documentation in R/vgi_insights_revenue.R
 \name{vgi_insights_revenue}
 \alias{vgi_insights_revenue}
-\title{Get Revenue Insights from Video Game Insights}
+\title{Get Revenue History for a Game}
 \usage{
 vgi_insights_revenue(
   steam_app_id,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  version = c("v4", "v3")
 )
 }
 \arguments{
-\item{steam_app_id}{Integer or character. The Steam App ID of the game.}
+\item{steam_app_id}{Integer. The Steam App ID of the game.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{version}{API generation. \code{"v4"} (default) takes the series from the
+v4 \verb{/historical-data} endpoint, which covers every day since the game was
+first tracked (pre-release days included). \code{"v3"} calls the per-game v3
+endpoint \verb{/commercial-performance/revenue/games/\{steamAppId\}}, which starts closer to release.}
 }
 \value{
-A \link[tibble:tibble]{tibble} containing revenue history with columns:
+A \link[tibble:tibble]{tibble} with columns:
 \describe{
-\item{steamAppId}{Integer. The Steam App ID}
-\item{date}{Date. The date of the revenue data}
-\item{revenueChange}{Numeric. Revenue change amount}
-\item{revenueChangePercent}{Numeric. Revenue change percentage}
+\item{steam_app_id}{Integer. The Steam App ID}
+\item{date}{Date}
+\item{revenue_change}{Numeric. Revenue earned on that day (USD)}
+\item{revenue_total}{Numeric. Cumulative revenue to date (USD)}
 }
 }
 \description{
-Retrieve revenue history data for a specific game.
-}
-\details{
-The new API provides revenue history as changes rather than absolute values.
-Each entry shows the revenue change from the previous period.
+Retrieve the daily revenue history for a single Steam game. In v4 the
+figures come from \code{premiumRevenueChange} / \code{premiumRevenueTotal} (the
+successors of the deprecated \code{revenueChange} / \code{revenueTotal}).
 }
 \examples{
 \dontrun{
-# Get revenue history for a game
-revenue_data <- vgi_insights_revenue(steam_app_id = 892970)
-
-# Plot revenue changes over time
-plot(revenue_data$date, revenue_data$revenueChange,
-     type = "l",
-     main = "Revenue Changes Over Time",
-     xlab = "Date", 
-     ylab = "Revenue Change")
+rev <- vgi_insights_revenue(steam_app_id = 4019220)
+plot(rev$date, rev$revenue_change, type = "l")
 }
-
 }

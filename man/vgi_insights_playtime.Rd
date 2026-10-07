@@ -2,12 +2,13 @@
 % Please edit documentation in R/vgi_insights_playtime.R
 \name{vgi_insights_playtime}
 \alias{vgi_insights_playtime}
-\title{Get Playtime Statistics for a Game}
+\title{Get Playtime Insights for a Game}
 \usage{
 vgi_insights_playtime(
   steam_app_id,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  version = c("v4", "v3")
 )
 }
 \arguments{
@@ -17,71 +18,26 @@ vgi_insights_playtime(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{version}{API generation. \code{"v4"} (default) reads the Steam row of
+the multi-game v4 \verb{/player-insights/games/playtime} endpoint; \code{"v3"}
+reads \verb{/player-insights/games/\{steamAppId\}/playtime}. Both return the same
+figures.}
 }
 \value{
-A list containing:
-\describe{
-\item{steamAppId}{Integer. The Steam App ID}
-\item{avgPlaytime}{Integer. Average lifetime playtime across all users (in minutes)}
-\item{medianPlaytime}{Integer. Median lifetime playtime across all users (in minutes)}
-\item{avgPlaytimeRank}{Integer. Rank of the game by average playtime}
-\item{avgPlaytimePrct}{Numeric. Percentile of average playtime}
-\item{playtimeRanges}{Data frame with columns:
-\itemize{
-\item range: Character string describing the playtime range (e.g., "0", "<2", "2-5", "5-10", etc.)
-\item percentage: Percentage of players in this range
-}
-}
-}
+A list containing \code{steam_app_id}, \code{avg_playtime} and
+\code{median_playtime} (minutes), \code{avg_playtime_rank}, \code{avg_playtime_prct},
+and \code{playtime_ranges}, a tibble with columns \code{range} and \code{percentage}.
 }
 \description{
-Retrieve detailed playtime statistics for a specific game, including average and median
-playtime, ranking information, and distribution across playtime ranges.
-}
-\details{
-The playtime data is returned in minutes. To convert to hours, divide by 60.
-
-Playtime ranges help understand player engagement patterns:
-\itemize{
-\item "0": Players who own but never played
-\item "<2": Players who tried briefly (under 2 hours)
-\item "2-5": Short engagement
-\item "5-10": Moderate engagement
-\item "10-20": Good engagement
-\item "20-50": Strong engagement
-\item "50-100": Very engaged players
-\item "100-200": Highly engaged players
-\item "200-500": Dedicated players
-\item "500+": Extremely dedicated players
-}
+Retrieve playtime statistics for a single Steam game. For many games at
+once, or for country / region filtered playtime, use
+\code{\link[=vgi_all_games_playtime]{vgi_all_games_playtime()}} (v4).
 }
 \examples{
 \dontrun{
-# Get playtime statistics for a game
-playtime <- vgi_insights_playtime(steam_app_id = 730)
-
-# Display overall statistics
-print(paste("Average playtime:", round(playtime$avgPlaytime / 60, 1), "hours"))
-print(paste("Median playtime:", round(playtime$medianPlaytime / 60, 1), "hours"))
-print(paste("Playtime rank:", playtime$avgPlaytimeRank))
-print(paste("Better than", round(100 - playtime$avgPlaytimePrct, 1), "\% of games"))
-
-# Visualize playtime distribution
-if (nrow(playtime$playtimeRanges) > 0) {
-  barplot(playtime$playtimeRanges$percentage,
-          names.arg = playtime$playtimeRanges$range,
-          main = "Player Playtime Distribution",
-          xlab = "Hours Played",
-          ylab = "Percentage of Players",
-          col = "steelblue",
-          las = 2)
-}
-
-# Calculate engaged players (20+ hours)
-engaged_ranges <- c("20-50", "50-100", "100-200", "200-500", "500+")
-engaged_players <- sum(playtime$playtimeRanges$percentage[
-  playtime$playtimeRanges$range \%in\% engaged_ranges
-], na.rm = TRUE)
-print(paste("Engaged players (20+ hours):", round(engaged_players, 1), "\%"))
+pt <- vgi_insights_playtime(steam_app_id = 4019220)
+pt$median_playtime
+pt$playtime_ranges
 }
 }

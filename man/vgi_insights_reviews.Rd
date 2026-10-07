@@ -2,12 +2,13 @@
 % Please edit documentation in R/vgi_insights_reviews.R
 \name{vgi_insights_reviews}
 \alias{vgi_insights_reviews}
-\title{Get Review Analytics from Video Game Insights}
+\title{Get Review History for a Game}
 \usage{
 vgi_insights_reviews(
   steam_app_id,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  version = c("v4", "v3")
 )
 }
 \arguments{
@@ -17,49 +18,23 @@ vgi_insights_reviews(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{version}{API generation. \code{"v4"} (default) takes the series from the
+v4 \verb{/historical-data} endpoint, which covers every day since the game was
+first tracked (pre-release days included). \code{"v3"} calls the per-game v3
+endpoint \verb{/reception/reviews/games/\{steamAppId\}}, which starts closer to release.}
 }
 \value{
-A data frame containing review history with columns:
-\describe{
-\item{steamAppId}{Integer. The Steam App ID}
-\item{date}{Date. The date of the review data}
-\item{positiveReviewsChange}{Integer. New positive reviews since last period}
-\item{positiveReviewsTotal}{Integer. Total cumulative positive reviews}
-\item{negativeReviewsChange}{Integer. New negative reviews since last period}
-\item{negativeReviewsTotal}{Integer. Total cumulative negative reviews}
-}
+A \link[tibble:tibble]{tibble} with columns \code{steam_app_id}, \code{date},
+\code{positive}, \code{negative} (cumulative totals), \code{total}, \code{positive_ratio},
+\code{positive_change} and \code{negative_change} (reviews added that day).
 }
 \description{
-Retrieve review history data for a specific game, including positive and negative review counts.
-}
-\details{
-The new API provides both incremental changes and cumulative totals for reviews.
-You can calculate the overall rating percentage from the totals:
-\code{rating = positiveReviewsTotal / (positiveReviewsTotal + negativeReviewsTotal) * 100}
+Retrieve the daily Steam review history for a single game.
 }
 \examples{
 \dontrun{
-# Get review history for a game
-reviews <- vgi_insights_reviews(steam_app_id = 892970)
-
-# Calculate current overall rating
-latest <- tail(reviews, 1)
-rating <- latest$positiveReviewsTotal / 
-          (latest$positiveReviewsTotal + latest$negativeReviewsTotal) * 100
-print(paste("Overall rating:", round(rating, 1), "\%"))
-
-# Plot review trends
-plot(reviews$date, reviews$positiveReviewsChange, 
-     type = "l", col = "green",
-     main = "Daily Review Trends",
-     xlab = "Date", ylab = "New Reviews")
-lines(reviews$date, reviews$negativeReviewsChange, col = "red")
-legend("topright", c("Positive", "Negative"), 
-       col = c("green", "red"), lty = 1)
-
-# Find review bombs (days with unusual negative reviews)
-avg_negative <- mean(reviews$negativeReviewsChange, na.rm = TRUE)
-sd_negative <- sd(reviews$negativeReviewsChange, na.rm = TRUE)
-review_bombs <- reviews[reviews$negativeReviewsChange > avg_negative + 2*sd_negative, ]
+reviews <- vgi_insights_reviews(steam_app_id = 4019220)
+tail(reviews[, c("date", "positive", "negative", "positive_ratio")])
 }
 }

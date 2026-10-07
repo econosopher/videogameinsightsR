@@ -35,7 +35,7 @@ vgi_game_metadata_batch <- function(steam_app_ids,
   }
   
   # Convert to numeric if character
-  steam_app_ids <- as.numeric(steam_app_ids)
+  steam_app_ids <- suppressWarnings(as.numeric(steam_app_ids))
   
   # Check for NA values
   if (any(is.na(steam_app_ids))) {
@@ -46,6 +46,10 @@ vgi_game_metadata_batch <- function(steam_app_ids,
   results <- lapply(steam_app_ids, function(app_id) {
     tryCatch({
       row <- vgi_game_metadata(app_id, auth_token = auth_token, headers = headers)
+      if (!is.data.frame(row) || nrow(row) == 0) {
+        warning(sprintf("No metadata found for game %s", app_id))
+        return(NULL)
+      }
       # Ensure id column for backward compatibility
       if (!"id" %in% names(row) && "steam_app_id" %in% names(row)) row$id <- row$steam_app_id
       tibble::as_tibble(row)

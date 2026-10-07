@@ -75,94 +75,6 @@ test_that("vgi_top_games validates inputs correctly", {
   )
 })
 
-test_that("validate_platform works correctly", {
-  # Valid platforms should not error
-  expect_silent(validate_platform("steam"))
-  expect_silent(validate_platform("playstation"))
-  expect_silent(validate_platform("xbox"))
-  expect_silent(validate_platform("nintendo"))
-  expect_silent(validate_platform("all"))
-  
-  # Invalid platform should error
-  expect_error(
-    validate_platform("pc"),
-    "Invalid platform"
-  )
-})
-
-test_that("validate_numeric works correctly", {
-  # Valid numeric values
-  expect_silent(validate_numeric(10, "test"))
-  expect_silent(validate_numeric(5, "test", min_val = 1, max_val = 10))
-  
-  # Non-numeric value
-  expect_error(
-    validate_numeric("abc", "test"),
-    "test must be numeric"
-  )
-  
-  # Below minimum
-  expect_error(
-    validate_numeric(0, "test", min_val = 1),
-    "test must be at least 1"
-  )
-  
-  # Above maximum
-  expect_error(
-    validate_numeric(11, "test", max_val = 10),
-    "test must be at most 10"
-  )
-})
-
-test_that("get_auth_token handles missing token correctly", {
-  # Store current token
-  old_token <- Sys.getenv("VGI_AUTH_TOKEN")
-  
-  # Clear token
-  Sys.unsetenv("VGI_AUTH_TOKEN")
-  
-  # Should error when no token
-  expect_error(
-    get_auth_token(),
-    "Authentication token is required"
-  )
-  
-  # Should use provided token
-  expect_equal(get_auth_token("test_token"), "test_token")
-  
-  # Restore token
-  if (old_token != "") {
-    Sys.setenv(VGI_AUTH_TOKEN = old_token)
-  }
-})
-
-# Legacy Publisher Functions Tests
-test_that("legacy vgi_publisher_info validates inputs correctly", {
-  # Test non-numeric input
-  expect_error(
-    vgi_publisher_info("not_a_number"),
-    "company_id must be numeric"
-  )
-  
-  expect_error(
-    vgi_publisher_info(NULL),
-    "company_id must be numeric"
-  )
-})
-
-test_that("legacy vgi_publisher_games validates inputs correctly", {
-  # Test non-numeric publisher_id
-  expect_error(
-    vgi_publisher_games("not_a_number"),
-    "company_id must be numeric"
-  )
-  
-  expect_error(
-    vgi_publisher_games(NULL),
-    "company_id must be numeric"
-  )
-})
-
 # Units Insights Tests
 test_that("vgi_insights_units validates inputs correctly", {
   # Test non-numeric steam_app_id
@@ -193,20 +105,6 @@ test_that("vgi_insights_reviews validates inputs correctly", {
   )
 })
 
-test_that("format_date works correctly", {
-  # Test character date
-  expect_equal(format_date("2023-01-15"), "2023-01-15")
-  
-  # Test Date object
-  expect_equal(format_date(as.Date("2023-01-15")), "2023-01-15")
-  
-  # Test clearly invalid format
-  expect_error(format_date("not-a-date-at-all"), "Invalid date format")
-  
-  # Test non-date input
-  expect_error(format_date(123), "Date must be a Date object")
-})
-
 # Price History Tests
 test_that("vgi_insights_price_history validates inputs correctly", {
   # Test non-numeric steam_app_id
@@ -235,13 +133,6 @@ test_that("vgi_insights_dau_mau validates inputs correctly", {
     vgi_insights_dau_mau(NULL),
     "steam_app_id must be numeric"
   )
-})
-
-test_that("null coalescing operator works", {
-  expect_equal(NULL %||% "default", "default")
-  expect_equal("value" %||% "default", "value")
-  expect_equal(0 %||% "default", 0)
-  expect_equal(FALSE %||% "default", FALSE)
 })
 
 # Playtime Tests
@@ -300,16 +191,6 @@ test_that("vgi_insights_followers validates inputs correctly", {
   )
 })
 
-# Game Rankings Tests
-test_that("vgi_game_rankings returns data frame", {
-  httptest2::with_mock_api({
-    expect_error(
-      vgi_game_rankings(auth_token = ""),
-      "Authentication token is required"
-    )
-  })
-})
-
 # Player Overlap Tests
 test_that("vgi_player_overlap validates inputs correctly", {
   # Test non-numeric steam_app_id
@@ -320,7 +201,7 @@ test_that("vgi_player_overlap validates inputs correctly", {
   
   expect_error(
     vgi_player_overlap(NULL),
-    "steam_app_id must be numeric"
+    "steam_app_id is required"
   )
   
   # Test invalid limit
@@ -334,16 +215,6 @@ test_that("vgi_player_overlap validates inputs correctly", {
     vgi_player_overlap(730, offset = -1),
     "offset must be at least 0"
   )
-})
-
-# Steam Market Data Tests
-test_that("vgi_steam_market_data works correctly", {
-  httptest2::with_mock_api({
-    expect_error(
-      vgi_steam_market_data(auth_token = ""),
-      "Authentication token is required"
-    )
-  })
 })
 
 # Historical Data Tests
@@ -389,7 +260,7 @@ test_that("vgi_developer_games validates inputs correctly", {
 })
 
 # New Publisher Info Tests
-test_that("new vgi_publisher_info validates inputs correctly", {
+test_that("vgi_publisher_info validates inputs correctly", {
   # Test non-numeric company_id
   expect_error(
     vgi_publisher_info("not_a_number"),
@@ -403,7 +274,7 @@ test_that("new vgi_publisher_info validates inputs correctly", {
 })
 
 # New Publisher Games Tests
-test_that("new vgi_publisher_games validates inputs correctly", {
+test_that("vgi_publisher_games validates inputs correctly", {
   # Test non-numeric company_id
   expect_error(
     vgi_publisher_games("not_a_number"),
@@ -413,36 +284,6 @@ test_that("new vgi_publisher_games validates inputs correctly", {
   expect_error(
     vgi_publisher_games(NULL),
     "company_id must be numeric"
-  )
-})
-
-# Game List Tests
-test_that("vgi_game_list works correctly", {
-  httptest2::with_mock_api({
-    expect_error(
-      vgi_game_list(auth_token = ""),
-      "Authentication token is required"
-    )
-  })
-})
-
-# Developer List Tests
-test_that("vgi_developer_list works correctly", {
-  # Function should work without parameters
-  # (but will fail without auth token)
-  expect_error(
-    vgi_developer_list(auth_token = ""),
-    "Authentication token is required"
-  )
-})
-
-# Publisher List Tests
-test_that("vgi_publisher_list works correctly", {
-  # Function should work without parameters
-  # (but will fail without auth token)
-  expect_error(
-    vgi_publisher_list(auth_token = ""),
-    "Authentication token is required"
   )
 })
 

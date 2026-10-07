@@ -1,0 +1,18 @@
+{
+    "steamAppId": 4019220,
+    "currency": "USD",
+    "priceChanges": [
+        {
+            "priceInitial": 14.99,
+            "priceFinal": 13.49,
+            "firstDate": "2026-09-21",
+            "lastDate": "2026-09-28"
+        },
+        {
+            "priceInitial": 14.99,
+            "priceFinal": 14.99,
+            "firstDate": "2026-09-29",
+            "lastDate": null
+        }
+    ]
+}

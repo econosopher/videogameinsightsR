@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgi_game_metadata.R
 \name{vgi_game_metadata}
 \alias{vgi_game_metadata}
-\title{Get Game Metadata from Video Game Insights}
+\title{Get Game Metadata (v3, single Steam game)}
 \usage{
 vgi_game_metadata(
   steam_app_id,
@@ -19,21 +19,22 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A \link[tibble:tibble]{tibble} containing game metadata including
-name, release date, price, genres, categories, developers, publishers,
-and more.
+A one-row \link[tibble:tibble]{tibble} with columns \code{steam_app_id}, \code{id}
+(alias), \code{name}, \code{price}, \code{release_date}, \code{full_release_date}, \code{genres},
+\code{subgenres}, \code{languages}, \code{publisher_classification}, \code{publishing_type},
+\code{vgi_url}, \code{steam_url}, \code{publisher_id}, \code{publisher_name}, \code{developer_id},
+\code{developer_name}, and list-columns \code{steam_tags}, \code{game_modes}, \code{themes},
+\code{art_styles}, \code{character}, \code{developers}, \code{publishers}. An empty tibble is
+returned when the API has no such game.
 }
 \description{
-Retrieves detailed metadata for a specific game using its Steam App ID.
+Retrieves metadata for one game from the v3 \verb{/games/\{steamAppId\}/metadata}
+endpoint. For multi-platform metadata, VGI IDs or slugs, or many games in
+one call, use \code{\link[=vgi_games_metadata]{vgi_games_metadata()}} (v4).
 }
 \examples{
 \dontrun{
-# Ensure the VGI_AUTH_TOKEN environment variable is set
-# Sys.setenv(VGI_AUTH_TOKEN = "your_auth_token_here")
-
-# Get metadata for Valheim (Steam App ID: 892970)
-valheim_data <- vgi_game_metadata(892970)
-print(valheim_data)
+vgi_game_metadata(4019220)$name
 }
 
 }

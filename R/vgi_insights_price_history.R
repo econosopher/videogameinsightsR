@@ -1,163 +1,116 @@
 #' Get Price History Data for a Game
 #'
-#' Retrieve historical pricing data for a specific game across different currencies.
+#' Retrieve the Steam price-change periods for a game. By default this reads
+#' the v4 `/price-history` endpoint (Steam rows only); `version = "v3"` reads
+#' the v3 `/commercial-performance/price-history/games/{steamAppId}[/{currency}]`
+#' endpoints. For PlayStation / Xbox prices and VGI-id or slug lookup see
+#' [vgi_price_history()].
 #'
 #' @param steam_app_id Integer. The Steam App ID of the game.
-#' @param currency Character. Optional. Currency code (e.g., "USD", "EUR", "GBP").
-#'   If not specified, returns price history for all currencies.
+#' @param currency Character. Optional ISO currency code (e.g. "USD", "EUR").
+#'   When omitted, price periods for every currency are returned.
+#' @param version API generation, `"v4"` (default) or `"v3"`. USD history
+#'   goes back to the end of 2014 and other currencies to 2022-04-14 in both.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
 #'
-#' @return If currency is specified, returns a list containing:
+#' @return A list containing:
 #' \describe{
-#'   \item{steamAppId}{Integer. The Steam App ID}
-#'   \item{currency}{Character. The currency code}
-#'   \item{priceChanges}{Data frame with columns:
-#'     \itemize{
-#'       \item priceInitial: Full price without discount
-#'       \item priceFinal: Price that the game is sold at
-#'       \item firstDate: First date when this price was recorded
-#'       \item lastDate: Last date when this price was active (NULL if current)
-#'     }
-#'   }
-#' }
-#' 
-#' If currency is not specified, returns a list containing:
-#' \describe{
-#'   \item{steamAppId}{Integer. The Steam App ID}
-#'   \item{price}{List of price histories for each currency}
+#'   \item{steam_app_id}{Integer. The Steam App ID}
+#'   \item{currency}{Character. The requested currency, or "ALL"}
+#'   \item{price_changes}{Tibble with columns `currency`, `price_initial`,
+#'     `price_final`, `first_date`, `last_date` (NA for the current period),
+#'     newest period first}
 #' }
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get price history for a game in USD
-#' usd_history <- vgi_insights_price_history(
-#'   steam_app_id = 730,
-#'   currency = "USD"
-#' )
-#' 
-#' # Calculate discount percentage for each price period
-#' if (nrow(usd_history$priceChanges) > 0) {
-#'   usd_history$priceChanges$discount_pct <- 
-#'     round((1 - usd_history$priceChanges$priceFinal / 
-#'            usd_history$priceChanges$priceInitial) * 100, 1)
+#' usd <- vgi_insights_price_history(4019220, currency = "USD")
+#' usd$price_changes
+#'
+#' all_prices <- vgi_insights_price_history(4019220)
+#' table(all_prices$price_changes$currency)
 #' }
-#' 
-#' # Get price history for all currencies
-#' all_prices <- vgi_insights_price_history(steam_app_id = 730)
-#' 
-#' # Find all currencies where the game is available
-#' currencies <- sapply(all_prices$price, function(x) x$currency)
-#' print(paste("Available in", length(currencies), "currencies"))
-#' 
-#' # Identify sales periods (where priceFinal < priceInitial)
-#' sales <- usd_history$priceChanges[
-#'   usd_history$priceChanges$priceFinal < usd_history$priceChanges$priceInitial, 
-#' ]
-#' print(paste("Number of sale periods:", nrow(sales)))
-#' }
-vgi_insights_price_history <- function(steam_app_id, 
-                                     currency = NULL,
-                                     auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                     headers = list()) {
-  
+vgi_insights_price_history <- function(steam_app_id,
+                                       currency = NULL,
+                                       auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                       headers = list(),
+                                       version = c("v4", "v3")) {
+
   validate_numeric(steam_app_id, "steam_app_id")
   if (!is.null(currency) && (!is.character(currency) || nchar(currency) == 0)) {
     stop("currency must be a non-empty character string")
   }
-  
-  hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
-  
-  empty_changes <- tibble::tibble(
-    priceInitial = numeric(), priceFinal = numeric(),
-    firstDate = as.Date(character()), lastDate = as.Date(character())
-  )
-  
-  price_ts <- hist$priceHistory
-  if (is.null(price_ts) || nrow(price_ts) == 0) {
-    return(.vgi_clean_list(list(
-      steamAppId = as.integer(steam_app_id),
-      currency = currency %||% "ALL",
-      priceChanges = empty_changes
-    )))
-  }
+  version <- .vgi_api_version(match.arg(version))
 
-  # vgi_historical_data returns snake_case columns after name cleaning.
-  # Keep compatibility with both naming styles in case callers pass raw frames.
-  price_initial_col <- if ("price_initial" %in% names(price_ts)) {
-    "price_initial"
-  } else if ("priceInitial" %in% names(price_ts)) {
-    "priceInitial"
-  } else {
-    NULL
-  }
-  price_final_col <- if ("price_final" %in% names(price_ts)) {
-    "price_final"
-  } else if ("priceFinal" %in% names(price_ts)) {
-    "priceFinal"
-  } else {
-    NULL
-  }
-  if (is.null(price_initial_col) || is.null(price_final_col)) {
-    stop("priceHistory is missing expected price columns (price_initial/price_final).")
-  }
-
-  if (!is.null(currency) && "currency" %in% names(price_ts)) {
-    price_ts <- price_ts[price_ts$currency == currency, , drop = FALSE]
-    if (nrow(price_ts) == 0) {
-      return(.vgi_clean_list(list(
-        steamAppId = as.integer(steam_app_id),
-        currency = currency,
-        priceChanges = empty_changes
-      )))
-    }
-  }
-  
-  # Build price-change periods from daily snapshots
-  build_changes <- function(df, initial_col, final_col) {
-    df <- df[order(df$date), , drop = FALSE]
-    initial_vals <- as.numeric(df[[initial_col]])
-    final_vals <- as.numeric(df[[final_col]])
-    df$priceInitial <- initial_vals
-    df$priceFinal <- final_vals
-    df <- df[!is.na(df$priceInitial) | !is.na(df$priceFinal), , drop = FALSE]
-    if (nrow(df) == 0) return(empty_changes)
-    
-    changes <- list()
-    cur_init <- df$priceInitial[1]
-    cur_final <- df$priceFinal[1]
-    first_date <- df$date[1]
-    
-    for (i in seq_len(nrow(df))) {
-      pi <- df$priceInitial[i]
-      pf <- df$priceFinal[i]
-      if (!identical(pi, cur_init) || !identical(pf, cur_final)) {
-        changes[[length(changes) + 1]] <- tibble::tibble(
-          priceInitial = cur_init, priceFinal = cur_final,
-          firstDate = as.Date(first_date),
-          lastDate = as.Date(df$date[i - 1])
-        )
-        cur_init <- pi
-        cur_final <- pf
-        first_date <- df$date[i]
-      }
-    }
-    changes[[length(changes) + 1]] <- tibble::tibble(
-      priceInitial = cur_init, priceFinal = cur_final,
-      firstDate = as.Date(first_date), lastDate = as.Date(NA)
+  if (version == "v4") {
+    v4 <- vgi_price_history(steam_app_id = steam_app_id, currency = currency,
+                            auth_token = auth_token, headers = headers)
+    v4 <- v4[v4$platform == "steam", , drop = FALSE]
+    changes <- tibble::tibble(
+      currency = v4$currency, priceInitial = v4$price_initial, priceFinal = v4$price_final,
+      firstDate = v4$first_date, lastDate = v4$last_date
     )
-    
-    result <- dplyr::bind_rows(changes)
-    result[order(result$firstDate, decreasing = TRUE), , drop = FALSE]
+    changes <- .vgi_sort_price_changes(changes)
+  } else {
+    endpoint <- sprintf("commercial-performance/price-history/games/%s", as.integer(steam_app_id))
+    if (!is.null(currency)) endpoint <- paste0(endpoint, "/", toupper(currency))
+    result <- make_api_request(
+      endpoint = endpoint,
+      auth_token = auth_token,
+      method = "GET",
+      headers = headers,
+      version = "v3"
+    )
+    changes <- .vgi_price_changes_from_v3(result, currency)
   }
-  
-  price_changes <- build_changes(price_ts, price_initial_col, price_final_col)
-  
+
   .vgi_clean_list(list(
     steamAppId = as.integer(steam_app_id),
-    currency = currency %||% "USD",
-    priceChanges = price_changes
+    currency = if (is.null(currency)) "ALL" else toupper(currency),
+    priceChanges = changes
   ))
+}
+
+.vgi_empty_price_changes <- function() {
+  tibble::tibble(
+    currency = character(), priceInitial = numeric(), priceFinal = numeric(),
+    firstDate = as.Date(character()), lastDate = as.Date(character())
+  )
+}
+
+.vgi_price_change_rows <- function(df, currency) {
+  if (!is.data.frame(df) || nrow(df) == 0) return(NULL)
+  tibble::tibble(
+    currency = as.character(currency),
+    priceInitial = as.numeric(.vgi_col(df, "priceInitial")),
+    priceFinal = as.numeric(.vgi_col(df, "priceFinal")),
+    firstDate = as.Date(.vgi_col(df, "firstDate", NA_character_)),
+    lastDate = as.Date(.vgi_col(df, "lastDate", NA_character_))
+  )
+}
+
+# Normalise either v3 price-history response shape into one long tibble.
+.vgi_price_changes_from_v3 <- function(result, currency = NULL) {
+  out <- .vgi_empty_price_changes()
+  if (!is.list(result)) return(out)
+  if (!is.null(currency) || "priceChanges" %in% names(result)) {
+    rows <- .vgi_price_change_rows(result$priceChanges, result$currency %||% currency %||% NA_character_)
+    if (!is.null(rows)) out <- rows
+  } else if (is.data.frame(result$price) && nrow(result$price) > 0) {
+    per_currency <- lapply(seq_len(nrow(result$price)), function(i) {
+      .vgi_price_change_rows(result$price$priceChanges[[i]], result$price$currency[i])
+    })
+    per_currency <- per_currency[!vapply(per_currency, is.null, logical(1))]
+    if (length(per_currency) > 0) out <- dplyr::bind_rows(per_currency)
+  }
+  .vgi_sort_price_changes(out)
+}
+
+# Currency A-Z, newest period first within a currency.
+.vgi_sort_price_changes <- function(df) {
+  if (nrow(df) == 0) return(df)
+  df[order(df$currency, df$firstDate, decreasing = c(FALSE, TRUE), method = "radix"), , drop = FALSE]
 }
