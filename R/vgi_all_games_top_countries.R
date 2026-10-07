@@ -1,158 +1,78 @@
-#' Get Top Countries Data for All Games
+#' Get Top Countries for Many Games (v4)
 #'
-#' Retrieve top countries by player count for all games, providing insights
-#' into global gaming preferences and regional market dynamics.
+#' Retrieve the player-share-by-country breakdown for many games from the v4
+#' `/player-insights/games/top-countries` endpoint. Games can be selected by
+#' Steam App ID, VGI ID or slug; without identifiers the catalogue is paged
+#' from the cursor. For one Steam game use [vgi_top_countries()] (v3).
 #'
+#' @param steam_app_ids Integer vector. Steam App IDs to select. Optional.
+#' @param vgi_ids Integer vector. VGI internal game IDs to select. Optional.
+#' @param slugs Character vector. VGI game slugs to select. Optional.
+#' @param limit Integer. Games per page (API default 200, maximum 1000).
+#' @param cursor Integer. Cursor from a previous page.
+#' @param all_pages Logical. Follow the cursor through every page.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
 #'
-#' @return A data frame with columns:
-#' \describe{
-#'   \item{steamAppId}{Integer. The Steam App ID}
-#'   \item{topCountries}{List. Top countries with their player percentages}
-#'   \item{countryCount}{Integer. Number of countries in the data}
-#'   \item{topCountry}{Character. The #1 country by player count}
-#'   \item{topCountryPct}{Numeric. Percentage of players from top country}
-#' }
-#'
-#' @details
-#' This endpoint helps identify:
-#' \itemize{
-#'   \item Games with global vs regional appeal
-#'   \item Regional gaming preferences
-#'   \item Localization opportunities
-#'   \item Market penetration patterns
-#'   \item Cultural gaming trends
-#' }
-#' 
-#' The topCountries list column contains detailed country breakdowns
-#' that can be expanded for deeper analysis.
+#' @return A [tibble][tibble::tibble] with one row per game: `vgi_id`,
+#'   `platform`, `steam_app_id`, `top_countries` (list-column of tibbles with
+#'   `country`, `country_name`, `percentage`, `rank`), `country_count`,
+#'   `top_country`, `top_country_pct`. The attribute `next_cursor` carries
+#'   the cursor for the next page.
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get top countries for all games
-#' countries_data <- vgi_all_games_top_countries()
-#' 
-#' # Find games dominated by specific countries
-#' us_dominated <- countries_data[countries_data$topCountry == "US" & 
-#'                               countries_data$topCountryPct > 50, ]
-#' cat("Games where >50% of players are from US:", nrow(us_dominated), "\n")
-#' 
-#' # Find globally diverse games
-#' global_games <- countries_data[countries_data$topCountryPct < 20 & 
-#'                               countries_data$countryCount > 50, ]
-#' cat("Globally diverse games (<20% from any country):", nrow(global_games), "\n")
-#' 
-#' # Analyze regional preferences
-#' top_countries_summary <- table(countries_data$topCountry)
-#' top_10_countries <- head(sort(top_countries_summary, decreasing = TRUE), 10)
-#' 
-#' barplot(top_10_countries,
-#'         main = "Countries Most Often #1 in Games",
-#'         xlab = "Country",
-#'         ylab = "Number of Games Where #1",
-#'         las = 2,
-#'         col = "steelblue")
-#' 
-#' # Extract detailed country data for a specific game
-#' game_id <- 730  # Example game
-#' game_countries <- countries_data$topCountries[
-#'   countries_data$steamAppId == game_id][[1]]
-#' if (!is.null(game_countries)) {
-#'   print(head(game_countries, 10))
+#' tc <- vgi_all_games_top_countries(steam_app_ids = c(4019220, 730))
+#' tc$top_countries[[1]]
 #' }
-#' 
-#' # Find games popular in specific regions
-#' # Extract games where China is in top 3
-#' china_popular <- countries_data[sapply(countries_data$topCountries, 
-#'   function(tc) {
-#'     if (is.null(tc) || nrow(tc) < 3) return(FALSE)
-#'     "CN" %in% tc$country[1:3]
-#'   }), ]
-#' cat("Games where China is in top 3 countries:", nrow(china_popular), "\n")
-#' 
-#' # Calculate market concentration
-#' countries_data$top3_concentration <- sapply(countries_data$topCountries,
-#'   function(tc) {
-#'     if (is.null(tc) || nrow(tc) < 3) return(NA)
-#'     sum(tc$percentage[1:3])
-#'   })
-#' 
-#' # Games with highest geographic concentration
-#' concentrated <- countries_data[!is.na(countries_data$top3_concentration) & 
-#'                               countries_data$top3_concentration > 70, ]
-#' cat("Games where top 3 countries >70% of players:", nrow(concentrated), "\n")
-#' 
-#' # Regional gaming hours analysis
-#' # Games popular in Asia vs Americas vs Europe
-#' asia_countries <- c("CN", "JP", "KR", "TW", "HK", "SG", "TH", "ID")
-#' americas_countries <- c("US", "CA", "BR", "MX", "AR", "CL", "CO")
-#' europe_countries <- c("DE", "FR", "GB", "IT", "ES", "PL", "NL", "SE")
-#' 
-#' countries_data$asia_pct <- sapply(countries_data$topCountries,
-#'   function(tc) {
-#'     if (is.null(tc)) return(0)
-#'     sum(tc$percentage[tc$country %in% asia_countries])
-#'   })
-#' 
-#' asia_focused <- countries_data[countries_data$asia_pct > 50, ]
-#' cat("Games with >50% Asian players:", nrow(asia_focused), "\n")
-#' }
-vgi_all_games_top_countries <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+vgi_all_games_top_countries <- function(steam_app_ids = NULL, vgi_ids = NULL, slugs = NULL,
+                                       limit = NULL, cursor = NULL, all_pages = FALSE,
+                                       auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                        headers = list()) {
-  
-  # Make API request
-  result <- make_api_request(
-    endpoint = "player-insights/games/top-countries",
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
+  page <- .vgi_player_insights_pages("top-countries", steam_app_ids, vgi_ids, slugs, limit, cursor,
+                                     all_pages, auth_token, headers)
+  out <- .vgi_nested_country_summary(page$results, "topCountries", "topCountries",
+                                     c("countryCount", "topCountry", "topCountryPct"))
+  attr(out, "next_cursor") <- page$next_cursor
+  out
+}
+
+# Shared v4 player-insights fetch.
+.vgi_player_insights_pages <- function(resource, steam_app_ids, vgi_ids, slugs, limit, cursor,
+                                       all_pages, auth_token, headers, countries = NULL, regions = NULL) {
+  qp <- .vgi_v4_query(steam_app_ids = steam_app_ids, vgi_ids = vgi_ids, slugs = slugs,
+                      limit = limit, cursor = cursor, countries = countries, regions = regions)
+  .vgi_fetch_v4_pages(sprintf("player-insights/games/%s", resource), qp,
+                      auth_token = auth_token, headers = headers, all_pages = all_pages)
+}
+
+# Per-game identity columns shared by the v4 player-insights outputs.
+.vgi_game_identity <- function(rows) {
+  tibble::tibble(
+    vgiId = as.integer(.vgi_col(rows, "vgiId", NA_integer_)),
+    platform = as.character(.vgi_col(rows, "platform", NA_character_)),
+    steamAppId = .vgi_steam_ids(rows)
   )
+}
 
-  rows <- .vgi_unwrap_results(result)
+# Summarise a nested country list-column (players or wishlists).
+.vgi_nested_country_summary <- function(rows, src_col, out_col, summary_cols) {
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(.vgi_clean_names(tibble::tibble(
-      steamAppId = integer(),
-      topCountries = I(list()),
-      countryCount = integer(),
-      topCountry = character(),
-      topCountryPct = numeric(),
-
-    )))
+    out <- tibble::tibble(vgiId = integer(), platform = character(), steamAppId = integer())
+    out[[out_col]] <- I(list())
+    out[[summary_cols[1]]] <- integer()
+    out[[summary_cols[2]]] <- character()
+    out[[summary_cols[3]]] <- numeric()
+    return(.vgi_clean_names(out))
   }
-
-  df <- dplyr::bind_rows(lapply(seq_len(nrow(rows)), function(i) {
-    tc <- if ("topCountries" %in% names(rows)) rows$topCountries[[i]] else NULL
-    if (is.data.frame(tc) && nrow(tc) > 0) {
-      tc_df <- tibble::tibble(
-        country = as.character(tc$countryCode %||% NA_character_),
-        countryName = as.character(tc$countryName %||% NA_character_),
-        percentage = as.numeric(tc$percentage %||% NA_real_),
-
-      )
-      top_country <- tc_df$country[1]
-      top_country_pct <- tc_df$percentage[1]
-      country_count <- nrow(tc_df)
-    } else {
-      tc_df <- NULL
-      top_country <- NA_character_
-      top_country_pct <- NA_real_
-      country_count <- 0
-    }
-
-    tibble::tibble(
-      steamAppId = as.integer(rows$externalId[i] %||% NA),
-      topCountries = I(list(tc_df)),
-      countryCount = as.integer(country_count),
-      topCountry = top_country,
-      topCountryPct = as.numeric(top_country_pct),
-
-    )
-  }))
-
-  df <- df[!is.na(df$steamAppId), , drop = FALSE]
-  df <- df[order(-df$topCountryPct, na.last = TRUE), , drop = FALSE]
-  .vgi_clean_names(df)
+  nested <- if (src_col %in% names(rows)) rows[[src_col]] else replicate(nrow(rows), NULL, simplify = FALSE)
+  tbls <- lapply(nested, .vgi_country_rows)
+  out <- .vgi_game_identity(rows)
+  out[[out_col]] <- I(tbls)
+  out[[summary_cols[1]]] <- vapply(tbls, nrow, integer(1))
+  out[[summary_cols[2]]] <- vapply(tbls, function(t) if (nrow(t) > 0) t$country[1] else NA_character_, character(1))
+  out[[summary_cols[3]]] <- vapply(tbls, function(t) if (nrow(t) > 0) t$percentage[1] else NA_real_, numeric(1))
+  .vgi_clean_names(out[order(-out[[summary_cols[3]]], na.last = TRUE), , drop = FALSE])
 }

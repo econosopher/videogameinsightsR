@@ -1,91 +1,52 @@
-#' Get Wishlist Data for a Game
+#' Get Wishlist History for a Game
 #'
-#' Retrieve historical wishlist data for a specific game, showing how many users
-#' have the game on their wishlist over time.
+#' Retrieve the outstanding-wishlist history for a single Steam game.
 #'
 #' @param steam_app_id Integer. The Steam App ID of the game.
+#' @param version API generation. `"v4"` (default) takes the series from the
+#'   v4 `/historical-data` endpoint, which covers every day since the game was
+#'   first tracked (pre-release days included). `"v3"` calls the per-game v3
+#'   endpoint ``/interest-level/wishlists/games/{steamAppId}``, which starts closer to release.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
 #'
 #' @return A list containing:
 #' \describe{
-#'   \item{steamAppId}{Integer. The Steam App ID}
-#'   \item{wishlistChanges}{Data frame with columns:
-#'     \itemize{
-#'       \item date: Date of the data point
-#'       \item wishlistsTotal: Total number of wishlists on that date
-#'       \item wishlistsChange: Change in wishlists from previous period
-#'     }
-#'   }
-#' }
-#'
-#' @details
-#' Wishlist data is a key indicator of interest and potential future sales:
-#' \itemize{
-#'   \item High wishlist numbers indicate strong market interest
-#'   \item Wishlist spikes often follow marketing campaigns or announcements
-#'   \item Conversion rate from wishlist to purchase typically ranges from 5-20%
-#'   \item Wishlist trends can predict launch day sales
+#'   \item{steam_app_id}{Integer. The Steam App ID}
+#'   \item{wishlist_changes}{Tibble with columns `date`, `wishlists_total`,
+#'     `wishlists_change`}
 #' }
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get wishlist data for a game
-#' wishlists <- vgi_insights_wishlists(steam_app_id = 892970)
-#' 
-#' # Calculate total wishlists and recent trend
-#' current_wishlists <- tail(wishlists$wishlistChanges, 1)$wishlistsTotal
-#' print(paste("Current wishlists:", format(current_wishlists, big.mark = ",")))
-#' 
-#' # Calculate 30-day growth
-#' if (nrow(wishlists$wishlistChanges) >= 30) {
-#'   thirty_days_ago <- wishlists$wishlistChanges[nrow(wishlists$wishlistChanges) - 29, ]
-#'   growth <- current_wishlists - thirty_days_ago$wishlistsTotal
-#'   growth_pct <- (growth / thirty_days_ago$wishlistsTotal) * 100
-#'   print(paste("30-day growth:", format(growth, big.mark = ","), 
-#'               sprintf("(%.1f%%)", growth_pct)))
-#' }
-#' 
-#' # Plot wishlist trend
-#' plot(wishlists$wishlistChanges$date, wishlists$wishlistChanges$wishlistsTotal,
-#'      type = "l", col = "blue", lwd = 2,
-#'      main = "Wishlist Trend Over Time",
-#'      xlab = "Date", ylab = "Total Wishlists")
-#' 
-#' # Identify major wishlist spikes
-#' avg_change <- mean(abs(wishlists$wishlistChanges$wishlistsChange), na.rm = TRUE)
-#' spikes <- wishlists$wishlistChanges[
-#'   wishlists$wishlistChanges$wishlistsChange > avg_change * 3, 
-#' ]
-#' if (nrow(spikes) > 0) {
-#'   print("Major wishlist spikes detected on:")
-#'   print(spikes[, c("date", "wishlistsChange")])
-#' }
+#' wl <- vgi_insights_wishlists(steam_app_id = 4019220)
+#' tail(wl$wishlist_changes)
 #' }
 vgi_insights_wishlists <- function(steam_app_id,
-                                 auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                 headers = list()) {
-  
+                                   version = c("v4", "v3"),
+                                   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                   headers = list()) {
+
   validate_numeric(steam_app_id, "steam_app_id")
-  
-  hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
-  
-  wl <- hist$wishlists
-  if (is.null(wl) || nrow(wl) == 0) {
+  version <- .vgi_api_version(match.arg(version))
+
+  rows <- .vgi_game_series(steam_app_id, version,
+                           "interest-level/wishlists/games/%s", "wishlistChanges",
+                           auth_token = auth_token, headers = headers)
+  if (nrow(rows) == 0) {
     changes_df <- tibble::tibble(
-      date = as.Date(character()), wishlistsTotal = integer(),
-      wishlistsChange = integer()
+      date = as.Date(character()), wishlistsTotal = integer(), wishlistsChange = integer()
     )
   } else {
     changes_df <- tibble::tibble(
-      date = as.Date(wl$date),
-      wishlistsTotal = as.integer(wl$wishlists),
-      wishlistsChange = c(NA_integer_, diff(as.integer(wl$wishlists))),
-
+      date = as.Date(rows$date),
+      wishlistsTotal = as.integer(.vgi_col(rows, "wishlistsTotal")),
+      wishlistsChange = as.integer(.vgi_col(rows, "wishlistsChange"))
     )
+    changes_df <- changes_df[order(changes_df$date), , drop = FALSE]
   }
-  
+
   .vgi_clean_list(list(steamAppId = as.integer(steam_app_id), wishlistChanges = changes_df))
 }

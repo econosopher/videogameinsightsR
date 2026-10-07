@@ -1,122 +1,43 @@
-#' Get Top Countries by Wishlist Count
+#' Get Top Wishlist Countries for a Game
 #'
-#' Retrieve the top countries by wishlist count for a specific game, showing
-#' where potential future players are concentrated.
+#' Retrieve the countries contributing the largest share of a Steam game's
+#' wishlists (v4 `/player-insights/games/top-wishlist-countries` by default,
+#' v3 `/player-insights/games/{steamAppId}/top-wishlist-countries` with
+#' `version = "v3"`). For many games at once use
+#' [vgi_all_games_wishlist_countries()].
 #'
-#' @param steam_app_id Integer. The Steam App ID of the game.
-#' @param auth_token Character string. Your VGI API authentication token.
-#'   Defaults to the VGI_AUTH_TOKEN environment variable.
-#' @param headers List. Optional custom headers to include in the API request.
+#' @inheritParams vgi_top_countries
+#' @param version API generation, `"v4"` (default) or `"v3"`; both return
+#'   the same figures.
 #'
-#' @return A data frame with columns:
-#' \describe{
-#'   \item{country}{Character. Two-letter country code (ISO 3166-1 alpha-2)}
-#'   \item{countryName}{Character. Full country name}
-#'   \item{wishlistCount}{Integer. Number of wishlists from this country}
-#'   \item{percentage}{Numeric. Percentage of total wishlists}
-#'   \item{rank}{Integer. Country rank by wishlist count}
-#' }
-#'
-#' @details
-#' Wishlist geographic data is valuable for:
-#' \itemize{
-#'   \item Pre-launch marketing focus
-#'   \item Identifying high-interest regions
-#'   \item Planning regional promotions
-#'   \item Localization priorities for upcoming content
-#'   \item Predicting launch day geographic distribution
-#' }
-#' 
-#' Compare wishlist distribution with actual player distribution
-#' to identify untapped markets or conversion opportunities.
+#' @return A [tibble][tibble::tibble] with columns `country` (ISO code),
+#'   `country_name`, `percentage` and `rank`, sorted by rank.
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get top wishlist countries for a game
-#' wishlist_countries <- vgi_top_wishlist_countries(steam_app_id = 892970)
-#' 
-#' # Display top 10 countries
-#' head(wishlist_countries, 10)
-#' 
-#' # Compare with actual player distribution
-#' player_countries <- vgi_top_countries(steam_app_id = 892970)
-#' 
-#' # Merge to compare wishlist vs player percentages
-#' comparison <- merge(wishlist_countries, player_countries, 
-#'                    by = "country", suffixes = c("_wishlist", "_player"))
-#' 
-#' # Calculate conversion potential
-#' comparison$conversion_rate <- comparison$percentage_player / comparison$percentage_wishlist
-#' comparison <- comparison[order(comparison$conversion_rate), ]
-#' 
-#' # Find underperforming countries (high wishlist, low players)
-#' underperforming <- comparison[comparison$conversion_rate < 0.5, ]
-#' cat("Countries with low wishlist conversion:\n")
-#' print(underperforming[, c("countryName_wishlist", "percentage_wishlist", 
-#'                          "percentage_player", "conversion_rate")])
-#' 
-#' # Calculate regional interest
-#' asia_countries <- c("CN", "JP", "KR", "TW", "HK", "SG", "TH", "ID", "MY", "PH")
-#' asia_wishlist_pct <- sum(wishlist_countries$percentage[
-#'   wishlist_countries$country %in% asia_countries])
-#' cat("Asia wishlist percentage:", round(asia_wishlist_pct, 1), "%\n")
-#' 
-#' # Visualize top 10 wishlist countries
-#' top10 <- head(wishlist_countries, 10)
-#' barplot(top10$percentage, 
-#'         names.arg = top10$countryName,
-#'         las = 2,
-#'         main = "Top 10 Countries by Wishlist %",
-#'         ylab = "Percentage of Wishlists",
-#'         col = "darkgreen")
+#' vgi_top_wishlist_countries(steam_app_id = 4019220)
 #' }
 vgi_top_wishlist_countries <- function(steam_app_id,
-                                      auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                      headers = list()) {
-  
-  # Validate inputs
+                                       version = c("v4", "v3"),
+                                       auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                       headers = list()) {
+
   validate_numeric(steam_app_id, "steam_app_id")
-  
-  # Make API request
-  result <- make_api_request(
-    endpoint = "player-insights/games/top-wishlist-countries",
-    query_params = list(steamAppIds = as.character(steam_app_id), limit = 1),
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
-  )
 
-  rows <- .vgi_unwrap_results(result)
-  if (!is.data.frame(rows) || nrow(rows) == 0 || !"wishlists" %in% names(rows)) {
-    return(.vgi_clean_names(tibble::tibble(
-      country = character(),
-      countryName = character(),
-      wishlistCount = integer(),
-      percentage = numeric(),
-      rank = integer(),
-
-    )))
+  version <- .vgi_api_version(match.arg(version))
+  result <- if (version == "v4") {
+    .vgi_v4_game_record("player-insights/games/top-wishlist-countries", steam_app_id,
+                        auth_token = auth_token, headers = headers)
+  } else {
+    make_api_request(
+      endpoint = sprintf("player-insights/games/%s/top-wishlist-countries", as.integer(steam_app_id)),
+      auth_token = auth_token,
+      method = "GET",
+      headers = headers,
+      version = "v3"
+    )
   }
 
-  wishlists <- rows$wishlists[[1]]
-  if (!is.data.frame(wishlists) || nrow(wishlists) == 0) {
-    return(.vgi_clean_names(tibble::tibble(
-      country = character(),
-      countryName = character(),
-      wishlistCount = integer(),
-      percentage = numeric(),
-      rank = integer(),
-
-    )))
-  }
-
-  .vgi_clean_names(tibble::tibble(
-    country = as.character(wishlists$countryCode %||% NA_character_),
-    countryName = as.character(wishlists$countryName %||% NA_character_),
-    wishlistCount = as.integer(NA),
-    percentage = as.numeric(wishlists$percentage %||% NA),
-    rank = as.integer(wishlists$rank %||% seq_len(nrow(wishlists))),
-
-  ))
+  .vgi_country_rows(if (is.list(result)) result$wishlists else NULL)
 }

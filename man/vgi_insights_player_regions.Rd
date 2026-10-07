@@ -2,10 +2,11 @@
 % Please edit documentation in R/vgi_insights_player_regions.R
 \name{vgi_insights_player_regions}
 \alias{vgi_insights_player_regions}
-\title{Get Player Geographic Distribution Data}
+\title{Get Player Region Distribution for a Game}
 \usage{
 vgi_insights_player_regions(
   steam_app_id,
+  version = c("v4", "v3"),
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   headers = list()
 )
@@ -13,70 +14,28 @@ vgi_insights_player_regions(
 \arguments{
 \item{steam_app_id}{Integer. The Steam App ID of the game.}
 
+\item{version}{API generation. \code{"v4"} (default) reads the Steam row of
+the multi-game v4 \verb{/player-insights/games/top-regions} endpoint; \code{"v3"}
+reads \verb{/player-insights/games/\{steamAppId\}/regions}. Both return the same
+figures.}
+
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A list containing:
-\describe{
-\item{steamAppId}{Integer. The Steam App ID}
-\item{regions}{Data frame with columns:
-\itemize{
-\item regionName: Geographic region (e.g., "Europe", "North America", "Asia")
-\item rank: Rank of the region by player percentage (1 = highest)
-\item percentage: Percentage of total player base from this region
-}
-}
-}
+A list containing \code{steam_app_id} and \code{regions}, a tibble with
+columns \code{region_name}, \code{rank} and \code{percentage}, sorted by rank.
 }
 \description{
-Retrieve the geographic distribution of players for a specific game by region.
-}
-\details{
-Understanding player geographic distribution is crucial for:
-\itemize{
-\item Localization decisions - Which languages to prioritize
-\item Server placement - Where to host game servers for optimal latency
-\item Marketing focus - Which regions to target with advertising
-\item Content scheduling - When to release updates based on player timezones
-\item Regional pricing - Understanding purchasing power by region
-}
+Retrieve the share of players by world region for a single Steam game.
 }
 \examples{
 \dontrun{
-# Get player regions for a game
-regions <- vgi_insights_player_regions(steam_app_id = 730)
-
-# Display regions sorted by rank
-print(regions$regions)
-
-# Find the top region
-top_region <- regions$regions[regions$regions$rank == 1, ]
-print(paste("Top region:", top_region$regionName, 
-            "with", round(top_region$percentage, 1), "\% of players"))
-
-# Create a horizontal bar chart of regions
-old_par <- par(no.readonly = TRUE)
-par(mar = c(5, 8, 4, 2))  # Increase left margin for region names
-barplot(regions$regions$percentage,
-        names.arg = regions$regions$regionName,
-        horiz = TRUE,
-        las = 1,
-        main = "Player Distribution by Region",
-        xlab = "Percentage of Players",
-        col = rainbow(nrow(regions$regions), alpha = 0.8))
-
-# Check geographic diversity
-top_3_percentage <- sum(head(regions$regions$percentage, 3))
-print(paste("Top 3 regions account for", 
-            round(top_3_percentage, 1), "\% of players"))
-            
-# Identify potential server locations
-major_regions <- regions$regions[regions$regions$percentage > 10, ]
-print(paste("Regions with >10\% of players:", 
-            paste(major_regions$regionName, collapse = ", ")))
-par(old_par)
+vgi_insights_player_regions(steam_app_id = 4019220)$regions
 }
+}
+\seealso{
+\code{\link[=vgi_top_regions]{vgi_top_regions()}} returns just the regions tibble.
 }

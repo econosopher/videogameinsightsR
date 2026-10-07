@@ -2,10 +2,11 @@
 % Please edit documentation in R/vgi_insights_entitlements.R
 \name{vgi_insights_entitlements}
 \alias{vgi_insights_entitlements}
-\title{Get Entitlements Data for a Game}
+\title{Get Entitlements (Units Sold) History for a Game}
 \usage{
 vgi_insights_entitlements(
   steam_app_id,
+  version = c("v4", "v3"),
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   headers = list()
 )
@@ -13,44 +14,27 @@ vgi_insights_entitlements(
 \arguments{
 \item{steam_app_id}{Integer. The Steam App ID of the game.}
 
+\item{version}{API generation. \code{"v4"} (default) takes the series from the
+v4 \verb{/historical-data} endpoint, which covers every day since the game was
+first tracked (pre-release days included). \code{"v3"} calls the per-game v3
+endpoint \verb{/commercial-performance/units-sold/games/\{steamAppId\}}, which starts closer to release.}
+
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A data frame containing entitlements history with columns:
-\describe{
-\item{steamAppId}{Integer. The Steam App ID}
-\item{date}{Date. The date of the data point}
-\item{entitlementsChange}{Integer. Entitlements change from previous period}
-\item{entitlementsTotal}{Integer. Total cumulative entitlements}
-}
+A \link[tibble:tibble]{tibble} with columns \code{steam_app_id}, \code{date},
+\code{entitlements_change} and \code{entitlements_total} (aliases of the units-sold
+columns).
 }
 \description{
-Retrieve historical entitlements (game ownership) data for a specific game.
+\strong{Deprecated.}
 }
 \details{
-The new API provides both incremental changes and cumulative totals for entitlements.
-This makes it easy to track both growth rates and absolute numbers.
+The VGI API has no entitlements endpoint; this function has always returned
+the units-sold history. Use \code{\link[=vgi_insights_units]{vgi_insights_units()}} instead. The first call in
+a session emits a deprecation warning.
 }
-\examples{
-\dontrun{
-# Get entitlements history for a game
-entitlements_data <- vgi_insights_entitlements(steam_app_id = 730)
-
-# Plot cumulative entitlements over time
-plot(entitlements_data$date, entitlements_data$entitlementsTotal, 
-     type = "l", main = "Total Entitlements Over Time",
-     xlab = "Date", ylab = "Total Entitlements")
-
-# Calculate daily sales for recent period
-recent_data <- tail(entitlements_data, 30)
-daily_sales <- mean(recent_data$entitlementsChange, na.rm = TRUE)
-print(paste("Average daily sales (last 30 days):", round(daily_sales)))
-
-# Find peak sales day
-peak_day <- entitlements_data[which.max(entitlements_data$entitlementsChange), ]
-print(paste("Peak entitlements:", peak_day$entitlementsChange, "on", peak_day$date))
-}
-}
+\keyword{internal}

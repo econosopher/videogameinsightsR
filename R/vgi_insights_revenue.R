@@ -1,66 +1,58 @@
-#' Get Revenue Insights from Video Game Insights
+#' Get Revenue History for a Game
 #'
-#' Retrieve revenue history data for a specific game.
+#' Retrieve the daily revenue history for a single Steam game. In v4 the
+#' figures come from `premiumRevenueChange` / `premiumRevenueTotal` (the
+#' successors of the deprecated `revenueChange` / `revenueTotal`).
 #'
-#' @param steam_app_id Integer or character. The Steam App ID of the game.
+#' @param steam_app_id Integer. The Steam App ID of the game.
+#' @param version API generation. `"v4"` (default) takes the series from the
+#'   v4 `/historical-data` endpoint, which covers every day since the game was
+#'   first tracked (pre-release days included). `"v3"` calls the per-game v3
+#'   endpoint ``/commercial-performance/revenue/games/{steamAppId}``, which starts closer to release.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
 #'
-#' @return A [tibble][tibble::tibble] containing revenue history with columns:
+#' @return A [tibble][tibble::tibble] with columns:
 #' \describe{
-#'   \item{steamAppId}{Integer. The Steam App ID}
-#'   \item{date}{Date. The date of the revenue data}
-#'   \item{revenueChange}{Numeric. Revenue change amount}
-#'   \item{revenueChangePercent}{Numeric. Revenue change percentage}
-#' }
-#'
-#' @details
-#' The new API provides revenue history as changes rather than absolute values.
-#' Each entry shows the revenue change from the previous period.
-#'
-#' @examples
-#' \dontrun{
-#' # Get revenue history for a game
-#' revenue_data <- vgi_insights_revenue(steam_app_id = 892970)
-#' 
-#' # Plot revenue changes over time
-#' plot(revenue_data$date, revenue_data$revenueChange,
-#'      type = "l",
-#'      main = "Revenue Changes Over Time",
-#'      xlab = "Date", 
-#'      ylab = "Revenue Change")
+#'   \item{steam_app_id}{Integer. The Steam App ID}
+#'   \item{date}{Date}
+#'   \item{revenue_change}{Numeric. Revenue earned on that day (USD)}
+#'   \item{revenue_total}{Numeric. Cumulative revenue to date (USD)}
 #' }
 #'
 #' @export
+#' @examples
+#' \dontrun{
+#' rev <- vgi_insights_revenue(steam_app_id = 4019220)
+#' plot(rev$date, rev$revenue_change, type = "l")
+#' }
 vgi_insights_revenue <- function(steam_app_id,
-                                auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                headers = list()) {
-  
-  if (is.null(steam_app_id) || steam_app_id == "") {
-    stop("steam_app_id is required")
-  }
-  
-  steam_app_id <- as.character(steam_app_id)
+                                 version = c("v4", "v3"),
+                                 auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                 headers = list()) {
+
+  if (is.null(steam_app_id) || identical(steam_app_id, "")) stop("steam_app_id is required")
+  steam_app_id <- suppressWarnings(as.numeric(steam_app_id))
+
   validate_numeric(steam_app_id, "steam_app_id")
-  
-  hist <- vgi_historical_data(as.integer(steam_app_id),
-                               auth_token = auth_token, headers = headers)
-  
-  rev <- hist$revenue
-  if (is.null(rev) || nrow(rev) == 0) {
+  version <- .vgi_api_version(match.arg(version))
+
+  rows <- .vgi_game_series(steam_app_id, version,
+                           "commercial-performance/revenue/games/%s",
+                           auth_token = auth_token, headers = headers)
+  if (nrow(rows) == 0) {
     return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(), date = as.Date(character()),
-      revenueChange = numeric(), revenueTotal = numeric(),
-
+      revenueChange = numeric(), revenueTotal = numeric()
     )))
   }
-  
-  .vgi_clean_names(tibble::tibble(
-    steamAppId = as.integer(steam_app_id),
-    date = as.Date(rev$date),
-    revenueChange = as.numeric(rev$dailyRevenue),
-    revenueTotal = as.numeric(rev$revenue),
 
-  ))
+  out <- tibble::tibble(
+    steamAppId = as.integer(steam_app_id),
+    date = as.Date(rows$date),
+    revenueChange = as.numeric(.vgi_col(rows, c("premiumRevenueChange", "revenueChange"))),
+    revenueTotal = as.numeric(.vgi_col(rows, c("premiumRevenueTotal", "revenueTotal")))
+  )
+  .vgi_clean_names(out[order(out$date), , drop = FALSE])
 }

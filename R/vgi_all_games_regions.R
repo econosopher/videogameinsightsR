@@ -1,175 +1,56 @@
-#' Get Regional Distribution Data for All Games
+#' Get Player Regions for Many Games (v4)
 #'
-#' Retrieve regional player distribution for all games, showing how players
-#' are distributed across major world regions.
+#' Retrieve the player-share-by-region breakdown for many games from the v4
+#' `/player-insights/games/top-regions` endpoint, widened to one column per
+#' region. For one Steam game use [vgi_top_regions()] (v3).
 #'
-#' @param auth_token Character string. Your VGI API authentication token.
-#'   Defaults to the VGI_AUTH_TOKEN environment variable.
-#' @param headers List. Optional custom headers to include in the API request.
-#'
-#' @return A data frame with columns:
-#' \describe{
-#'   \item{steamAppId}{Integer. The Steam App ID}
-#'   \item{northAmerica}{Numeric. Percentage of players from North America}
-#'   \item{europe}{Numeric. Percentage of players from Europe}
-#'   \item{asia}{Numeric. Percentage of players from Asia}
-#'   \item{southAmerica}{Numeric. Percentage of players from South America}
-#'   \item{oceania}{Numeric. Percentage of players from Oceania}
-#'   \item{africa}{Numeric. Percentage of players from Africa}
-#'   \item{middleEast}{Numeric. Percentage of players from Middle East}
-#'   \item{dominantRegion}{Character. Region with highest player percentage}
-#' }
-#'
-#' @details
-#' Regional data provides high-level insights for:
-#' \itemize{
-#'   \item Global market strategy
-#'   \item Server infrastructure planning
-#'   \item Marketing budget allocation
-#'   \item Content scheduling (time zones)
-#'   \item Localization priorities
-#' }
-#' 
-#' Regions are aggregated from individual country data using
-#' standard geographic classifications.
-#'
+#' @inheritParams vgi_all_games_top_countries
+#' @return A [tibble][tibble::tibble] with one row per game: `vgi_id`,
+#'   `platform`, `steam_app_id`, `north_america`, `europe`, `asia`,
+#'   `south_america`, `oceania`, `africa`, `middle_east` (percentages) and
+#'   `dominant_region`. The attribute `next_cursor` carries the cursor for
+#'   the next page.
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get regional data for all games
-#' regions_data <- vgi_all_games_regions()
-#' 
-#' # Find games by dominant region
-#' dominant_regions <- table(regions_data$dominantRegion)
-#' print(dominant_regions)
-#' 
-#' # Visualize regional distribution
-#' pie(dominant_regions,
-#'     main = "Games by Dominant Region",
-#'     col = rainbow(length(dominant_regions)))
-#' 
-#' # Find globally balanced games
-#' regions_data$max_region_pct <- pmax(regions_data$northAmerica,
-#'                                     regions_data$europe,
-#'                                     regions_data$asia,
-#'                                     regions_data$southAmerica,
-#'                                     regions_data$oceania,
-#'                                     regions_data$africa,
-#'                                     regions_data$middleEast)
-#' 
-#' balanced_games <- regions_data[regions_data$max_region_pct < 40, ]
-#' cat("Games with no region >40%:", nrow(balanced_games), "\n")
-#' 
-#' # Compare Western vs Eastern games
-#' regions_data$western_pct <- regions_data$northAmerica + 
-#'                            regions_data$europe + 
-#'                            regions_data$oceania
-#' regions_data$eastern_pct <- regions_data$asia + 
-#'                            regions_data$middleEast
-#' 
-#' western_games <- regions_data[regions_data$western_pct > 70, ]
-#' eastern_games <- regions_data[regions_data$eastern_pct > 70, ]
-#' 
-#' cat("Western-dominated games (>70%):", nrow(western_games), "\n")
-#' cat("Eastern-dominated games (>70%):", nrow(eastern_games), "\n")
-#' 
-#' # Analyze emerging markets
-#' emerging_markets <- regions_data$southAmerica + 
-#'                    regions_data$africa + 
-#'                    regions_data$middleEast
-#' 
-#' emerging_focused <- regions_data[emerging_markets > 30, ]
-#' cat("Games with >30% from emerging markets:", nrow(emerging_focused), "\n")
-#' 
-#' # Create regional profile heatmap (requires additional packages)
-#' # library(ggplot2)
-#' # library(reshape2)
-#' # 
-#' # top_100 <- head(regions_data, 100)
-#' # regions_matrix <- top_100[, c("steamAppId", "northAmerica", "europe", 
-#' #                              "asia", "southAmerica", "oceania", 
-#' #                              "africa", "middleEast")]
-#' # regions_long <- melt(regions_matrix, id.vars = "steamAppId")
-#' # 
-#' # ggplot(regions_long, aes(x = variable, y = steamAppId, fill = value)) +
-#' #   geom_tile() +
-#' #   scale_fill_gradient(low = "white", high = "darkblue") +
-#' #   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-#' #   labs(title = "Regional Distribution Heatmap (Top 100 Games)",
-#' #        x = "Region", y = "Game", fill = "Player %")
-#' 
-#' # Find region-specific genres (would need genre data)
-#' # Asia-focused games might be more likely to be MMOs or mobile ports
-#' asia_focused <- regions_data[regions_data$asia > 50, ]
-#' cat("Asia-focused games (>50% Asian players):", nrow(asia_focused), "\n")
+#' vgi_all_games_regions(steam_app_ids = 4019220)
 #' }
-vgi_all_games_regions <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+vgi_all_games_regions <- function(steam_app_ids = NULL, vgi_ids = NULL, slugs = NULL,
+                                 limit = NULL, cursor = NULL, all_pages = FALSE,
+                                 auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                  headers = list()) {
-  
-  # Make API request
-  result <- make_api_request(
-    endpoint = "player-insights/games/top-regions",
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
-  )
+  page <- .vgi_player_insights_pages("top-regions", steam_app_ids, vgi_ids, slugs, limit, cursor,
+                                     all_pages, auth_token, headers)
+  rows <- page$results
+  region_keys <- c("north america" = "northAmerica", "europe" = "europe", "asia" = "asia",
+                   "south america" = "southAmerica", "oceania" = "oceania", "africa" = "africa",
+                   "middle east" = "middleEast")
 
-  rows <- .vgi_unwrap_results(result)
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(.vgi_clean_names(tibble::tibble(
-      steamAppId = integer(),
-      northAmerica = numeric(),
-      europe = numeric(),
-      asia = numeric(),
-      southAmerica = numeric(),
-      oceania = numeric(),
-      africa = numeric(),
-      middleEast = numeric(),
-      dominantRegion = character(),
-
-    )))
+    out <- tibble::tibble(vgiId = integer(), platform = character(), steamAppId = integer())
+    for (k in region_keys) out[[k]] <- numeric()
+    out$dominantRegion <- character()
+    out <- .vgi_clean_names(out)
+    attr(out, "next_cursor") <- page$next_cursor
+    return(out)
   }
 
-  map_region <- function(region_name) {
-    key <- tolower(region_name %||% "")
-    if (key == "north america") return("northAmerica")
-    if (key == "south america") return("southAmerica")
-    if (key == "middle east") return("middleEast")
-    if (key %in% c("europe", "asia", "oceania", "africa")) return(key)
-    NULL
-  }
-
-  df <- dplyr::bind_rows(lapply(seq_len(nrow(rows)), function(i) {
-    reg_df <- if ("topRegions" %in% names(rows)) rows$topRegions[[i]] else NULL
-    region_vals <- c(
-      northAmerica = 0, europe = 0, asia = 0, southAmerica = 0,
-      oceania = 0, africa = 0, middleEast = 0
-    )
-
+  nested <- if ("topRegions" %in% names(rows)) rows$topRegions else replicate(nrow(rows), NULL, simplify = FALSE)
+  shares <- t(vapply(nested, function(reg_df) {
+    vals <- stats::setNames(rep(0, length(region_keys)), region_keys)
     if (is.data.frame(reg_df) && nrow(reg_df) > 0) {
-      for (j in seq_len(nrow(reg_df))) {
-        key <- map_region(reg_df$regionName[j])
-        if (!is.null(key)) {
-          region_vals[key] <- as.numeric(reg_df$percentage[j] %||% 0)
-        }
-      }
+      keys <- region_keys[tolower(reg_df$regionName)]
+      ok <- !is.na(keys)
+      vals[keys[ok]] <- as.numeric(reg_df$percentage[ok])
     }
+    vals
+  }, numeric(length(region_keys))))
 
-    dominant_region <- names(region_vals)[which.max(region_vals)]
-    tibble::tibble(
-      steamAppId = as.integer(rows$externalId[i] %||% NA),
-      northAmerica = as.numeric(region_vals["northAmerica"]),
-      europe = as.numeric(region_vals["europe"]),
-      asia = as.numeric(region_vals["asia"]),
-      southAmerica = as.numeric(region_vals["southAmerica"]),
-      oceania = as.numeric(region_vals["oceania"]),
-      africa = as.numeric(region_vals["africa"]),
-      middleEast = as.numeric(region_vals["middleEast"]),
-      dominantRegion = as.character(dominant_region),
-
-    )
-  }))
-
-  df <- df[!is.na(df$steamAppId), , drop = FALSE]
-  .vgi_clean_names(df)
+  out <- .vgi_game_identity(rows)
+  for (k in region_keys) out[[k]] <- as.numeric(shares[, k])
+  out$dominantRegion <- region_keys[apply(shares, 1, which.max)]
+  attr_cursor <- page$next_cursor
+  out <- .vgi_clean_names(out)
+  attr(out, "next_cursor") <- attr_cursor
+  out
 }

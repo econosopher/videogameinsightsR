@@ -7,19 +7,26 @@
 vgi_game_rankings(
   offset = NULL,
   limit = NULL,
-  date = Sys.Date() - 7,
+  date = NULL,
+  steam_app_id = NULL,
+  all_pages = FALSE,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   headers = list()
 )
 }
 \arguments{
-\item{offset}{Integer. The number of records to skip for pagination. Optional.}
+\item{offset}{Integer. Number of records to skip (catalogue listing only).}
 
-\item{limit}{Integer. Maximum number of results to return. Without specifying
-limit you will receive 5 results. The maximum limit is 1000. Optional.}
+\item{limit}{Integer. Records to return (API default 5, maximum 1000).}
 
-\item{date}{Character string or Date. Snapshot date to build rankings from.
-Defaults to 7 days ago to align with data availability lag.}
+\item{date}{Deprecated and ignored. Rankings are always the API's current
+values. Supplying a value emits a one-time warning.}
+
+\item{steam_app_id}{Integer. When supplied, return the single ranking row
+for that game instead of the catalogue listing.}
+
+\item{all_pages}{Logical. Walk the whole ranking catalogue in pages of
+\code{limit} (catalogue listing only).}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
@@ -27,79 +34,22 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A data frame containing rankings for each game with columns:
-\describe{
-\item{steamAppId}{Integer. The Steam App ID}
-\item{positiveReviewsRank}{Integer. Rank by positive reviews}
-\item{positiveReviewsPrct}{Numeric. Percentile for positive reviews}
-\item{totalRevenueRank}{Integer. Rank by total revenue}
-\item{totalRevenuePrct}{Numeric. Percentile for total revenue}
-\item{totalUnitsSoldRank}{Integer. Rank by total units sold}
-\item{totalUnitsSoldPrct}{Numeric. Percentile for total units sold}
-\item{yesterdayUnitsSoldRank}{Integer. Rank by yesterday's units sold}
-\item{yesterdayUnitsSoldPrct}{Numeric. Percentile for yesterday's units sold}
-\item{followersRank}{Integer. Rank by follower count}
-\item{followersPrct}{Numeric. Percentile for followers}
-\item{avgPlaytimeRank}{Integer. Rank by average playtime}
-\item{avgPlaytimePrct}{Numeric. Percentile for average playtime}
-}
+A \link[tibble:tibble]{tibble} with columns \code{steam_app_id},
+\code{positive_reviews_rank}, \code{positive_reviews_prct}, \code{total_revenue_rank},
+\code{total_revenue_prct}, \code{total_units_sold_rank}, \code{total_units_sold_prct},
+\code{yesterday_units_sold_rank}, \code{yesterday_units_sold_prct},
+\code{followers_rank}, \code{followers_prct}, \code{avg_playtime_rank},
+\code{avg_playtime_prct}. Lower rank is better (1 = best); \verb{*_prct} is the
+percentile position in the catalogue.
 }
 \description{
-Retrieve rankings for games across various metrics including reviews, revenue,
-units sold, followers, and playtime.
-}
-\details{
-Rankings provide a comprehensive view of game performance across metrics:
-\itemize{
-\item Lower rank numbers indicate better performance (1 = best)
-\item Percentiles show the percentage of games that rank below
-\item Use multiple metrics to get a balanced view of game success
-\item Recent sales rankings help identify trending games
-}
-
-Note: The API currently returns a limited set of games. Filtering by genre,
-platform, or date is not supported by the API endpoint.
+Retrieve VGI rankings and percentiles across reviews, revenue, units sold,
+followers and playtime from the v3 \verb{/games/rankings} endpoint, or the
+ranking of one game from \verb{/games/\{steamAppId\}/rankings}.
 }
 \examples{
 \dontrun{
-# Get default rankings (5 games)
-rankings <- vgi_game_rankings()
-
-# Get top 100 games
-rankings <- vgi_game_rankings(limit = 100)
-
-# Get games starting from offset 50
-rankings <- vgi_game_rankings(offset = 50, limit = 20)
-
-# Find top 10 games by revenue
-rankings <- vgi_game_rankings(limit = 100)
-top_revenue <- head(rankings[order(rankings$totalRevenueRank), ], 10)
-print(top_revenue[, c("steamAppId", "totalRevenueRank", "totalRevenuePrct")])
-
-# Find games that rank well across multiple metrics
-# (top 100 in both revenue and reviews)
-top_overall <- rankings[
-  rankings$totalRevenueRank <= 100 & 
-  rankings$positiveReviewsRank <= 100, 
-]
-print(paste("Games in top 100 for both revenue and reviews:", nrow(top_overall)))
-
-# Identify trending games (high recent sales relative to total)
-rankings$trending_score <- rankings$totalUnitsSoldRank / rankings$yesterdayUnitsSoldRank
-trending <- head(rankings[order(rankings$trending_score, decreasing = TRUE), ], 20)
-
-# Create a scatter plot of revenue vs reviews rankings
-plot(rankings$totalRevenueRank, rankings$positiveReviewsRank,
-     pch = 19, col = rgb(0, 0, 1, 0.1),
-     xlab = "Revenue Rank", ylab = "Reviews Rank",
-     main = "Game Rankings: Revenue vs Reviews")
-abline(a = 0, b = 1, col = "red", lty = 2)
-
-# Find hidden gems (great reviews but lower revenue)
-hidden_gems <- rankings[
-  rankings$positiveReviewsRank <= 50 & 
-  rankings$totalRevenueRank > 200,
-]
-print(paste("Hidden gems found:", nrow(hidden_gems)))
+vgi_game_rankings(limit = 100)
+vgi_game_rankings(steam_app_id = 4019220)
 }
 }

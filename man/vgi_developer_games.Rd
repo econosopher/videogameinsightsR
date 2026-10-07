@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgi_developers.R
 \name{vgi_developer_games}
 \alias{vgi_developer_games}
-\title{Get Game IDs by Developer}
+\title{Get a Developer's Steam Games (v3)}
 \usage{
 vgi_developer_games(
   company_id,
@@ -11,7 +11,7 @@ vgi_developer_games(
 )
 }
 \arguments{
-\item{company_id}{Integer. The developer's company ID.}
+\item{company_id}{Integer. The VGI company ID of the developer.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
@@ -19,59 +19,14 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A numeric vector of Steam App IDs for games developed by this company.
+An integer vector of Steam App IDs (empty when none).
 }
 \description{
-Retrieve a list of Steam App IDs for all games by a specific developer.
-}
-\details{
-This endpoint now returns only game IDs instead of full game metadata.
-To get detailed information about each game, use \code{vgi_game_metadata()}
-with the returned IDs.
-
-This approach is more efficient when you only need to:
-\itemize{
-\item Count the number of games by a developer
-\item Check if a developer made a specific game
-\item Get a subset of games for detailed analysis
-}
+Retrieve the Steam App IDs developed by a company from the v3
+\verb{/developers/\{companyId\}/game-ids} endpoint.
 }
 \examples{
 \dontrun{
-# Get all game IDs for a developer
-game_ids <- vgi_developer_games(company_id = 24569)
-
-# Count games by this developer
-cat("Total games:", length(game_ids), "\n")
-
-# Get detailed info for the first 5 games
-if (length(game_ids) > 0) {
-  first_five <- head(game_ids, 5)
-  game_details <- lapply(first_five, vgi_game_metadata)
-  
-  # Display game names
-  for (game in game_details) {
-    cat(game$name, "(", game$steamAppId, ")\n")
-  }
-}
-
-# Check if developer made a specific game
-target_game_id <- 730
-if (target_game_id \%in\% game_ids) {
-  cat("Yes, this developer made game", target_game_id, "\n")
-}
-
-# Analyze developer's recent releases
-if (length(game_ids) > 0) {
-  # Get metadata for all games
-  all_games <- vgi_game_metadata_batch(game_ids)
-  
-  # Find games released in last 2 years
-  recent_games <- all_games[
-    as.Date(all_games$releaseDate) > Sys.Date() - 730,
-  ]
-  
-  cat("Games released in last 2 years:", nrow(recent_games), "\n")
-}
+vgi_developer_games(28663)
 }
 }

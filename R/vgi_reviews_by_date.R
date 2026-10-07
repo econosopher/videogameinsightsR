@@ -84,7 +84,7 @@ vgi_reviews_by_date <- function(date,
   formatted_date <- format_date(date)
   
   steam_app_ids <- if (is.null(steam_app_ids)) NULL else as.numeric(steam_app_ids)
-  fetch_limit <- if (is.null(steam_app_ids)) 2000 else max(50, length(steam_app_ids) * 5)
+  fetch_limit <- if (is.null(steam_app_ids)) 1000 else min(1000, max(50, length(steam_app_ids) * 5))
   
   result <- .vgi_historical_results(
     date = formatted_date,

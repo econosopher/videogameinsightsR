@@ -1,66 +1,56 @@
-#' Get Units Sold Data for a Game
+#' Get Units Sold History for a Game
 #'
-#' Retrieve historical units sold data for a specific game.
+#' Retrieve the daily units history for a single Steam game. In v4 the figures
+#' come from `unitsOwnedChange` / `unitsOwnedTotal` (the successors of the
+#' deprecated `unitsSoldChange` / `unitsSoldTotal`; they include copies obtained
+#' for free).
 #'
 #' @param steam_app_id Integer. The Steam App ID of the game.
+#' @param version API generation. `"v4"` (default) takes the series from the
+#'   v4 `/historical-data` endpoint, which covers every day since the game was
+#'   first tracked (pre-release days included). `"v3"` calls the per-game v3
+#'   endpoint ``/commercial-performance/units-sold/games/{steamAppId}``, which starts closer to release.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
 #'
-#' @return A data frame containing units sold history with columns:
+#' @return A [tibble][tibble::tibble] with columns:
 #' \describe{
-#'   \item{steamAppId}{Integer. The Steam App ID}
-#'   \item{date}{Date. The date of the data point}
-#'   \item{unitsSoldChange}{Integer. Units sold change from previous period}
-#'   \item{unitsSoldTotal}{Integer. Total cumulative units sold}
+#'   \item{steam_app_id}{Integer. The Steam App ID}
+#'   \item{date}{Date}
+#'   \item{units_sold_change}{Integer. Units sold on that day}
+#'   \item{units_sold_total}{Integer. Cumulative units sold to date}
 #' }
-#'
-#' @details
-#' The new API provides both incremental changes and cumulative totals for units sold.
-#' This makes it easy to track both growth rates and absolute numbers.
 #'
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get units sold history for a game
-#' units_data <- vgi_insights_units(steam_app_id = 730)
-#' 
-#' # Plot cumulative units sold over time
-#' plot(units_data$date, units_data$unitsSoldTotal, 
-#'      type = "l", main = "Total Units Sold Over Time",
-#'      xlab = "Date", ylab = "Total Units")
-#' 
-#' # Calculate daily sales for recent period
-#' recent_data <- tail(units_data, 30)
-#' daily_sales <- mean(recent_data$unitsSoldChange, na.rm = TRUE)
-#' print(paste("Average daily sales (last 30 days):", round(daily_sales)))
-#' 
-#' # Find peak sales day
-#' peak_day <- units_data[which.max(units_data$unitsSoldChange), ]
-#' print(paste("Peak sales:", peak_day$unitsSoldChange, "on", peak_day$date))
+#' units <- vgi_insights_units(steam_app_id = 4019220)
+#' max(units$units_sold_total)
 #' }
-vgi_insights_units <- function(steam_app_id, 
+vgi_insights_units <- function(steam_app_id,
+                               version = c("v4", "v3"),
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                headers = list()) {
-  
+
   validate_numeric(steam_app_id, "steam_app_id")
-  
-  hist <- vgi_historical_data(steam_app_id, auth_token = auth_token, headers = headers)
-  
-  us <- hist$unitsSold
-  if (is.null(us) || nrow(us) == 0) {
+  version <- .vgi_api_version(match.arg(version))
+
+  rows <- .vgi_game_series(steam_app_id, version,
+                           "commercial-performance/units-sold/games/%s",
+                           auth_token = auth_token, headers = headers)
+  if (nrow(rows) == 0) {
     return(.vgi_clean_names(tibble::tibble(
       steamAppId = integer(), date = as.Date(character()),
-      unitsSoldChange = integer(), unitsSoldTotal = integer(),
-
+      unitsSoldChange = integer(), unitsSoldTotal = integer()
     )))
   }
-  
-  .vgi_clean_names(tibble::tibble(
-    steamAppId = as.integer(steam_app_id),
-    date = as.Date(us$date),
-    unitsSoldChange = as.integer(us$dailyUnits),
-    unitsSoldTotal = as.integer(us$unitsSold),
 
-  ))
+  out <- tibble::tibble(
+    steamAppId = as.integer(steam_app_id),
+    date = as.Date(rows$date),
+    unitsSoldChange = as.integer(.vgi_col(rows, c("unitsOwnedChange", "unitsSoldChange"))),
+    unitsSoldTotal = as.integer(.vgi_col(rows, c("unitsOwnedTotal", "unitsSoldTotal")))
+  )
+  .vgi_clean_names(out[order(out$date), , drop = FALSE])
 }

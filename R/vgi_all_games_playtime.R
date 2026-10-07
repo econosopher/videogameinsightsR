@@ -1,135 +1,60 @@
-#' Get Playtime Data for All Games
+#' Get Playtime for Many Games (v4)
 #'
-#' Retrieve playtime statistics for all games in the database, providing
-#' a comprehensive view of player engagement across the market.
+#' Retrieve playtime statistics for many games from the v4
+#' `/player-insights/games/playtime` endpoint, optionally restricted to
+#' players in given countries or regions. For one Steam game use
+#' [vgi_insights_playtime()] (v3).
 #'
-#' @param auth_token Character string. Your VGI API authentication token.
-#'   Defaults to the VGI_AUTH_TOKEN environment variable.
-#' @param headers List. Optional custom headers to include in the API request.
-#'
-#' @return A data frame with columns:
-#' \describe{
-#'   \item{steamAppId}{Integer. The Steam App ID}
-#'   \item{avgPlaytime}{Numeric. Average playtime in hours}
-#'   \item{medianPlaytime}{Numeric. Median playtime in hours}
-#'   \item{totalPlaytime}{Numeric. Total playtime across all players in hours}
-#'   \item{playtimeRank}{Integer. Rank by average playtime}
-#' }
-#'
-#' @details
-#' Playtime data is crucial for understanding:
-#' \itemize{
-#'   \item Game engagement and stickiness
-#'   \item Content depth and replayability
-#'   \item Player satisfaction (high playtime often = high satisfaction)
-#'   \item Genre-specific engagement patterns
-#'   \item Value proposition (playtime per dollar)
-#' }
-#' 
-#' Average playtime can be skewed by dedicated players, while median
-#' provides a better sense of typical player engagement.
-#'
+#' @inheritParams vgi_all_games_top_countries
+#' @param countries Character vector of 2-letter ISO country codes. Limits the
+#'   numbers to players from those countries.
+#' @param regions Character vector of VGI region slugs. Limits the numbers to
+#'   players from those regions.
+#' @return A [tibble][tibble::tibble] with one row per game: `vgi_id`,
+#'   `platform`, `steam_app_id`, `avg_playtime`, `median_playtime` (minutes),
+#'   `avg_playtime_rank`, `avg_playtime_prct`, `playtime_ranges` (list-column
+#'   of tibbles with `range`, `percentage`) and `playtime_rank` (rank by
+#'   average playtime within the returned rows). The attribute `next_cursor`
+#'   carries the cursor for the next page.
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get playtime data for all games
-#' playtime_data <- vgi_all_games_playtime()
-#' 
-#' # Top 20 most played games by average playtime
-#' top_played <- head(playtime_data, 20)
-#' cat("Top 20 games by average playtime:\n")
-#' print(top_played[, c("steamAppId", "avgPlaytime", "medianPlaytime")])
-#' 
-#' # Find games with high engagement
-#' high_engagement <- playtime_data[playtime_data$avgPlaytime > 100, ]
-#' cat("Games with >100 hours average playtime:", nrow(high_engagement), "\n")
-#' 
-#' # Analyze playtime distribution
-#' hist(log10(playtime_data$avgPlaytime + 1),
-#'      breaks = 40,
-#'      main = "Distribution of Average Playtime (log scale)",
-#'      xlab = "Log10(Avg Playtime + 1)",
-#'      col = "orange")
-#' 
-#' # Compare average vs median to find games with dedicated players
-#' playtime_data$avg_median_ratio <- playtime_data$avgPlaytime / 
-#'                                   (playtime_data$medianPlaytime + 0.1)
-#' 
-#' # Games where average is much higher than median (cult followings)
-#' cult_games <- playtime_data[playtime_data$avg_median_ratio > 5 & 
-#'                            playtime_data$avgPlaytime > 20, ]
-#' cat("Games with cult followings (avg >> median):", nrow(cult_games), "\n")
-#' 
-#' # Combine with revenue data for value analysis
-#' revenue_data <- vgi_revenue_by_date(Sys.Date() - 1)
-#' value_analysis <- merge(playtime_data, revenue_data, by = "steamAppId")
-#' 
-#' # Calculate hours per dollar (value metric)
-#' units_data <- vgi_units_sold_by_date(Sys.Date() - 1)
-#' value_analysis <- merge(value_analysis, units_data, by = "steamAppId")
-#' value_analysis$avg_price <- value_analysis$revenue / 
-#'                            (value_analysis$unitsSold + 1)
-#' value_analysis$hours_per_dollar <- value_analysis$avgPlaytime / 
-#'                                    (value_analysis$avg_price + 0.01)
-#' 
-#' # Best value games (high playtime, reasonable price)
-#' best_value <- value_analysis[value_analysis$hours_per_dollar > 2 & 
-#'                             value_analysis$avg_price < 60 &
-#'                             value_analysis$unitsSold > 10000, ]
-#' best_value <- head(best_value[order(-best_value$hours_per_dollar), ], 20)
-#' cat("Best value games (hours per dollar):\n")
-#' print(best_value[, c("steamAppId", "avgPlaytime", "avg_price", 
-#'                     "hours_per_dollar")])
-#' 
-#' # Genre analysis (would need genre data)
-#' # Multiplayer games typically have higher playtime
-#' likely_multiplayer <- playtime_data[playtime_data$avgPlaytime > 50 & 
-#'                                    playtime_data$medianPlaytime > 20, ]
-#' cat("Likely multiplayer/service games:", nrow(likely_multiplayer), "\n")
+#' vgi_all_games_playtime(steam_app_ids = 4019220, countries = "US")
 #' }
-vgi_all_games_playtime <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+vgi_all_games_playtime <- function(steam_app_ids = NULL, vgi_ids = NULL, slugs = NULL,
+                                  countries = NULL, regions = NULL,
+                                  limit = NULL, cursor = NULL, all_pages = FALSE,
+                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                   headers = list()) {
-  
-  # Make API request
-  result <- make_api_request(
-    endpoint = "player-insights/games/playtime",
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers
-  )
-
-  rows <- .vgi_unwrap_results(result)
+  page <- .vgi_player_insights_pages("playtime", steam_app_ids, vgi_ids, slugs, limit, cursor,
+                                     all_pages, auth_token, headers, countries = countries, regions = regions)
+  rows <- page$results
   if (!is.data.frame(rows) || nrow(rows) == 0) {
-    return(.vgi_clean_names(tibble::tibble(
-      steamAppId = integer(),
-      avgPlaytime = numeric(),
-      medianPlaytime = numeric(),
-      totalPlaytime = numeric(),
-      playtimeRank = integer(),
-
-    )))
+    out <- .vgi_clean_names(tibble::tibble(
+      vgiId = integer(), platform = character(), steamAppId = integer(),
+      avgPlaytime = numeric(), medianPlaytime = numeric(), avgPlaytimeRank = integer(),
+      avgPlaytimePrct = numeric(), playtimeRanges = I(list()), playtimeRank = integer()
+    ))
+    attr(out, "next_cursor") <- page$next_cursor
+    return(out)
   }
-
-  df <- tibble::tibble(
-    steamAppId = as.integer(rows$externalId %||% NA),
-    avgPlaytime = as.numeric(rows$avgPlaytime %||% NA),
-    medianPlaytime = as.numeric(rows$medianPlaytime %||% NA),
-    totalPlaytime = as.numeric(NA),
-
-  )
-  df <- df[!is.na(df$steamAppId), , drop = FALSE]
-  if (nrow(df) == 0) {
-    return(.vgi_clean_names(tibble::tibble(
-      steamAppId = integer(),
-      avgPlaytime = numeric(),
-      medianPlaytime = numeric(),
-      totalPlaytime = numeric(),
-      playtimeRank = integer(),
-
-    )))
-  }
-
-  df <- df[order(-df$avgPlaytime), , drop = FALSE]
-  df$playtimeRank <- seq_len(nrow(df))
-  .vgi_clean_names(df)
+  nested <- if ("playtime" %in% names(rows)) rows$playtime else replicate(nrow(rows), NULL, simplify = FALSE)
+  ranges <- lapply(nested, function(df) {
+    if (is.data.frame(df) && nrow(df) > 0) {
+      tibble::tibble(range = as.character(df$range), percentage = as.numeric(df$percentage))
+    } else {
+      tibble::tibble(range = character(), percentage = numeric())
+    }
+  })
+  out <- .vgi_game_identity(rows)
+  out$avgPlaytime <- as.numeric(.vgi_col(rows, "avgPlaytime"))
+  out$medianPlaytime <- as.numeric(.vgi_col(rows, "medianPlaytime"))
+  out$avgPlaytimeRank <- as.integer(.vgi_col(rows, "avgPlaytimeRank", NA_integer_))
+  out$avgPlaytimePrct <- as.numeric(.vgi_col(rows, "avgPlaytimePrct"))
+  out$playtimeRanges <- I(ranges)
+  out <- out[order(-out$avgPlaytime, na.last = TRUE), , drop = FALSE]
+  out$playtimeRank <- seq_len(nrow(out))
+  out <- .vgi_clean_names(out)
+  attr(out, "next_cursor") <- page$next_cursor
+  out
 }

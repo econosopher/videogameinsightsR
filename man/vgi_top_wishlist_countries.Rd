@@ -2,10 +2,11 @@
 % Please edit documentation in R/vgi_top_wishlist_countries.R
 \name{vgi_top_wishlist_countries}
 \alias{vgi_top_wishlist_countries}
-\title{Get Top Countries by Wishlist Count}
+\title{Get Top Wishlist Countries for a Game}
 \usage{
 vgi_top_wishlist_countries(
   steam_app_id,
+  version = c("v4", "v3"),
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   headers = list()
 )
@@ -13,76 +14,27 @@ vgi_top_wishlist_countries(
 \arguments{
 \item{steam_app_id}{Integer. The Steam App ID of the game.}
 
+\item{version}{API generation, \code{"v4"} (default) or \code{"v3"}; both return
+the same figures.}
+
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A data frame with columns:
-\describe{
-\item{country}{Character. Two-letter country code (ISO 3166-1 alpha-2)}
-\item{countryName}{Character. Full country name}
-\item{wishlistCount}{Integer. Number of wishlists from this country}
-\item{percentage}{Numeric. Percentage of total wishlists}
-\item{rank}{Integer. Country rank by wishlist count}
-}
+A \link[tibble:tibble]{tibble} with columns \code{country} (ISO code),
+\code{country_name}, \code{percentage} and \code{rank}, sorted by rank.
 }
 \description{
-Retrieve the top countries by wishlist count for a specific game, showing
-where potential future players are concentrated.
-}
-\details{
-Wishlist geographic data is valuable for:
-\itemize{
-\item Pre-launch marketing focus
-\item Identifying high-interest regions
-\item Planning regional promotions
-\item Localization priorities for upcoming content
-\item Predicting launch day geographic distribution
-}
-
-Compare wishlist distribution with actual player distribution
-to identify untapped markets or conversion opportunities.
+Retrieve the countries contributing the largest share of a Steam game's
+wishlists (v4 \verb{/player-insights/games/top-wishlist-countries} by default,
+v3 \verb{/player-insights/games/\{steamAppId\}/top-wishlist-countries} with
+\code{version = "v3"}). For many games at once use
+\code{\link[=vgi_all_games_wishlist_countries]{vgi_all_games_wishlist_countries()}}.
 }
 \examples{
 \dontrun{
-# Get top wishlist countries for a game
-wishlist_countries <- vgi_top_wishlist_countries(steam_app_id = 892970)
-
-# Display top 10 countries
-head(wishlist_countries, 10)
-
-# Compare with actual player distribution
-player_countries <- vgi_top_countries(steam_app_id = 892970)
-
-# Merge to compare wishlist vs player percentages
-comparison <- merge(wishlist_countries, player_countries, 
-                   by = "country", suffixes = c("_wishlist", "_player"))
-
-# Calculate conversion potential
-comparison$conversion_rate <- comparison$percentage_player / comparison$percentage_wishlist
-comparison <- comparison[order(comparison$conversion_rate), ]
-
-# Find underperforming countries (high wishlist, low players)
-underperforming <- comparison[comparison$conversion_rate < 0.5, ]
-cat("Countries with low wishlist conversion:\n")
-print(underperforming[, c("countryName_wishlist", "percentage_wishlist", 
-                         "percentage_player", "conversion_rate")])
-
-# Calculate regional interest
-asia_countries <- c("CN", "JP", "KR", "TW", "HK", "SG", "TH", "ID", "MY", "PH")
-asia_wishlist_pct <- sum(wishlist_countries$percentage[
-  wishlist_countries$country \%in\% asia_countries])
-cat("Asia wishlist percentage:", round(asia_wishlist_pct, 1), "\%\n")
-
-# Visualize top 10 wishlist countries
-top10 <- head(wishlist_countries, 10)
-barplot(top10$percentage, 
-        names.arg = top10$countryName,
-        las = 2,
-        main = "Top 10 Countries by Wishlist \%",
-        ylab = "Percentage of Wishlists",
-        col = "darkgreen")
+vgi_top_wishlist_countries(steam_app_id = 4019220)
 }
 }

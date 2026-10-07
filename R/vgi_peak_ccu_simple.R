@@ -10,7 +10,7 @@ vgi_peak_ccu_by_ids <- function(steam_app_ids) {
     return(.vgi_clean_names(tibble::tibble(name = character(), steamAppId = integer(), peak_ccu = numeric(), peak_date = as.Date(character()))))
   }
   rows <- lapply(as.integer(steam_app_ids), function(id) {
-    ts <- tryCatch(vgi_insights_ccu(id), error = function(e) NULL)
+    ts <- tryCatch(vgi_insights_ccu(id)$player_history, error = function(e) NULL)
     nm <- tryCatch({
       meta <- vgi_game_metadata(id)
       if (is.data.frame(meta) && nrow(meta) > 0 && "name" %in% names(meta)) meta$name[1] else as.character(id)
@@ -18,7 +18,7 @@ vgi_peak_ccu_by_ids <- function(steam_app_ids) {
     if (is.null(ts) || !is.data.frame(ts) || nrow(ts) == 0) {
       return(tibble::tibble(name = nm, steamAppId = id, peak_ccu = NA_real_, peak_date = as.Date(NA)))
     }
-    value_col <- intersect(names(ts), c("ccu", "concurrent", "peakConcurrent"))
+    value_col <- intersect(names(ts), c("max", "ccu", "concurrent", "peakConcurrent"))
     date_col <- intersect(names(ts), c("date", "timestamp"))
     if (length(value_col) == 0 || length(date_col) == 0) {
       return(tibble::tibble(name = nm, steamAppId = id, peak_ccu = NA_real_, peak_date = as.Date(NA)))
