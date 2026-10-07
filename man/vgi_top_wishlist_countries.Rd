@@ -6,21 +6,21 @@
 \usage{
 vgi_top_wishlist_countries(
   steam_app_id,
-  version = c("v4", "v3"),
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  version = c("v4", "v3")
 )
 }
 \arguments{
 \item{steam_app_id}{Integer. The Steam App ID of the game.}
 
-\item{version}{API generation, \code{"v4"} (default) or \code{"v3"}; both return
-the same figures.}
-
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{version}{API generation, \code{"v4"} (default) or \code{"v3"}; both return
+the same figures.}
 }
 \value{
 A \link[tibble:tibble]{tibble} with columns \code{country} (ISO code),

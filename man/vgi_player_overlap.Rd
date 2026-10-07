@@ -8,11 +8,11 @@ vgi_player_overlap(
   steam_app_id = NULL,
   limit = 10,
   offset = 0,
+  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+  headers = list(),
   vgi_id = NULL,
   slug = NULL,
-  version = c("v3", "v4"),
-  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  version = c("v3", "v4")
 )
 }
 \arguments{
@@ -26,17 +26,17 @@ overlap.}
 
 \item{offset}{Integer. Records to skip (v3 only).}
 
+\item{auth_token}{Character string. Your VGI API authentication token.
+Defaults to the VGI_AUTH_TOKEN environment variable.}
+
+\item{headers}{List. Optional custom headers to include in the API request.}
+
 \item{vgi_id}{Integer. VGI internal game ID (v4 only).}
 
 \item{slug}{Character. VGI game slug (v4 only).}
 
 \item{version}{\code{"v3"} or \code{"v4"}. Inferred as \code{"v4"} when \code{vgi_id} or
 \code{slug} is supplied.}
-
-\item{auth_token}{Character string. Your VGI API authentication token.
-Defaults to the VGI_AUTH_TOKEN environment variable.}
-
-\item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
 A list containing:

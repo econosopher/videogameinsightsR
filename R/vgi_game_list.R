@@ -20,9 +20,9 @@
 #' games <- vgi_game_list()
 #' nrow(games)
 #' }
-vgi_game_list <- function(version = c("v4", "v3"),
-                          auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                          headers = list()) {
+vgi_game_list <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                          headers = list(),
+                          version = c("v4", "v3")) {
   version <- match.arg(version)
   if (interactive() || isTRUE(getOption("vgi.verbose", FALSE))) {
     message("Note: This endpoint returns ALL games and may take some time. Consider caching the results.")

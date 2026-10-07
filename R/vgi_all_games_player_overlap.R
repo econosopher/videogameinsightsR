@@ -21,9 +21,10 @@
 #' \dontrun{
 #' vgi_all_games_player_overlap(limit = 5)
 #' }
-vgi_all_games_player_overlap <- function(offset = NULL, limit = NULL,
-                                        auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                        headers = list()) {
+vgi_all_games_player_overlap <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                         headers = list(),
+                                         offset = NULL,
+                                         limit = NULL) {
   if (!is.null(offset)) validate_numeric(offset, "offset", min_val = 0)
   if (!is.null(limit)) validate_numeric(limit, "limit", min_val = 1)
   qp <- list()

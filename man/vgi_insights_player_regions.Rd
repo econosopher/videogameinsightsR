@@ -6,23 +6,23 @@
 \usage{
 vgi_insights_player_regions(
   steam_app_id,
-  version = c("v4", "v3"),
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  version = c("v4", "v3")
 )
 }
 \arguments{
 \item{steam_app_id}{Integer. The Steam App ID of the game.}
 
-\item{version}{API generation. \code{"v4"} (default) reads the Steam row of
-the multi-game v4 \verb{/player-insights/games/top-regions} endpoint; \code{"v3"}
-reads \verb{/player-insights/games/\{steamAppId\}/regions}. Both return the same
-figures.}
-
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{version}{API generation. \code{"v4"} (default) reads the Steam row of
+the multi-game v4 \verb{/player-insights/games/top-regions} endpoint; \code{"v3"}
+reads \verb{/player-insights/games/\{steamAppId\}/regions}. Both return the same
+figures.}
 }
 \value{
 A list containing \code{steam_app_id} and \code{regions}, a tibble with

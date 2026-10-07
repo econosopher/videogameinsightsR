@@ -29,9 +29,9 @@ vgi_publishers_overview <- function(vgi_ids = NULL,
                                     slugs = NULL,
                                     cursor = NULL,
                                     limit = 100,
-                                    all_pages = FALSE,
                                     auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                    headers = list()) {
+                                    headers = list(),
+                                    all_pages = FALSE) {
   .vgi_company_overview("publishers", vgi_ids, slugs, cursor, limit, all_pages, auth_token, headers)
 }
 

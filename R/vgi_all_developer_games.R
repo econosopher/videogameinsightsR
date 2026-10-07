@@ -14,9 +14,15 @@
 #' \dontrun{
 #' vgi_all_developer_games(vgi_ids = 28663)
 #' }
-vgi_all_developer_games <- function(vgi_ids = NULL, slugs = NULL, limit = NULL, cursor = NULL,
-                                    offset = NULL, all_pages = FALSE, version = c("v4", "v3"),
-                                    auth_token = Sys.getenv("VGI_AUTH_TOKEN"), headers = list()) {
+vgi_all_developer_games <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                    headers = list(),
+                                    vgi_ids = NULL,
+                                    slugs = NULL,
+                                    limit = NULL,
+                                    cursor = NULL,
+                                    offset = NULL,
+                                    all_pages = FALSE,
+                                    version = c("v4", "v3")) {
   .vgi_company_game_ids("developers", "developerId", vgi_ids, slugs, limit, cursor, offset,
                         all_pages, match.arg(version), auth_token, headers)
 }

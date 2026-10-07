@@ -29,15 +29,15 @@
 #' vgi_publisher_list(slugs = "free-lives")
 #' }
 vgi_publisher_list <- function(search = NULL,
-                              limit = NULL,
-                              min_games = NULL,
-                              vgi_ids = NULL,
-                              slugs = NULL,
-                              cursor = NULL,
-                              all_pages = FALSE,
-                              version = c("v4", "v3"),
-                              auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                              headers = list()) {
+                               limit = NULL,
+                               min_games = NULL,
+                               auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                               headers = list(),
+                               vgi_ids = NULL,
+                               slugs = NULL,
+                               cursor = NULL,
+                               all_pages = FALSE,
+                               version = c("v4", "v3")) {
   .vgi_company_directory("publishers", search, limit, min_games, vgi_ids, slugs, cursor,
                          all_pages, match.arg(version), auth_token, headers)
 }

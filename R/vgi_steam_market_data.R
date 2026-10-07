@@ -20,9 +20,9 @@
 #' market <- vgi_steam_market_data()
 #' tail(market)
 #' }
-vgi_steam_market_data <- function(version = c("v4", "v3"),
-                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                  headers = list()) {
+vgi_steam_market_data <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                  headers = list(),
+                                  version = c("v4", "v3")) {
   version <- match.arg(version)
   rows <- make_api_request(
     endpoint = if (version == "v3") "analytics/steam-market-data" else "market-data",

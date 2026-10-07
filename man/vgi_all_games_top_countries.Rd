@@ -5,17 +5,22 @@
 \title{Get Top Countries for Many Games (v4)}
 \usage{
 vgi_all_games_top_countries(
+  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+  headers = list(),
   steam_app_ids = NULL,
   vgi_ids = NULL,
   slugs = NULL,
   limit = NULL,
   cursor = NULL,
-  all_pages = FALSE,
-  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  all_pages = FALSE
 )
 }
 \arguments{
+\item{auth_token}{Character string. Your VGI API authentication token.
+Defaults to the VGI_AUTH_TOKEN environment variable.}
+
+\item{headers}{List. Optional custom headers to include in the API request.}
+
 \item{steam_app_ids}{Integer vector. Steam App IDs to select. Optional.}
 
 \item{vgi_ids}{Integer vector. VGI internal game IDs to select. Optional.}
@@ -27,11 +32,6 @@ vgi_all_games_top_countries(
 \item{cursor}{Integer. Cursor from a previous page.}
 
 \item{all_pages}{Logical. Follow the cursor through every page.}
-
-\item{auth_token}{Character string. Your VGI API authentication token.
-Defaults to the VGI_AUTH_TOKEN environment variable.}
-
-\item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
 A \link[tibble:tibble]{tibble} with one row per game: \code{vgi_id},

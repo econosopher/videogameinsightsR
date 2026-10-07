@@ -5,21 +5,21 @@
 \title{Get Player Overlap Across the Catalogue (v3)}
 \usage{
 vgi_all_games_player_overlap(
-  offset = NULL,
-  limit = NULL,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  offset = NULL,
+  limit = NULL
 )
 }
 \arguments{
-\item{offset}{Integer. Games to skip.}
-
-\item{limit}{Integer. Games to return (API default 1).}
-
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{offset}{Integer. Games to skip.}
+
+\item{limit}{Integer. Games to return (API default 1).}
 }
 \value{
 A \link[tibble:tibble]{tibble} with one row per game: \code{steam_app_id},

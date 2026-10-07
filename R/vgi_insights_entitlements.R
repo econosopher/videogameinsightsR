@@ -13,9 +13,9 @@
 #' @keywords internal
 #' @export
 vgi_insights_entitlements <- function(steam_app_id,
-                                      version = c("v4", "v3"),
                                       auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                      headers = list()) {
+                                      headers = list(),
+                                      version = c("v4", "v3")) {
   .vgi_deprecate("vgi_insights_entitlements()", "vgi_insights_units()")
   units <- vgi_insights_units(steam_app_id, version = version,
                               auth_token = auth_token, headers = headers)

@@ -47,13 +47,13 @@
 #' vgi_player_overlap(slug = "dressmaker")
 #' }
 vgi_player_overlap <- function(steam_app_id = NULL,
-                             limit = 10,
-                             offset = 0,
-                             vgi_id = NULL,
-                             slug = NULL,
-                             version = c("v3", "v4"),
-                             auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                             headers = list()) {
+                               limit = 10,
+                               offset = 0,
+                               auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                               headers = list(),
+                               vgi_id = NULL,
+                               slug = NULL,
+                               version = c("v3", "v4")) {
   if (!is.null(vgi_id) || !is.null(slug)) version <- "v4"
   version <- .vgi_api_version(match.arg(version))
   validate_numeric(limit, "limit", min_val = 1)

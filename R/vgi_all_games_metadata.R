@@ -22,10 +22,10 @@
 #' vgi_all_games_metadata(limit = 100, offset = 100)
 #' }
 vgi_all_games_metadata <- function(limit = 1000,
-                                  offset = 0,
-                                  all_pages = FALSE,
-                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                  headers = list()) {
+                                   offset = 0,
+                                   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                   headers = list(),
+                                   all_pages = FALSE) {
   validate_numeric(limit, "limit", min_val = 1, max_val = 1000)
   validate_numeric(offset, "offset", min_val = 0)
 

@@ -8,13 +8,13 @@ vgi_publisher_list(
   search = NULL,
   limit = NULL,
   min_games = NULL,
+  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+  headers = list(),
   vgi_ids = NULL,
   slugs = NULL,
   cursor = NULL,
   all_pages = FALSE,
-  version = c("v4", "v3"),
-  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  version = c("v4", "v3")
 )
 }
 \arguments{
@@ -25,6 +25,11 @@ applied to publisher names after download.}
 
 \item{min_games}{Deprecated and ignored.}
 
+\item{auth_token}{Character string. Your VGI API authentication token.
+Defaults to the VGI_AUTH_TOKEN environment variable.}
+
+\item{headers}{List. Optional custom headers to include in the API request.}
+
 \item{vgi_ids}{Integer vector. VGI company IDs to select (v4 only).}
 
 \item{slugs}{Character vector. VGI company slugs to select (v4 only).}
@@ -34,11 +39,6 @@ applied to publisher names after download.}
 \item{all_pages}{Logical. Follow the cursor through every page (v4 only).}
 
 \item{version}{\code{"v4"} (default) or \code{"v3"}.}
-
-\item{auth_token}{Character string. Your VGI API authentication token.
-Defaults to the VGI_AUTH_TOKEN environment variable.}
-
-\item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
 A \link[tibble:tibble]{tibble} with columns \code{id}, \code{name} and (v4)

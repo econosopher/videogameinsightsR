@@ -27,9 +27,15 @@
 #' vgi_all_publisher_games(vgi_ids = 28663)
 #' vgi_all_publisher_games(version = "v3", limit = 50)
 #' }
-vgi_all_publisher_games <- function(vgi_ids = NULL, slugs = NULL, limit = NULL, cursor = NULL,
-                                    offset = NULL, all_pages = FALSE, version = c("v4", "v3"),
-                                    auth_token = Sys.getenv("VGI_AUTH_TOKEN"), headers = list()) {
+vgi_all_publisher_games <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                    headers = list(),
+                                    vgi_ids = NULL,
+                                    slugs = NULL,
+                                    limit = NULL,
+                                    cursor = NULL,
+                                    offset = NULL,
+                                    all_pages = FALSE,
+                                    version = c("v4", "v3")) {
   .vgi_company_game_ids("publishers", "publisherId", vgi_ids, slugs, limit, cursor, offset,
                         all_pages, match.arg(version), auth_token, headers)
 }

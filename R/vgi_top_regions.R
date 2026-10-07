@@ -14,9 +14,9 @@
 #' vgi_top_regions(steam_app_id = 4019220)
 #' }
 vgi_top_regions <- function(steam_app_id,
-                            version = c("v4", "v3"),
                             auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                            headers = list()) {
+                            headers = list(),
+                            version = c("v4", "v3")) {
   out <- vgi_insights_player_regions(steam_app_id, version = version,
                                      auth_token = auth_token, headers = headers)
   .vgi_clean_names(out$regions)

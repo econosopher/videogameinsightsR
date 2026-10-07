@@ -35,9 +35,9 @@
 #' }
 vgi_insights_price_history <- function(steam_app_id,
                                        currency = NULL,
-                                       version = c("v4", "v3"),
                                        auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                       headers = list()) {
+                                       headers = list(),
+                                       version = c("v4", "v3")) {
 
   validate_numeric(steam_app_id, "steam_app_id")
   if (!is.null(currency) && (!is.character(currency) || nchar(currency) == 0)) {

@@ -5,18 +5,23 @@
 \title{Get Game IDs for Publishers}
 \usage{
 vgi_all_publisher_games(
+  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+  headers = list(),
   vgi_ids = NULL,
   slugs = NULL,
   limit = NULL,
   cursor = NULL,
   offset = NULL,
   all_pages = FALSE,
-  version = c("v4", "v3"),
-  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  version = c("v4", "v3")
 )
 }
 \arguments{
+\item{auth_token}{Character string. Your VGI API authentication token.
+Defaults to the VGI_AUTH_TOKEN environment variable.}
+
+\item{headers}{List. Optional custom headers to include in the API request.}
+
 \item{vgi_ids}{Integer vector. VGI company IDs to select (v4 only).}
 
 \item{slugs}{Character vector. VGI company slugs to select (v4 only).}
@@ -30,11 +35,6 @@ vgi_all_publisher_games(
 \item{all_pages}{Logical. Fetch every page.}
 
 \item{version}{\code{"v4"} (default) or \code{"v3"}.}
-
-\item{auth_token}{Character string. Your VGI API authentication token.
-Defaults to the VGI_AUTH_TOKEN environment variable.}
-
-\item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
 A \link[tibble:tibble]{tibble} with columns \code{publisher_id}, \code{name}

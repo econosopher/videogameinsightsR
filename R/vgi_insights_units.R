@@ -29,9 +29,9 @@
 #' max(units$units_sold_total)
 #' }
 vgi_insights_units <- function(steam_app_id,
-                               version = c("v4", "v3"),
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                               headers = list()) {
+                               headers = list(),
+                               version = c("v4", "v3")) {
 
   validate_numeric(steam_app_id, "steam_app_id")
   version <- .vgi_api_version(match.arg(version))

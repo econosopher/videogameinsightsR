@@ -9,9 +9,9 @@ vgi_publishers_overview(
   slugs = NULL,
   cursor = NULL,
   limit = 100,
-  all_pages = FALSE,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  all_pages = FALSE
 )
 }
 \arguments{
@@ -23,12 +23,12 @@ vgi_publishers_overview(
 
 \item{limit}{Integer. Records per page (API default 200, maximum 1000).}
 
-\item{all_pages}{Logical. Follow the cursor through every page.}
-
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{all_pages}{Logical. Follow the cursor through every page.}
 }
 \value{
 A \link[tibble:tibble]{tibble} with one row per publisher:

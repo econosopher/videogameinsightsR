@@ -24,8 +24,9 @@ answers at `https://vginsights.com/api/{v3,v4}` (301 to
   `vgi_insights_units()` and `vgi_insights_revenue()` no longer error, and
   read the v4 `unitsOwned*` / `premiumRevenue*` fields (the deprecated
   `unitsSold*` / `revenue*` names are a fallback).
-* Every per-game time-series and player-insight function gains
-  `version = c("v4", "v3")`. `"v3"` calls the per-game v3 endpoints
+* Every per-game time-series and player-insight function gains an optional
+  trailing `version = c("v4", "v3")` argument. `"v3"` calls the per-game v3
+  endpoints
   (`/engagement/...`, `/commercial-performance/...`, `/reception/...`,
   `/interest-level/...`, `/historical-data/games/{id}`,
   `/player-insights/games/{id}/...`), which remain live; v4 has no
@@ -86,9 +87,10 @@ answers at `https://vginsights.com/api/{v3,v4}` (301 to
 
 ### Changed
 
-* The per-game series and player-insight functions take `version` as their
-  second argument, before `auth_token`. Pass the token by name
-  (`auth_token = ...`); a positional token now fails the `version` check.
+* All new arguments (`version`, identifier filters, `cursor`, `all_pages`,
+  `vgi_id`, `slug`, ...) are optional and come after the existing
+  `auth_token` and `headers` arguments, so existing positional calls keep
+  working.
 * v4 per-game series start when VGI began tracking the game (often months
   before release, with zero or null figures) rather than at release; use
   `version = "v3"` or filter by date for launch-window series.

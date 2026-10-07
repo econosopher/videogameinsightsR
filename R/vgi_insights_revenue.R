@@ -28,9 +28,9 @@
 #' plot(rev$date, rev$revenue_change, type = "l")
 #' }
 vgi_insights_revenue <- function(steam_app_id,
-                                 version = c("v4", "v3"),
                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                 headers = list()) {
+                                 headers = list(),
+                                 version = c("v4", "v3")) {
 
   if (is.null(steam_app_id) || identical(steam_app_id, "")) stop("steam_app_id is required")
   steam_app_id <- suppressWarnings(as.numeric(steam_app_id))

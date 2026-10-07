@@ -21,11 +21,16 @@
 #' \dontrun{
 #' vgi_all_games_playtime(steam_app_ids = 4019220, countries = "US")
 #' }
-vgi_all_games_playtime <- function(steam_app_ids = NULL, vgi_ids = NULL, slugs = NULL,
-                                  countries = NULL, regions = NULL,
-                                  limit = NULL, cursor = NULL, all_pages = FALSE,
-                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                  headers = list()) {
+vgi_all_games_playtime <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                   headers = list(),
+                                   steam_app_ids = NULL,
+                                   vgi_ids = NULL,
+                                   slugs = NULL,
+                                   countries = NULL,
+                                   regions = NULL,
+                                   limit = NULL,
+                                   cursor = NULL,
+                                   all_pages = FALSE) {
   page <- .vgi_player_insights_pages("playtime", steam_app_ids, vgi_ids, slugs, limit, cursor,
                                      all_pages, auth_token, headers, countries = countries, regions = regions)
   rows <- page$results

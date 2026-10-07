@@ -5,18 +5,18 @@
 \title{Get the Full Game List}
 \usage{
 vgi_game_list(
-  version = c("v4", "v3"),
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  version = c("v4", "v3")
 )
 }
 \arguments{
-\item{version}{\code{"v4"} (default) or \code{"v3"}.}
-
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{version}{\code{"v4"} (default) or \code{"v3"}.}
 }
 \value{
 A \link[tibble:tibble]{tibble} with columns \code{steam_app_id}, \code{name},

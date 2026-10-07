@@ -19,9 +19,9 @@
 #' vgi_top_wishlist_countries(steam_app_id = 4019220)
 #' }
 vgi_top_wishlist_countries <- function(steam_app_id,
-                                       version = c("v4", "v3"),
                                        auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                       headers = list()) {
+                                       headers = list(),
+                                       version = c("v4", "v3")) {
 
   validate_numeric(steam_app_id, "steam_app_id")
 

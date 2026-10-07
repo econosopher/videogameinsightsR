@@ -27,10 +27,14 @@
 #' tc <- vgi_all_games_top_countries(steam_app_ids = c(4019220, 730))
 #' tc$top_countries[[1]]
 #' }
-vgi_all_games_top_countries <- function(steam_app_ids = NULL, vgi_ids = NULL, slugs = NULL,
-                                       limit = NULL, cursor = NULL, all_pages = FALSE,
-                                       auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                       headers = list()) {
+vgi_all_games_top_countries <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                        headers = list(),
+                                        steam_app_ids = NULL,
+                                        vgi_ids = NULL,
+                                        slugs = NULL,
+                                        limit = NULL,
+                                        cursor = NULL,
+                                        all_pages = FALSE) {
   page <- .vgi_player_insights_pages("top-countries", steam_app_ids, vgi_ids, slugs, limit, cursor,
                                      all_pages, auth_token, headers)
   out <- .vgi_nested_country_summary(page$results, "topCountries", "topCountries",

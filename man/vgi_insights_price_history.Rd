@@ -7,9 +7,9 @@
 vgi_insights_price_history(
   steam_app_id,
   currency = NULL,
-  version = c("v4", "v3"),
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  version = c("v4", "v3")
 )
 }
 \arguments{
@@ -18,13 +18,13 @@ vgi_insights_price_history(
 \item{currency}{Character. Optional ISO currency code (e.g. "USD", "EUR").
 When omitted, price periods for every currency are returned.}
 
-\item{version}{API generation, \code{"v4"} (default) or \code{"v3"}. USD history
-goes back to the end of 2014 and other currencies to 2022-04-14 in both.}
-
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{version}{API generation, \code{"v4"} (default) or \code{"v3"}. USD history
+goes back to the end of 2014 and other currencies to 2022-04-14 in both.}
 }
 \value{
 A list containing:

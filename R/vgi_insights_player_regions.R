@@ -21,9 +21,9 @@
 #' vgi_insights_player_regions(steam_app_id = 4019220)$regions
 #' }
 vgi_insights_player_regions <- function(steam_app_id,
-                                        version = c("v4", "v3"),
                                         auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                        headers = list()) {
+                                        headers = list(),
+                                        version = c("v4", "v3")) {
 
   validate_numeric(steam_app_id, "steam_app_id")
 

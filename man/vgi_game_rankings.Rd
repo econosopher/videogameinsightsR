@@ -8,10 +8,10 @@ vgi_game_rankings(
   offset = NULL,
   limit = NULL,
   date = NULL,
-  steam_app_id = NULL,
-  all_pages = FALSE,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  steam_app_id = NULL,
+  all_pages = FALSE
 )
 }
 \arguments{
@@ -22,16 +22,16 @@ vgi_game_rankings(
 \item{date}{Deprecated and ignored. Rankings are always the API's current
 values. Supplying a value emits a one-time warning.}
 
+\item{auth_token}{Character string. Your VGI API authentication token.
+Defaults to the VGI_AUTH_TOKEN environment variable.}
+
+\item{headers}{List. Optional custom headers to include in the API request.}
+
 \item{steam_app_id}{Integer. When supplied, return the single ranking row
 for that game instead of the catalogue listing.}
 
 \item{all_pages}{Logical. Walk the whole ranking catalogue in pages of
 \code{limit} (catalogue listing only).}
-
-\item{auth_token}{Character string. Your VGI API authentication token.
-Defaults to the VGI_AUTH_TOKEN environment variable.}
-
-\item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
 A \link[tibble:tibble]{tibble} with columns \code{steam_app_id},

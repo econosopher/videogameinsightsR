@@ -7,9 +7,9 @@
 vgi_all_games_metadata(
   limit = 1000,
   offset = 0,
-  all_pages = FALSE,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list()
+  headers = list(),
+  all_pages = FALSE
 )
 }
 \arguments{
@@ -17,13 +17,13 @@ vgi_all_games_metadata(
 
 \item{offset}{Integer. Number of games to skip.}
 
-\item{all_pages}{Logical. Walk the whole catalogue in pages of \code{limit}.
-This is a large download (tens of thousands of games).}
-
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
+
+\item{all_pages}{Logical. Walk the whole catalogue in pages of \code{limit}.
+This is a large download (tens of thousands of games).}
 }
 \value{
 A \link[tibble:tibble]{tibble} with one row per game; see

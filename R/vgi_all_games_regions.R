@@ -15,10 +15,14 @@
 #' \dontrun{
 #' vgi_all_games_regions(steam_app_ids = 4019220)
 #' }
-vgi_all_games_regions <- function(steam_app_ids = NULL, vgi_ids = NULL, slugs = NULL,
-                                 limit = NULL, cursor = NULL, all_pages = FALSE,
-                                 auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                 headers = list()) {
+vgi_all_games_regions <- function(auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                                  headers = list(),
+                                  steam_app_ids = NULL,
+                                  vgi_ids = NULL,
+                                  slugs = NULL,
+                                  limit = NULL,
+                                  cursor = NULL,
+                                  all_pages = FALSE) {
   page <- .vgi_player_insights_pages("top-regions", steam_app_ids, vgi_ids, slugs, limit, cursor,
                                      all_pages, auth_token, headers)
   rows <- page$results

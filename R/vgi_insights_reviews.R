@@ -22,9 +22,9 @@
 #' tail(reviews[, c("date", "positive", "negative", "positive_ratio")])
 #' }
 vgi_insights_reviews <- function(steam_app_id,
-                                 version = c("v4", "v3"),
                                  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                 headers = list()) {
+                                 headers = list(),
+                                 version = c("v4", "v3")) {
 
   validate_numeric(steam_app_id, "steam_app_id")
   version <- .vgi_api_version(match.arg(version))

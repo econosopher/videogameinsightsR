@@ -31,12 +31,12 @@
 #' vgi_game_rankings(steam_app_id = 4019220)
 #' }
 vgi_game_rankings <- function(offset = NULL,
-                             limit = NULL,
-                             date = NULL,
-                             steam_app_id = NULL,
-                             all_pages = FALSE,
-                             auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                             headers = list()) {
+                              limit = NULL,
+                              date = NULL,
+                              auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
+                              headers = list(),
+                              steam_app_id = NULL,
+                              all_pages = FALSE) {
 
   if (!is.null(offset)) validate_numeric(offset, "offset", min_val = 0)
   if (!is.null(limit)) validate_numeric(limit, "limit", min_val = 1, max_val = 1000)
