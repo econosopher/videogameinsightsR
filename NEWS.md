@@ -86,6 +86,9 @@ answers at `https://vginsights.com/api/{v3,v4}` (301 to
 
 ### Changed
 
+* The per-game series and player-insight functions take `version` as their
+  second argument, before `auth_token`. Pass the token by name
+  (`auth_token = ...`); a positional token now fails the `version` check.
 * v4 per-game series start when VGI began tracking the game (often months
   before release, with zero or null figures) rather than at release; use
   `version = "v3"` or filter by date for launch-window series.
