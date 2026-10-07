@@ -1,0 +1,62 @@
+{
+    "steamAppId": 4019220,
+    "name": "Dressmaker",
+    "price": 14.99,
+    "releaseDate": "2026-09-21",
+    "fullReleaseDate": null,
+    "genres": "Simulation, Casual",
+    "subgenres": "Crafting, Management, Resource Management",
+    "languages": "English, Japanese, Simplified Chinese",
+    "publisherClassification": "Indie",
+    "vgiUrl": "https://app.sensortower.com/vgi/game/4019220",
+    "steamUrl": "https://store.steampowered.com/app/4019220",
+    "themes": [
+        "Cute",
+        "Relaxing",
+        "Family Friendly"
+    ],
+    "character": null,
+    "artStyles": [
+        "Colorful"
+    ],
+    "steamTags": [
+        "Indie",
+        "Simulation",
+        "Singleplayer",
+        "Casual",
+        "Cute",
+        "Relaxing",
+        "Family Friendly",
+        "Colorful",
+        "Resource Management",
+        "Management",
+        "Stylized",
+        "Immersive Sim",
+        "Design & Illustration",
+        "LGBTQ+",
+        "Crafting",
+        "Historical",
+        "Life Sim",
+        "Job Simulator",
+        "Cozy",
+        "Shop Keeper"
+    ],
+    "gameModes": [
+        "Single-player"
+    ],
+    "publishingType": "3rd Party Published",
+    "publishers": [
+        {
+            "companyId": 28663,
+            "companyName": "Free Lives",
+            "vgiUrl": "https://app.sensortower.com/vgi/publisher/28663/free-lives"
+        }
+    ],
+    "developers": [
+        {
+            "companyId": 9344351,
+            "companyName": "Cozy Lives",
+            "vgiUrl": "https://app.sensortower.com/vgi/developer/9344351/cozy-lives"
+        }
+    ]
+}

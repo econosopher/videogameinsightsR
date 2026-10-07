@@ -1,0 +1,48 @@
+{
+    "nextCursor": 2047657,
+    "results": [
+        {
+            "vgiId": 2047657,
+            "platform": "steam",
+            "externalId": 4019220,
+            "playtime": [
+                {
+                    "range": "0",
+                    "percentage": 11.89
+                },
+                {
+                    "range": "<2",
+                    "percentage": 11.89
+                },
+                {
+                    "range": "2-5",
+                    "percentage": 20.42
+                },
+                {
+                    "range": "5-10",
+                    "percentage": 20
+                },
+                {
+                    "range": "10-20",
+                    "percentage": 21.4
+                },
+                {
+                    "range": "20-40",
+                    "percentage": 11.75
+                },
+                {
+                    "range": "40-100",
+                    "percentage": 2.52
+                },
+                {
+                    "range": ">100",
+                    "percentage": 0.14
+                }
+            ],
+            "avgPlaytimeRank": 6037,
+            "avgPlaytimePrct": 3,
+            "avgPlaytime": 655,
+            "medianPlaytime": 442
+        }
+    ]
+}

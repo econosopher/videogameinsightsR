@@ -1,0 +1,781 @@
+[
+    {
+        "currency": "AED",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 47.49,
+                "priceFinal": 42.74,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 47.49,
+                "priceFinal": 47.49,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "AUD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 20.95,
+                "priceFinal": 18.85,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 20.95,
+                "priceFinal": 20.95,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "BRL",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 53.47,
+                "priceFinal": 48.12,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 53.47,
+                "priceFinal": 53.47,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "CAD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 17.99,
+                "priceFinal": 16.19,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 17.99,
+                "priceFinal": 17.99,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "CHF",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 13.37,
+                "priceFinal": 12.03,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 13.37,
+                "priceFinal": 13.37,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "CIS_USD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 8.55,
+                "priceFinal": 7.69,
+                "firstDate": "2026-09-22",
+                "lastDate": "2026-09-28"
+            },
+            {
+                "priceInitial": 8.55,
+                "priceFinal": 8.55,
+                "firstDate": "2026-09-29",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "CLP",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 9549,
+                "priceFinal": 8594,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 9549,
+                "priceFinal": 9549,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "CNY",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 59,
+                "priceFinal": 53.1,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 59,
+                "priceFinal": 59,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "COP",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 38999,
+                "priceFinal": 35099,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 38999,
+                "priceFinal": 38999,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "CRC",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 7350,
+                "priceFinal": 6615,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 7350,
+                "priceFinal": 7350,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "EUR",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 15.47,
+                "priceFinal": 13.92,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-28"
+            },
+            {
+                "priceInitial": 15.47,
+                "priceFinal": 15.47,
+                "firstDate": "2026-09-29",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "GBP",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 13.6,
+                "priceFinal": 12.24,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-28"
+            },
+            {
+                "priceInitial": 13.6,
+                "priceFinal": 13.6,
+                "firstDate": "2026-09-29",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "HKD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 87,
+                "priceFinal": 78.3,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 87,
+                "priceFinal": 87,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "IDR",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 136022,
+                "priceFinal": 122419,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 136022,
+                "priceFinal": 136022,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "ILS",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 54.49,
+                "priceFinal": 49.04,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 54.49,
+                "priceFinal": 54.49,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "INR",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 719,
+                "priceFinal": 647,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 719,
+                "priceFinal": 719,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "JPY",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 1923,
+                "priceFinal": 1730,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 1923,
+                "priceFinal": 1923,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "KRW",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 16000,
+                "priceFinal": 14400,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 16000,
+                "priceFinal": 16000,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "KWD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 3.2,
+                "priceFinal": 2.88,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 3.2,
+                "priceFinal": 3.2,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "KZT",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 4510,
+                "priceFinal": 4059,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 4510,
+                "priceFinal": 4510,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "LATAM_USD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 8.55,
+                "priceFinal": 7.69,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 8.55,
+                "priceFinal": 8.55,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "MENA_USD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 8.55,
+                "priceFinal": 7.69,
+                "firstDate": "2026-09-22",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 8.55,
+                "priceFinal": 8.55,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "MXN",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 204.99,
+                "priceFinal": 184.49,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 204.99,
+                "priceFinal": 204.99,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "MYR",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 36.36,
+                "priceFinal": 32.72,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 36.36,
+                "priceFinal": 36.36,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "NOK",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 178.24,
+                "priceFinal": 160.41,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 178.24,
+                "priceFinal": 178.24,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "NZD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 23.49,
+                "priceFinal": 21.14,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 23.49,
+                "priceFinal": 23.49,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "PEN",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 37.75,
+                "priceFinal": 33.97,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 37.75,
+                "priceFinal": 37.75,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "PHP",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 468.11,
+                "priceFinal": 421.29,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 468.11,
+                "priceFinal": 468.11,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "PLN",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 29.99,
+                "priceFinal": 26.99,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 29.99,
+                "priceFinal": 29.99,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "QAR",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 38.75,
+                "priceFinal": 34.87,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 38.75,
+                "priceFinal": 38.75,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "RUB",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 666.05,
+                "priceFinal": 599.05,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 666.05,
+                "priceFinal": 666.05,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "SAR",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 37.49,
+                "priceFinal": 33.74,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 37.49,
+                "priceFinal": 37.49,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "SASIA_USD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 8.55,
+                "priceFinal": 7.69,
+                "firstDate": "2026-09-22",
+                "lastDate": "2026-09-28"
+            },
+            {
+                "priceInitial": 8.55,
+                "priceFinal": 8.55,
+                "firstDate": "2026-09-29",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "SGD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 16.25,
+                "priceFinal": 14.62,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 16.25,
+                "priceFinal": 16.25,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "THB",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 295,
+                "priceFinal": 265.5,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 295,
+                "priceFinal": 295,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "TWD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 308,
+                "priceFinal": 277,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 308,
+                "priceFinal": 308,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "UAH",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 335,
+                "priceFinal": 301,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 335,
+                "priceFinal": 335,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "USD",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 14.99,
+                "priceFinal": 13.49,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-28"
+            },
+            {
+                "priceInitial": 14.99,
+                "priceFinal": 14.99,
+                "firstDate": "2026-09-29",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "UYU",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 510,
+                "priceFinal": 459,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 510,
+                "priceFinal": 510,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "VND",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 216000,
+                "priceFinal": 194500,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 216000,
+                "priceFinal": 216000,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    },
+    {
+        "currency": "ZAR",
+        "externalId": "4019220",
+        "platform": "steam",
+        "priceChanges": [
+            {
+                "priceInitial": 149.99,
+                "priceFinal": 134.99,
+                "firstDate": "2026-09-21",
+                "lastDate": "2026-09-27"
+            },
+            {
+                "priceInitial": 149.99,
+                "priceFinal": 149.99,
+                "firstDate": "2026-09-28",
+                "lastDate": null
+            }
+        ]
+    }
+]

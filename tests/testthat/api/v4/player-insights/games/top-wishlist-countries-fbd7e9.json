@@ -1,0 +1,138 @@
+{
+    "nextCursor": 2047657,
+    "results": [
+        {
+            "vgiId": 2047657,
+            "platform": "steam",
+            "externalId": 4019220,
+            "wishlists": [
+                {
+                    "rank": 1,
+                    "percentage": 21.63,
+                    "countryCode": "US",
+                    "countryName": "United States"
+                },
+                {
+                    "rank": 2,
+                    "percentage": 8.61,
+                    "countryCode": "BR",
+                    "countryName": "Brazil"
+                },
+                {
+                    "rank": 3,
+                    "percentage": 5.78,
+                    "countryCode": "CN",
+                    "countryName": "China"
+                },
+                {
+                    "rank": 4,
+                    "percentage": 5.55,
+                    "countryCode": "GB",
+                    "countryName": "United Kingdom"
+                },
+                {
+                    "rank": 5,
+                    "percentage": 5.44,
+                    "countryCode": "RU",
+                    "countryName": "Russia"
+                },
+                {
+                    "rank": 6,
+                    "percentage": 5.1,
+                    "countryCode": "DE",
+                    "countryName": "Germany"
+                },
+                {
+                    "rank": 7,
+                    "percentage": 3.96,
+                    "countryCode": "CA",
+                    "countryName": "Canada"
+                },
+                {
+                    "rank": 8,
+                    "percentage": 3.51,
+                    "countryCode": "AR",
+                    "countryName": "Argentina"
+                },
+                {
+                    "rank": 9,
+                    "percentage": 3.28,
+                    "countryCode": "PL",
+                    "countryName": "Poland"
+                },
+                {
+                    "rank": 10,
+                    "percentage": 2.6,
+                    "countryCode": "AU",
+                    "countryName": "Australia"
+                },
+                {
+                    "rank": 11,
+                    "percentage": 2.38,
+                    "countryCode": "JP",
+                    "countryName": "Japan"
+                },
+                {
+                    "rank": 12,
+                    "percentage": 2.38,
+                    "countryCode": "FR",
+                    "countryName": "France"
+                },
+                {
+                    "rank": 13,
+                    "percentage": 2.26,
+                    "countryCode": "ES",
+                    "countryName": "Spain"
+                },
+                {
+                    "rank": 14,
+                    "percentage": 2.04,
+                    "countryCode": "UA",
+                    "countryName": "Ukraine"
+                },
+                {
+                    "rank": 15,
+                    "percentage": 1.59,
+                    "countryCode": "MX",
+                    "countryName": "Mexico"
+                },
+                {
+                    "rank": 16,
+                    "percentage": 1.59,
+                    "countryCode": "TR",
+                    "countryName": "Turkey"
+                },
+                {
+                    "rank": 17,
+                    "percentage": 1.47,
+                    "countryCode": "TH",
+                    "countryName": "Thailand"
+                },
+                {
+                    "rank": 18,
+                    "percentage": 1.36,
+                    "countryCode": "TW",
+                    "countryName": "Taiwan"
+                },
+                {
+                    "rank": 19,
+                    "percentage": 1.25,
+                    "countryCode": "KR",
+                    "countryName": "South Korea"
+                },
+                {
+                    "rank": 20,
+                    "percentage": 1.13,
+                    "countryCode": "IT",
+                    "countryName": "Italy"
+                },
+                {
+                    "rank": 21,
+                    "percentage": 17.1,
+                    "countryCode": null,
+                    "countryName": "Other"
+                }
+            ]
+        }
+    ]
+}

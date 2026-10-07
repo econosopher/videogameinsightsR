@@ -1,0 +1,49 @@
+{
+    "nextCursor": 2047657,
+    "results": [
+        {
+            "vgiId": 2047657,
+            "platform": "steam",
+            "date": "2026-09-28",
+            "country": "DE",
+            "premiumRevenueChange": 10834,
+            "premiumRevenueTotal": 96447,
+            "unitsOwnedChange": 1004,
+            "unitsOwnedTotal": 8937,
+            "paidUnitsChange": null,
+            "paidUnitsTotal": null,
+            "dau": 2467,
+            "mau": 8938,
+            "wishlistsChange": 1571,
+            "wishlistsTotal": 22262,
+            "externalId": 4019220,
+            "__fieldsBelowAreDeprecated": "See Response Schema in API Docs",
+            "revenueChange": 10834,
+            "revenueTotal": 96447,
+            "unitsSoldChange": 1004,
+            "unitsSoldTotal": 8937
+        },
+        {
+            "vgiId": 2047657,
+            "platform": "steam",
+            "date": "2026-09-28",
+            "country": "US",
+            "premiumRevenueChange": 80473,
+            "premiumRevenueTotal": 508537,
+            "unitsOwnedChange": 7457,
+            "unitsOwnedTotal": 47122,
+            "paidUnitsChange": null,
+            "paidUnitsTotal": null,
+            "dau": 28780,
+            "mau": 47127,
+            "wishlistsChange": 3553,
+            "wishlistsTotal": 75692,
+            "externalId": 4019220,
+            "__fieldsBelowAreDeprecated": "See Response Schema in API Docs",
+            "revenueChange": 80473,
+            "revenueTotal": 508537,
+            "unitsSoldChange": 7457,
+            "unitsSoldTotal": 47122
+        }
+    ]
+}

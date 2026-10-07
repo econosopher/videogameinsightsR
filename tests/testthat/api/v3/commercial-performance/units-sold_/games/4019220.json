@@ -1,0 +1,98 @@
+[
+    {
+        "steamAppId": 4019220,
+        "date": "2026-09-21",
+        "unitsSoldChange": 8386,
+        "unitsSoldTotal": 8386
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-09-22",
+        "unitsSoldChange": 16354,
+        "unitsSoldTotal": 24740
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-09-23",
+        "unitsSoldChange": 11742,
+        "unitsSoldTotal": 36482
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-09-24",
+        "unitsSoldChange": 18033,
+        "unitsSoldTotal": 54515
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-09-25",
+        "unitsSoldChange": 22228,
+        "unitsSoldTotal": 76743
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-09-26",
+        "unitsSoldChange": 28940,
+        "unitsSoldTotal": 105683
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-09-27",
+        "unitsSoldChange": 26005,
+        "unitsSoldTotal": 131688
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-09-28",
+        "unitsSoldChange": 23489,
+        "unitsSoldTotal": 155177
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-09-29",
+        "unitsSoldChange": 16359,
+        "unitsSoldTotal": 171536
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-09-30",
+        "unitsSoldChange": 17618,
+        "unitsSoldTotal": 189154
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-10-01",
+        "unitsSoldChange": 16361,
+        "unitsSoldTotal": 205515
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-10-02",
+        "unitsSoldChange": 17200,
+        "unitsSoldTotal": 222715
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-10-03",
+        "unitsSoldChange": 15103,
+        "unitsSoldTotal": 237818
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-10-04",
+        "unitsSoldChange": 17621,
+        "unitsSoldTotal": 255439
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-10-05",
+        "unitsSoldChange": 13426,
+        "unitsSoldTotal": 268865
+    },
+    {
+        "steamAppId": 4019220,
+        "date": "2026-10-06",
+        "unitsSoldChange": 15105,
+        "unitsSoldTotal": 283970
+    }
+]

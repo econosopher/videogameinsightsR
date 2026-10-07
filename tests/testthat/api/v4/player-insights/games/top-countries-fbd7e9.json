@@ -1,0 +1,138 @@
+{
+    "nextCursor": 2047657,
+    "results": [
+        {
+            "vgiId": 2047657,
+            "platform": "steam",
+            "externalId": 4019220,
+            "topCountries": [
+                {
+                    "rank": 1,
+                    "percentage": 33.33,
+                    "countryCode": "US",
+                    "countryName": "United States"
+                },
+                {
+                    "rank": 2,
+                    "percentage": 10.05,
+                    "countryCode": "CN",
+                    "countryName": "China"
+                },
+                {
+                    "rank": 3,
+                    "percentage": 6.88,
+                    "countryCode": "GB",
+                    "countryName": "United Kingdom"
+                },
+                {
+                    "rank": 4,
+                    "percentage": 5.29,
+                    "countryCode": "DE",
+                    "countryName": "Germany"
+                },
+                {
+                    "rank": 5,
+                    "percentage": 4.76,
+                    "countryCode": "CA",
+                    "countryName": "Canada"
+                },
+                {
+                    "rank": 6,
+                    "percentage": 4.23,
+                    "countryCode": "AU",
+                    "countryName": "Australia"
+                },
+                {
+                    "rank": 7,
+                    "percentage": 3.7,
+                    "countryCode": "PL",
+                    "countryName": "Poland"
+                },
+                {
+                    "rank": 8,
+                    "percentage": 2.91,
+                    "countryCode": "FR",
+                    "countryName": "France"
+                },
+                {
+                    "rank": 9,
+                    "percentage": 2.91,
+                    "countryCode": "RU",
+                    "countryName": "Russia"
+                },
+                {
+                    "rank": 10,
+                    "percentage": 2.91,
+                    "countryCode": "BR",
+                    "countryName": "Brazil"
+                },
+                {
+                    "rank": 11,
+                    "percentage": 2.12,
+                    "countryCode": "JP",
+                    "countryName": "Japan"
+                },
+                {
+                    "rank": 12,
+                    "percentage": 1.59,
+                    "countryCode": "NL",
+                    "countryName": "Netherlands"
+                },
+                {
+                    "rank": 13,
+                    "percentage": 1.32,
+                    "countryCode": "ES",
+                    "countryName": "Spain"
+                },
+                {
+                    "rank": 14,
+                    "percentage": 1.32,
+                    "countryCode": "KR",
+                    "countryName": "South Korea"
+                },
+                {
+                    "rank": 15,
+                    "percentage": 1.06,
+                    "countryCode": "AR",
+                    "countryName": "Argentina"
+                },
+                {
+                    "rank": 16,
+                    "percentage": 1.06,
+                    "countryCode": "DK",
+                    "countryName": "Denmark"
+                },
+                {
+                    "rank": 17,
+                    "percentage": 0.79,
+                    "countryCode": "PE",
+                    "countryName": "Peru"
+                },
+                {
+                    "rank": 18,
+                    "percentage": 0.79,
+                    "countryCode": "TR",
+                    "countryName": "Turkey"
+                },
+                {
+                    "rank": 19,
+                    "percentage": 0.79,
+                    "countryCode": "AT",
+                    "countryName": "Austria"
+                },
+                {
+                    "rank": 20,
+                    "percentage": 0.53,
+                    "countryCode": "CH",
+                    "countryName": "Switzerland"
+                },
+                {
+                    "rank": 21,
+                    "percentage": 11.64,
+                    "countryCode": null,
+                    "countryName": "Other"
+                }
+            ]
+        }
+    ]
+}

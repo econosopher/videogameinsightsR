@@ -1,0 +1,40 @@
+{
+    "nextCursor": 28663,
+    "results": [
+        {
+            "vgiCompanyId": 28663,
+            "name": "Free Lives",
+            "slug": "free-lives",
+            "classification": "Indie",
+            "platformData": {
+                "steam": {
+                    "revenueTotal": 3680104,
+                    "gamesReleased": 2,
+                    "genreBreakdown": {
+                        "rpg": 0,
+                        "indie": 0,
+                        "action": 0,
+                        "arcade": 0,
+                        "casino": 0,
+                        "puzzle": 50,
+                        "racing": 0,
+                        "sports": 0,
+                        "shooter": 0,
+                        "strategy": 0,
+                        "tabletop": 0,
+                        "adventure": 0,
+                        "lifestyle": 0,
+                        "simulation": 50
+                    },
+                    "revenueAvgPerGame": 1840052,
+                    "gamesInDevelopment": 0,
+                    "selfPublishedCount": 0,
+                    "revenueMedianPerGame": 1840052,
+                    "selfPublishedPercentage": 0
+                }
+            },
+            "country": "South Africa",
+            "vgiUrl": "https://app.sensortower.com/vgi/publisher/28663/free-lives"
+        }
+    ]
+}

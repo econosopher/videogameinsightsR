@@ -1,0 +1,47 @@
+[
+    {
+        "steamAppId": 10,
+        "positiveReviewsRank": 104,
+        "positiveReviewsPrct": 0.1,
+        "totalRevenueRank": 224,
+        "totalRevenuePrct": 0.1,
+        "totalUnitsSoldRank": 69,
+        "totalUnitsSoldPrct": 0.1,
+        "yesterdayUnitsSoldRank": null,
+        "yesterdayUnitsSoldPrct": null,
+        "followersRank": 250,
+        "followersPrct": 0.1,
+        "avgPlaytimeRank": 283,
+        "avgPlaytimePrct": 0.1
+    },
+    {
+        "steamAppId": 20,
+        "positiveReviewsRank": 2306,
+        "positiveReviewsPrct": 1,
+        "totalRevenueRank": 4041,
+        "totalRevenuePrct": 2,
+        "totalUnitsSoldRank": 2356,
+        "totalUnitsSoldPrct": 1,
+        "yesterdayUnitsSoldRank": null,
+        "yesterdayUnitsSoldPrct": null,
+        "followersRank": 6543,
+        "followersPrct": 3,
+        "avgPlaytimeRank": 6447,
+        "avgPlaytimePrct": 3
+    },
+    {
+        "steamAppId": 30,
+        "positiveReviewsRank": 2733,
+        "positiveReviewsPrct": 1,
+        "totalRevenueRank": 4235,
+        "totalRevenuePrct": 2,
+        "totalUnitsSoldRank": 2467,
+        "totalUnitsSoldPrct": 1,
+        "yesterdayUnitsSoldRank": 1101,
+        "yesterdayUnitsSoldPrct": 0.6,
+        "followersRank": 8128,
+        "followersPrct": 4,
+        "avgPlaytimeRank": 2659,
+        "avgPlaytimePrct": 1
+    }
+]

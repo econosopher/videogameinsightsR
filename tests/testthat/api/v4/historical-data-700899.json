@@ -1,0 +1,39 @@
+{
+    "nextCursor": 2047657,
+    "results": [
+        {
+            "vgiId": 2047657,
+            "platform": "steam",
+            "date": "2026-09-28",
+            "country": "WW",
+            "premiumRevenueChange": 253493,
+            "premiumRevenueTotal": 1674666,
+            "unitsOwnedChange": 23489,
+            "unitsOwnedTotal": 155177,
+            "paidUnitsChange": 23489,
+            "paidUnitsTotal": 155177,
+            "dau": 83050,
+            "mau": 155194,
+            "wishlistsChange": 18403,
+            "wishlistsTotal": 361764,
+            "externalId": 4019220,
+            "followersChange": 1878,
+            "followersTotal": 24328,
+            "positiveReviewsChange": 793,
+            "positiveReviewsTotal": 5562,
+            "negativeReviewsChange": 11,
+            "negativeReviewsTotal": 122,
+            "priceInitial": 14.99,
+            "priceFinal": 13.49,
+            "ccuAvg": 25661,
+            "ccuMedian": 28394,
+            "ccuMax": 32107,
+            "ccuMin": 16664,
+            "__fieldsBelowAreDeprecated": "See Response Schema in API Docs",
+            "revenueChange": 253493,
+            "revenueTotal": 1674666,
+            "unitsSoldChange": 23489,
+            "unitsSoldTotal": 155177
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+[
+    {
+        "companyId": 1,
+        "name": "Square Enix",
+        "classification": "AAA",
+        "gamesPublished": 164,
+        "gamesInDevelopment": 5,
+        "revenueTotal": 1224995955,
+        "revenueAvgPerGame": 7469488,
+        "revenueMedianPerGame": 1509814
+    },
+    {
+        "companyId": 3,
+        "name": "Konami Digital Entertainment",
+        "classification": "AA",
+        "gamesPublished": 8,
+        "gamesInDevelopment": 0,
+        "revenueTotal": 33917347,
+        "revenueAvgPerGame": 4239668,
+        "revenueMedianPerGame": null
+    }
+]
