@@ -243,7 +243,7 @@ empty_tests <- sum(sapply(test_results, function(x) x$status %in% c("NULL_RESPON
 md_content <- c(
   "# Video Game Insights API Endpoint Test Report",
   paste0("\n**Generated:** ", Sys.time()),
-  paste0("\n**Package Version:** ", packageVersion("VideoGameInsightsR")),
+  paste0("\n**Package Version:** ", packageVersion("videogameinsightsR")),
   "",
   "## Summary",
   "",

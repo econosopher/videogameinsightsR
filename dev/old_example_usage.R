@@ -1,7 +1,7 @@
-# Example usage of VideoGameInsightsR package
+# Example usage of videogameinsightsR package
 
 # Load the package
-library(VideoGameInsightsR)
+library(videogameinsightsR)
 
 # Ensure you have set your API token
 # Sys.setenv(VGI_AUTH_TOKEN = "your_token_here")

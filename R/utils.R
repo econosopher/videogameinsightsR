@@ -1,4 +1,4 @@
-# --- Utility Functions for VideoGameInsightsR ---
+# --- Utility Functions for videogameinsightsR ---
 
 # This file contains helper functions used by the main data-fetching functions
 # in the package. They handle tasks like input validation, query parameter
@@ -29,27 +29,16 @@ if (!exists("%||%")) {
   }
 }
 
-# --- API version handling ---
+# --- API root ---
 
 .vgi_default_api_root <- "https://vginsights.com/api"
-
-#' Normalise an API version argument to "v3" or "v4".
-#' @noRd
-.vgi_api_version <- function(version = NULL) {
-  if (is.null(version)) version <- getOption("vgi.api_version", "v3")
-  version <- tolower(as.character(version[[1]]))
-  if (grepl("^[0-9]+$", version)) version <- paste0("v", version)
-  if (!version %in% c("v3", "v4")) {
-    stop(sprintf("Unsupported VGI API version '%s'. Use \"v3\" or \"v4\".", version))
-  }
-  version
-}
+.vgi_api_version <- "v4"
 
 #' Root of the VGI API (without the version segment).
 #'
 #' Config precedence: option `vgi.base_url` > env var `VGI_BASE_URL` > default.
-#' A configured value that already ends in `/v3` or `/v4` (the pre-0.2.0
-#' convention) is accepted and the version suffix is stripped.
+#' A configured value that already ends in a version segment such as `/v4`
+#' is accepted and the suffix is stripped.
 #' @noRd
 get_api_root <- function() {
   opt <- getOption("vgi.base_url", NULL)
@@ -63,21 +52,21 @@ get_api_root <- function() {
   sub("/v[0-9]+$", "", root)
 }
 
-# Base URL for one version of the Video Game Insights API
-get_base_url <- function(version = NULL) {
-  paste0(get_api_root(), "/", .vgi_api_version(version))
+# Base URL of the Video Game Insights API (v4)
+get_base_url <- function() {
+  paste0(get_api_root(), "/", .vgi_api_version)
 }
 
 # Build a consistent User-Agent string including package version
 get_user_agent <- function() {
-  pkg_ver <- tryCatch(as.character(utils::packageVersion("VideoGameInsightsR")), error = function(e) "0.0.0")
-  sprintf("VideoGameInsightsR/%s", pkg_ver)
+  pkg_ver <- tryCatch(as.character(utils::packageVersion("videogameinsightsR")), error = function(e) "0.0.0")
+  sprintf("videogameinsightsR/%s", pkg_ver)
 }
 
 # --- Request-level Cache Helpers ---
 
 .vgi_request_cache_dir <- function() {
-  dir <- file.path(tools::R_user_dir("VideoGameInsightsR", "cache"), "request_cache")
+  dir <- file.path(tools::R_user_dir("videogameinsightsR", "cache"), "request_cache")
   if (!dir.exists(dir)) dir.create(dir, recursive = TRUE)
   dir
 }
@@ -88,9 +77,9 @@ get_user_agent <- function() {
   params[order(names(params))]
 }
 
-.vgi_cache_key <- function(method, endpoint, query_params, version = "v3") {
+.vgi_cache_key <- function(method, endpoint, query_params) {
   normalized <- .vgi_normalize_params(query_params)
-  payload <- list(method = toupper(method %||% "GET"), version = version,
+  payload <- list(method = toupper(method %||% "GET"), version = .vgi_api_version,
                   endpoint = endpoint, params = normalized)
   # Use digest to create a short, filesystem-safe key
   json <- jsonlite::toJSON(payload, auto_unbox = TRUE)
@@ -153,9 +142,9 @@ get_auth_token <- function(auth_token = NULL) {
 
 # --- HTTP Request Handling ---
 
-# Build an authenticated httr2 request for one API version
-.vgi_build_request <- function(endpoint, token, headers = list(), version = "v3") {
-  httr2::request(get_base_url(version)) |>
+# Build an authenticated httr2 request
+.vgi_build_request <- function(endpoint, token, headers = list()) {
+  httr2::request(get_base_url()) |>
     httr2::req_url_path_append(endpoint) |>
     httr2::req_headers("api-key" = token, "Accept" = "application/json", !!!headers) |>
     httr2::req_user_agent(get_user_agent()) |>
@@ -201,21 +190,16 @@ get_auth_token <- function(auth_token = NULL) {
   content_list
 }
 
-# Make authenticated API request
-#
-# `version` selects the API generation: "v3" (per-Steam-game endpoints,
-# offset/limit pagination) or "v4" (multi-platform endpoints, cursor
-# pagination, `{nextCursor, results}` envelopes).
+# Make authenticated API request (v4: multi-platform endpoints, cursor
+# pagination, `{nextCursor, results}` envelopes)
 make_api_request <- function(endpoint,
                            query_params = list(),
                            auth_token = NULL,
                            method = "GET",
-                           headers = list(),
-                           version = "v3") {
+                           headers = list()) {
 
   token <- get_auth_token(auth_token)
-  version <- .vgi_api_version(version)
-  req <- .vgi_build_request(endpoint, token, headers, version)
+  req <- .vgi_build_request(endpoint, token, headers)
 
   # Add query parameters if provided
   if (length(query_params) > 0) {
@@ -226,11 +210,11 @@ make_api_request <- function(endpoint,
 
   # Request-level caching (GET only)
   ttl <- getOption("vgi.request_cache_ttl", as.numeric(Sys.getenv("VGI_REQUEST_CACHE_TTL_SECONDS", "0")))
-  cache_key <- .vgi_cache_key(method, endpoint, query_params, version)
+  cache_key <- .vgi_cache_key(method, endpoint, query_params)
   if (toupper(method) == "GET") {
     cached <- .vgi_cache_get(cache_key, ttl)
     if (!is.null(cached)) {
-      if (isTRUE(getOption("vgi.verbose", FALSE))) message(sprintf("[cache hit] GET %s/%s", version, endpoint))
+      if (isTRUE(getOption("vgi.verbose", FALSE))) message(sprintf("[cache hit] GET %s", endpoint))
       return(cached)
     }
   }
@@ -239,7 +223,7 @@ make_api_request <- function(endpoint,
   limiter <- .vgi_get_global_limiter()
   if (!is.null(limiter)) limiter$increment()
 
-  content_list <- .vgi_perform(req, sprintf("%s %s/%s", toupper(method), version, endpoint))
+  content_list <- .vgi_perform(req, sprintf("%s %s", toupper(method), endpoint))
 
   # Store in request cache (GET only)
   if (toupper(method) == "GET" && ttl > 0) {
@@ -253,18 +237,16 @@ make_api_request <- function(endpoint,
 make_api_request_post <- function(endpoint,
                                  body = list(),
                                  auth_token = NULL,
-                                 headers = list(),
-                                 version = "v3") {
+                                 headers = list()) {
 
   token <- get_auth_token(auth_token)
-  version <- .vgi_api_version(version)
-  req <- .vgi_build_request(endpoint, token, headers, version) |>
+  req <- .vgi_build_request(endpoint, token, headers) |>
     httr2::req_body_json(body)
 
   limiter <- .vgi_get_global_limiter()
   if (!is.null(limiter)) limiter$increment()
 
-  .vgi_perform(req, sprintf("POST %s/%s", version, endpoint))
+  .vgi_perform(req, sprintf("POST %s", endpoint))
 }
 
 # --- Input Validation ---
@@ -458,7 +440,7 @@ warn_if_stale_ids <- function(steam_app_ids) {
 
 # --- Response envelope / pagination helpers ---
 
-#' Unwrap a v4 `{nextCursor, results}` envelope (pass-through for v3 arrays).
+#' Unwrap a v4 `{nextCursor, results}` envelope (pass-through otherwise).
 #' @noRd
 .vgi_unwrap_results <- function(result) {
   if (is.list(result) && !is.data.frame(result) && "results" %in% names(result)) {
@@ -467,10 +449,10 @@ warn_if_stale_ids <- function(steam_app_ids) {
   result
 }
 
-#' Steam App ID column from either API generation.
+#' Steam App ID column of v4 rows.
 #'
-#' v3 rows carry `steamAppId`; v4 rows carry `platform` + `externalId`.
-#' Non-steam v4 rows yield NA.
+#' v4 rows carry `platform` + `externalId` (a few carry `steamAppId`).
+#' Non-steam rows yield NA.
 #' @noRd
 .vgi_steam_ids <- function(rows) {
   if (!is.data.frame(rows) || nrow(rows) == 0) return(integer())
@@ -518,7 +500,7 @@ warn_if_stale_ids <- function(steam_app_ids) {
     qp$cursor <- cursor
     raw <- make_api_request(endpoint = endpoint, query_params = qp,
                             auth_token = auth_token, method = "GET",
-                            headers = headers, version = "v4")
+                            headers = headers)
     rows <- .vgi_unwrap_results(raw)
     prev_next <- next_cursor
     next_cursor <- if (is.list(raw) && !is.data.frame(raw)) raw$nextCursor else NULL
@@ -545,9 +527,7 @@ warn_if_stale_ids <- function(steam_app_ids) {
 #' With `steamAppIds` and no `date`, the endpoint returns every day since the
 #' game was first tracked (one world-wide row per day) in a single response.
 #' Rows are filtered to the requested Steam game and the `WW` slice,
-#' de-duplicated by date and sorted. Column names are the raw API names, which
-#' match the v3 per-game endpoints except for the renamed revenue and units
-#' fields (`premiumRevenue*`, `unitsOwned*`, `paidUnits*`).
+#' de-duplicated by date and sorted. Column names are the raw API names.
 #' @noRd
 .vgi_v4_game_history <- function(steam_app_id, auth_token = NULL, headers = list()) {
   rows <- .vgi_fetch_v4_pages(
@@ -566,8 +546,8 @@ warn_if_stale_ids <- function(steam_app_ids) {
 }
 
 #' One Steam game's record from a v4 multi-game player-insights endpoint,
-#' returned in the v3 per-game shape (a list whose nested breakdowns are data
-#' frames), or NULL when the API has no steam row for the game.
+#' returned as a list whose nested breakdowns are data frames, or NULL when
+#' the API has no steam row for the game.
 #' @noRd
 .vgi_v4_game_record <- function(endpoint, steam_app_id, auth_token = NULL, headers = list()) {
   raw <- make_api_request(
@@ -575,40 +555,13 @@ warn_if_stale_ids <- function(steam_app_ids) {
     query_params = list(steamAppIds = as.character(as.integer(steam_app_id))),
     auth_token = auth_token,
     method = "GET",
-    headers = headers,
-    version = "v4"
+    headers = headers
   )
   row <- .vgi_steam_row(.vgi_unwrap_results(raw), steam_app_id)
   if (is.null(row)) return(NULL)
   rec <- lapply(as.list(row), function(v) if (is.list(v)) v[[1]] else v)
   rec$steamAppId <- as.integer(steam_app_id)
   rec
-}
-
-#' Fetch one or every page of a v3 offset/limit endpoint (returns bare arrays).
-#' @noRd
-.vgi_fetch_v3_pages <- function(endpoint, query_params = list(), auth_token = NULL,
-                                headers = list(), all_pages = FALSE, page_size = 1000,
-                                max_pages = getOption("vgi.max_pages", 1000)) {
-  pages <- list()
-  offset <- as.integer(query_params$offset %||% 0L)
-  n <- 0L
-  repeat {
-    qp <- query_params
-    if (isTRUE(all_pages)) {
-      qp$offset <- offset
-      qp$limit <- as.integer(page_size)
-    }
-    rows <- make_api_request(endpoint = endpoint, query_params = qp,
-                             auth_token = auth_token, method = "GET",
-                             headers = headers, version = "v3")
-    if (is.data.frame(rows) && nrow(rows) > 0) pages[[length(pages) + 1]] <- rows
-    n <- n + 1L
-    if (!isTRUE(all_pages)) break
-    if (!is.data.frame(rows) || nrow(rows) < page_size || n >= max_pages) break
-    offset <- offset + as.integer(page_size)
-  }
-  if (length(pages) == 0) data.frame() else dplyr::bind_rows(pages)
 }
 
 #' v4 `historical-data` snapshot rows for one date (steam rows only unless
@@ -657,24 +610,4 @@ warn_if_stale_ids <- function(steam_app_ids) {
 .vgi_col <- function(df, candidates, default = NA) {
   for (nm in candidates) if (nm %in% names(df)) return(df[[nm]])
   rep(default, NROW(df))
-}
-
-#' Daily rows for one game from v4 `/historical-data` (default) or from a v3
-#' per-game time-series endpoint (`v3_endpoint` is a sprintf template taking
-#' the Steam App ID; `v3_element` names the array inside an object response).
-#' @noRd
-.vgi_game_series <- function(steam_app_id, version, v3_endpoint, v3_element = NULL,
-                             auth_token = NULL, headers = list()) {
-  if (identical(version, "v4")) {
-    return(.vgi_v4_game_history(steam_app_id, auth_token = auth_token, headers = headers))
-  }
-  result <- make_api_request(
-    endpoint = sprintf(v3_endpoint, as.integer(steam_app_id)),
-    auth_token = auth_token,
-    method = "GET",
-    headers = headers,
-    version = "v3"
-  )
-  if (!is.null(v3_element) && is.list(result) && !is.data.frame(result)) result <- result[[v3_element]]
-  if (is.data.frame(result)) result else data.frame()
 }

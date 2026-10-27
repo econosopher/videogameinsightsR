@@ -1,4 +1,4 @@
-# VideoGameInsightsR 0.2.0
+# videogameinsightsR 0.2.0
 
 ## API sync (October 2026)
 
@@ -114,13 +114,13 @@ answers at `https://vginsights.com/api/{v3,v4}` (301 to
   and ships them in the package so `R CMD check` exercises the real
   parsing paths. Live smoke tests run only when `VGI_AUTH_TOKEN` is set.
 
-# VideoGameInsightsR 0.1.1
+# videogameinsightsR 0.1.1
 
 * Fixed DESCRIPTION URL to follow redirect (vginsights.com -> app.sensortower.com/vgi/).
 * Replaced `rappdirs` with `tools::R_user_dir()` for CRAN-preferred caching.
 * Switched API-dependent examples from `\donttest{}` to `\dontrun{}`.
 
-# VideoGameInsightsR 0.1.0
+# videogameinsightsR 0.1.0
 
 ## Breaking Changes
 
@@ -144,7 +144,7 @@ answers at `https://vginsights.com/api/{v3,v4}` (301 to
 
 ---
 
-# VideoGameInsightsR 0.0.4
+# videogameinsightsR 0.0.4
 
 * Migrated package core to VGI API v4.
 * Added `vgi_publishers_overview()` and `vgi_developers_overview()` for
@@ -154,19 +154,19 @@ answers at `https://vginsights.com/api/{v3,v4}` (301 to
 * Re-architected data endpoints to use `historical-data` snapshot polling,
   handling API v4 shape changes gracefully.
 
-# VideoGameInsightsR 0.0.3
+# videogameinsightsR 0.0.3
 
 * Added `vgi_game_summary_yoy()` for year-over-year comparisons.
 * Support for flexible date specification (months or explicit dates).
 * Automatic YoY growth percentage calculation.
 * Added rate limiting utilities.
 
-# VideoGameInsightsR 0.0.2
+# videogameinsightsR 0.0.2
 
 * Added multi-ID support in all data retrieval functions.
 * Added `vgi_game_summary()` for comprehensive single-call analysis.
 * Fixed field mapping for revenue and units sold endpoints.
 
-# VideoGameInsightsR 0.0.1
+# videogameinsightsR 0.0.1
 
 * Initial release with core VGI API wrapper functions.

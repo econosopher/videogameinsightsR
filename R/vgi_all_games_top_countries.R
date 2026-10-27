@@ -3,7 +3,7 @@
 #' Retrieve the player-share-by-country breakdown for many games from the v4
 #' `/player-insights/games/top-countries` endpoint. Games can be selected by
 #' Steam App ID, VGI ID or slug; without identifiers the catalogue is paged
-#' from the cursor. For one Steam game use [vgi_top_countries()] (v3).
+#' from the cursor. For one Steam game use [vgi_top_countries()].
 #'
 #' @param steam_app_ids Integer vector. Steam App IDs to select. Optional.
 #' @param vgi_ids Integer vector. VGI internal game IDs to select. Optional.

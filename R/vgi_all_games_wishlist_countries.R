@@ -2,7 +2,7 @@
 #'
 #' Retrieve the wishlist-share-by-country breakdown for many games from the v4
 #' `/player-insights/games/top-wishlist-countries` endpoint. For one Steam
-#' game use [vgi_top_wishlist_countries()] (v3).
+#' game use [vgi_top_wishlist_countries()].
 #'
 #' @inheritParams vgi_all_games_top_countries
 #' @return A [tibble][tibble::tibble] with one row per game: `vgi_id`,

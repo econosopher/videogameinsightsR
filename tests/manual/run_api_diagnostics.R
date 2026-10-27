@@ -1,7 +1,7 @@
 # Comprehensive API Diagnostics Script
 # Run this to diagnose all API issues and generate reports
 
-library(VideoGameInsightsR)
+library(videogameinsightsR)
 library(testthat)
 
 cat("=== VIDEO GAME INSIGHTS API DIAGNOSTICS ===\n")

@@ -1,7 +1,7 @@
-# VideoGameInsightsR
+# videogameinsightsR
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/econosopher/VideoGameInsightsR/workflows/R-CMD-check/badge.svg)](https://github.com/econosopher/VideoGameInsightsR/actions)
+[![R-CMD-check](https://github.com/econosopher/videogameinsightsR/workflows/R-CMD-check/badge.svg)](https://github.com/econosopher/videogameinsightsR/actions)
 <!-- badges: end -->
 
 R package for the [Video Game Insights](https://app.sensortower.com/vgi/) API
@@ -25,13 +25,13 @@ See `dev/api_coverage_2026-10.md` for the endpoint-by-endpoint mapping.
 ## Installation
 
 ```r
-devtools::install_github("econosopher/VideoGameInsightsR")
+devtools::install_github("econosopher/videogameinsightsR")
 ```
 
 ## Quick Start
 
 ```r
-library(VideoGameInsightsR)
+library(videogameinsightsR)
 
 # Store your API token (once per session, or add to .Renviron)
 Sys.setenv(VGI_AUTH_TOKEN = "your_token_here")

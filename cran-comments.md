@@ -11,7 +11,7 @@ This is a resubmission. Changes requested in CRAN feedback were addressed:
   suppressible messaging (`message()`), while keeping `cat()` only in print methods.
 * Updated cache behavior to avoid default writes in user home-space paths.
   Default cache location now uses a temporary directory, with optional override
-  via `options(VideoGameInsightsR.cache_dir = "...")` or `VGI_CACHE_DIR`.
+  via `options(videogameinsightsR.cache_dir = "...")` or `VGI_CACHE_DIR`.
 * Updated examples that write files to use `tempdir()` paths.
 * Updated examples that change graphical parameters (`par(...)`) to restore
   original settings after plotting.

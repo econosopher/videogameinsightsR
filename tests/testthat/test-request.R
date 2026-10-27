@@ -109,7 +109,7 @@ test_that(".vgi_fetch_v4_pages follows nextCursor until exhausted and stops on r
       i <<- i + 1L
       pages[[i]]
     },
-    .package = "VideoGameInsightsR"
+    .package = "videogameinsightsR"
   )
   out <- .vgi_fetch_v4_pages("games/metadata", list(limit = 2L), all_pages = TRUE)
   expect_equal(out$results$vgiId, 1:5)
@@ -125,7 +125,7 @@ test_that(".vgi_fetch_v4_pages follows nextCursor until exhausted and stops on r
   # A server that keeps returning the same cursor must not loop forever.
   testthat::local_mocked_bindings(
     make_api_request = function(...) list(nextCursor = 9, results = data.frame(vgiId = 9L)),
-    .package = "VideoGameInsightsR"
+    .package = "videogameinsightsR"
   )
   stuck <- .vgi_fetch_v4_pages("x", list(cursor = 9L), all_pages = TRUE)
   expect_equal(nrow(stuck$results), 1)
@@ -139,7 +139,7 @@ test_that(".vgi_fetch_v4_pages does not duplicate a page the API replays for id 
     make_api_request = function(...) {
       list(nextCursor = 2047657L, results = data.frame(vgiId = 2047657L, date = c("2026-10-05", "2026-10-06")))
     },
-    .package = "VideoGameInsightsR"
+    .package = "videogameinsightsR"
   )
   out <- .vgi_fetch_v4_pages("historical-data", list(steamAppIds = "4019220"), all_pages = TRUE)
   expect_equal(out$results$date, c("2026-10-05", "2026-10-06"))
@@ -154,7 +154,7 @@ test_that(".vgi_fetch_v3_pages advances offset by page size until a short page",
       n <- if (query_params$offset >= 4) 1 else 2
       data.frame(steamAppId = seq_len(n) + query_params$offset)
     },
-    .package = "VideoGameInsightsR"
+    .package = "videogameinsightsR"
   )
   out <- .vgi_fetch_v3_pages("games/rankings", list(), all_pages = TRUE, page_size = 2)
   expect_equal(out$steamAppId, c(1, 2, 3, 4, 5))
@@ -173,7 +173,7 @@ test_that("deprecated aliases warn once per session and delegate", {
     vgi_units_sold_by_date = function(date, steam_app_ids = NULL, ...) {
       tibble::tibble(steam_app_id = steam_app_ids, date = date, units_sold = 5L, daily_units = 1L, sales_rank = 1L)
     },
-    .package = "VideoGameInsightsR"
+    .package = "videogameinsightsR"
   )
   withr::local_options(vgi.deprecation_frequency = "always")
   expect_warning(out <- vgi_entitlements_by_date("2026-09-28", 1), class = "vgi_deprecated")

@@ -1,4 +1,4 @@
 library(testthat)
-library(VideoGameInsightsR)
+library(videogameinsightsR)
 
-test_check("VideoGameInsightsR")
+test_check("videogameinsightsR")

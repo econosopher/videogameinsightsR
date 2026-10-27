@@ -4,10 +4,6 @@
 #' into tidy per-metric time series.
 #'
 #' @param steam_app_id Integer. The Steam App ID of the game.
-#' @param version API generation. `"v4"` (default) reads the v4
-#'   `/historical-data` endpoint filtered to the game, which covers every day
-#'   since the game was first tracked, world-wide. `"v3"` reads the per-game
-#'   v3 `/historical-data/games/{steamAppId}` endpoint.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
@@ -43,14 +39,10 @@
 #' }
 vgi_historical_data <- function(steam_app_id,
                                 auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                headers = list(),
-                                version = c("v4", "v3")) {
+                                headers = list()) {
 
   validate_numeric(steam_app_id, "steam_app_id")
-
-  version <- .vgi_api_version(match.arg(version))
-  rows <- .vgi_game_series(steam_app_id, version, "historical-data/games/%s",
-                           auth_token = auth_token, headers = headers)
+  rows <- .vgi_v4_game_history(steam_app_id, auth_token = auth_token, headers = headers)
 
   empty <- .vgi_clean_list(list(
     steamAppId = as.integer(steam_app_id),

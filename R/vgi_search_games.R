@@ -50,9 +50,9 @@ vgi_search_games <- function(query,
   # The API fallback can be enabled explicitly with:
   # options(vgi.search_allow_api_fallback = TRUE)
   candidate_cache_paths <- c(
-    system.file("extdata", "game_cache.rds", package = "VideoGameInsightsR"),
+    system.file("extdata", "game_cache.rds", package = "videogameinsightsR"),
     file.path("inst", "extdata", "game_cache.rds"),
-    file.path(tools::R_user_dir("VideoGameInsightsR", "cache"), "vgi_all_games_cache.rds")
+    file.path(tools::R_user_dir("videogameinsightsR", "cache"), "vgi_all_games_cache.rds")
   )
   candidate_cache_paths <- unique(candidate_cache_paths[nzchar(candidate_cache_paths)])
 

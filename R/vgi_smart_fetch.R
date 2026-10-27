@@ -16,7 +16,7 @@
 vgi_fetch_all_games <- function(cache_results = TRUE, 
                                verbose = TRUE,
                                auth_token = Sys.getenv("VGI_AUTH_TOKEN")) {
-  configured_cache <- getOption("VideoGameInsightsR.cache_dir", Sys.getenv("VGI_CACHE_DIR", ""))
+  configured_cache <- getOption("videogameinsightsR.cache_dir", Sys.getenv("VGI_CACHE_DIR", ""))
   cache_base_dir <- if (!is.null(configured_cache) && nzchar(configured_cache)) {
     configured_cache
   } else {
@@ -34,37 +34,9 @@ vgi_fetch_all_games <- function(cache_results = TRUE,
     }
   }
   
-  all_games <- list()
-  offset <- 0
-  limit <- 1000  # Maximum allowed by API
-  total_fetched <- 0
-  
   if (verbose) message("Fetching all games from API...")
-  
-  repeat {
-    # Fetch batch
-    games_batch <- vgi_game_rankings(offset = offset, limit = limit)
-    
-    if (nrow(games_batch) == 0) break
-    
-    all_games[[length(all_games) + 1]] <- games_batch
-    total_fetched <- total_fetched + nrow(games_batch)
-    
-    if (verbose) {
-      message(sprintf("Fetched %d games (total: %d)", nrow(games_batch), total_fetched))
-    }
-    
-    # Check if we got less than limit (indicates last page)
-    if (nrow(games_batch) < limit) break
-    
-    offset <- offset + limit
-    
-    # Be nice to the API
-    Sys.sleep(0.1)
-  }
-  
-  # Combine all results
-  all_games_df <- dplyr::bind_rows(all_games)
+  all_games_df <- vgi_game_list()
+  if (verbose) message(sprintf("Fetched %d games", nrow(all_games_df)))
   
   if (cache_results && nrow(all_games_df) > 0) {
     if (!dir.exists(dirname(cache_file))) {
@@ -79,210 +51,31 @@ vgi_fetch_all_games <- function(cache_results = TRUE,
 
 #' Fetch Games by ID List
 #'
-#' Efficiently fetches game data for a list of Steam App IDs.
-#' Uses caching and batching to minimize API calls.
+#' Fetch game data for a list of Steam App IDs: metadata from
+#' `/games/metadata`, or one day's active players from `/historical-data`.
 #'
 #' @param steam_app_ids Integer vector. List of Steam App IDs to fetch.
-#' @param data_type Character. Type of data to fetch: "metadata", "rankings", "active_players"
-#' @param date Character or Date. Required for "active_players" data type.
-#' @param use_cache Logical. Use local cache if available. Default TRUE.
+#' @param data_type Character. Type of data to fetch: "metadata" or
+#'   "active_players".
+#' @param date Character or Date. Required for "active_players".
 #' @param auth_token Character string. Your VGI API authentication token.
 #'
-#' @return Data frame with requested game data
+#' @return A [tibble][tibble::tibble] with the requested game data.
 #' @export
 #' @examples
 #' \dontrun{
-#' # Get metadata for specific games
 #' games <- vgi_fetch_by_ids(c(730, 578080, 1172470), "metadata")
-#' 
-#' # Get active players for specific games
 #' active <- vgi_fetch_by_ids(c(730, 578080), "active_players", date = "2025-07-26")
 #' }
-vgi_fetch_by_ids <- function(steam_app_ids, 
-                            data_type = c("metadata", "rankings", "active_players"),
+vgi_fetch_by_ids <- function(steam_app_ids,
+                            data_type = c("metadata", "active_players"),
                             date = NULL,
-                            use_cache = TRUE,
                             auth_token = Sys.getenv("VGI_AUTH_TOKEN")) {
-  
   data_type <- match.arg(data_type)
-  
-  # Remove duplicates
   steam_app_ids <- unique(steam_app_ids)
-  
-  if (data_type == "rankings") {
-    # For rankings, we need to fetch all and filter
-    all_rankings <- vgi_fetch_all_games(cache_results = use_cache)
-    return(.vgi_clean_names(all_rankings[all_rankings$steam_app_id %in% steam_app_ids, ]))
-  }
-  
   if (data_type == "active_players") {
     if (is.null(date)) stop("Date is required for active_players data type")
-    
-    # Fetch active players for date
-    all_active <- vgi_active_players_by_date(date, limit = 1000)
-    
-    # Filter for our IDs
-    return(.vgi_clean_names(all_active[all_active$steam_app_id %in% steam_app_ids, ]))
+    return(vgi_active_players_by_date(date, steam_app_ids = steam_app_ids, auth_token = auth_token))
   }
-  
-  if (data_type == "metadata") {
-    # Try batch fetch first
-    result <- tryCatch({
-      vgi_game_metadata_batch(steam_app_ids)
-    }, error = function(e) {
-      # Fall back to individual fetches
-      message("Batch metadata fetch failed, trying individual fetches...")
-      
-      metadata_list <- list()
-      success_count <- 0
-      
-      for (id in steam_app_ids) {
-        tryCatch({
-          meta <- vgi_game_metadata(id)
-          metadata_list[[as.character(id)]] <- tibble::tibble(
-            steam_app_id = id,
-            name = meta$name,
-            genres = paste(meta$genres, collapse = ", "),
-            release_date = meta$release_date,
-            developer = meta$developer,
-            publisher = meta$publisher,
-
-          )
-          success_count <- success_count + 1
-        }, error = function(e) {
-          # Skip failed games
-        })
-        
-        # Progress indicator
-        if (length(steam_app_ids) > 10 && which(steam_app_ids == id) %% 10 == 0) {
-          message(sprintf("Progress: %d/%d games fetched", 
-                         which(steam_app_ids == id), length(steam_app_ids)))
-        }
-      }
-      
-      if (length(metadata_list) > 0) {
-        dplyr::bind_rows(metadata_list)
-      } else {
-        tibble::tibble()
-      }
-    })
-    
-    return(.vgi_clean_names(result))
-  }
-}
-
-#' Smart Game Search with Filtering
-#'
-#' Searches for games using local cache and smart filtering to minimize API calls.
-#'
-#' @param genre Character. Genre to filter by (optional).
-#' @param developer Character. Developer to filter by (optional).
-#' @param publisher Character. Publisher to filter by (optional).
-#' @param min_rank Integer. Minimum rank threshold (optional).
-#' @param metric Character. Ranking metric to use: "revenue", "units", "followers"
-#' @param limit Integer. Maximum number of results to return.
-#'
-#' @return Data frame with filtered games
-#' @export
-#' @examples
-#' \dontrun{
-#' # Get top 20 shooters by revenue
-#' shooters <- vgi_smart_search(genre = "Shooter", metric = "revenue", limit = 20)
-#' 
-#' # Get all games by a specific developer
-#' valve_games <- vgi_smart_search(developer = "Valve")
-#' }
-vgi_smart_search <- function(genre = NULL,
-                            developer = NULL, 
-                            publisher = NULL,
-                            min_rank = NULL,
-                            metric = c("revenue", "units", "followers"),
-                            limit = 100) {
-  
-  metric <- match.arg(metric)
-  
-  # Get all games with rankings
-  all_games <- vgi_fetch_all_games(verbose = FALSE)
-  
-  rank_col <- switch(metric,
-    revenue = "total_revenue_rank",
-    units = "total_units_sold_rank",
-    followers = "followers_rank"
-  )
-  
-  if (!is.null(min_rank)) {
-    all_games <- all_games[!is.na(all_games[[rank_col]]) & 
-                          all_games[[rank_col]] <= min_rank, ]
-  }
-  
-  all_games <- all_games[order(all_games[[rank_col]]), ]
-  
-  if (is.null(genre) && is.null(developer) && is.null(publisher)) {
-    return(.vgi_clean_names(head(all_games, limit)))
-  }
-  
-  candidate_ids <- head(all_games$steam_app_id, limit * 3)
-  
-  metadata <- vgi_fetch_by_ids(candidate_ids, "metadata")
-  
-  results <- merge(all_games, metadata, by = "steam_app_id")
-  
-  # Apply filters
-  if (!is.null(genre)) {
-    results <- results[grepl(genre, results$genres, ignore.case = TRUE), ]
-  }
-  
-  if (!is.null(developer)) {
-    results <- results[grepl(developer, results$developer, ignore.case = TRUE), ]
-  }
-  
-  if (!is.null(publisher)) {
-    results <- results[grepl(publisher, results$publisher, ignore.case = TRUE), ]
-  }
-  
-  # Return top N after filtering
-  return(.vgi_clean_names(head(results, limit)))
-}
-
-#' Get Top Games with Active Player Data
-#'
-#' Combines rankings with active player data for a specific date.
-#'
-#' @param date Character or Date. Date for active player data.
-#' @param metric Character. Ranking metric to sort by.
-#' @param limit Integer. Number of games to return.
-#' @param genre Character. Optional genre filter.
-#'
-#' @return Data frame with games, rankings, and active player data
-#' @export
-vgi_top_games_with_activity <- function(date,
-                                       metric = c("revenue", "units", "followers"),
-                                       limit = 50,
-                                       genre = NULL) {
-  
-  metric <- match.arg(metric)
-  
-  # Get top games by metric
-  if (!is.null(genre)) {
-    top_games <- vgi_smart_search(genre = genre, metric = metric, limit = limit * 2)
-  } else {
-    all_games <- vgi_fetch_all_games(verbose = FALSE)
-    rank_col <- switch(metric,
-      revenue = "total_revenue_rank",
-      units = "total_units_sold_rank", 
-      followers = "followers_rank"
-    )
-    top_games <- head(all_games[order(all_games[[rank_col]]), ], limit * 2)
-  }
-  
-  active_data <- vgi_active_players_by_date(date, limit = 1000)
-  
-  results <- merge(top_games, active_data, by = "steam_app_id", all.x = TRUE)
-  
-  # Sort by DAU (if available) or by original metric
-  if (sum(!is.na(results$dau)) > 0) {
-    results <- results[order(-results$dau, results[[rank_col]]), ]
-  }
-  
-  return(.vgi_clean_names(head(results, limit)))
+  vgi_game_metadata_batch(steam_app_ids, auth_token = auth_token)
 }
