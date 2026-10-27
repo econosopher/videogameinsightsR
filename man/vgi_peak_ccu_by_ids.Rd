@@ -10,7 +10,7 @@ vgi_peak_ccu_by_ids(steam_app_ids)
 \item{steam_app_ids}{Integer vector of Steam app IDs}
 }
 \value{
-A tibble with columns: name, steamAppId, peak_ccu, peak_date
+A tibble with columns: name, steam_app_id, peak_ccu, peak_date
 }
 \description{
 Get peak concurrent players (CCU) for multiple Steam app IDs

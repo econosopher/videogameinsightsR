@@ -87,6 +87,7 @@ vgi_search_games <- function(query,
   if (!"name" %in% names(all_games)) all_games$name <- NA_character_
   if (!"steam_app_id" %in% names(all_games) && "id" %in% names(all_games)) all_games$steam_app_id <- as.integer(all_games$id)
   if (!"id" %in% names(all_games) && "steam_app_id" %in% names(all_games)) all_games$id <- all_games$steam_app_id
+  all_games <- all_games[!is.na(all_games$steam_app_id), , drop = FALSE]
 
   name_col <- all_games$name
   name_col[is.na(name_col)] <- ""
@@ -152,6 +153,7 @@ vgi_search_games <- function(query,
       if (!"id" %in% names(all_games_api) && "steam_app_id" %in% names(all_games_api)) {
         all_games_api$id <- all_games_api$steam_app_id
       }
+      all_games_api <- all_games_api[!is.na(all_games_api$steam_app_id), , drop = FALSE]
       nm <- all_games_api$name
       nm[is.na(nm)] <- ""
       keep_cols <- intersect(c("steam_app_id", "name", "id"), names(all_games_api))

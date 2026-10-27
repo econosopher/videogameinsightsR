@@ -2,36 +2,37 @@
 % Please edit documentation in R/vgi_all_games_player_overlap.R
 \name{vgi_all_games_player_overlap}
 \alias{vgi_all_games_player_overlap}
-\title{Get Player Overlap Across the Catalogue (v3)}
+\title{Get Player Overlap Across the Catalogue}
 \usage{
 vgi_all_games_player_overlap(
+  limit = 1,
+  cursor = NULL,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list(),
-  offset = NULL,
-  limit = NULL
+  headers = list()
 )
 }
 \arguments{
+\item{limit}{Integer. Number of games to return.}
+
+\item{cursor}{Integer. VGI ID after which to start (the \code{next_cursor}
+attribute of a previous call).}
+
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
-
-\item{offset}{Integer. Games to skip.}
-
-\item{limit}{Integer. Games to return (API default 1).}
 }
 \value{
-A \link[tibble:tibble]{tibble} with one row per game: \code{steam_app_id},
-\code{top_overlaps} (list-column of overlap tibbles, see
-\code{\link[=vgi_player_overlap]{vgi_player_overlap()}}), \code{overlap_count}, \code{top_overlap_game},
-\code{top_overlap_pct}.
+A \link[tibble:tibble]{tibble} with one row per game: \code{vgi_id},
+\code{steam_app_id}, \code{top_overlaps} (list-column of overlap tibbles, see
+\code{\link[=vgi_player_overlap]{vgi_player_overlap()}}), \code{overlap_count}, \code{top_overlap_game} (VGI ID) and
+\code{top_overlap_pct}, sorted by \code{top_overlap_pct}. The attribute
+\code{next_cursor} carries the cursor for the next game.
 }
 \description{
-Retrieve player-overlap lists for many games from the v3
-\verb{/player-insights/games/player-overlap} endpoint (offset paging; the API
-returns one game per call by default and each row can be large). For one
-game use \code{\link[=vgi_player_overlap]{vgi_player_overlap()}}.
+Walk \verb{/player-overlap} game by game, starting after \code{cursor}. The endpoint
+returns one game per request, so \code{limit} games cost \code{limit} requests and
+each row can be large. For one game use \code{\link[=vgi_player_overlap]{vgi_player_overlap()}}.
 }
 \examples{
 \dontrun{

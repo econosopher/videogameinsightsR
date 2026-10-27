@@ -4,7 +4,7 @@
 #   Rscript dev/record_fixtures.R
 #
 # Responses are captured under a temporary directory as
-# vginsights.com/api/{v3,v4}/... and then copied to tests/testthat/api/...,
+# vginsights.com/api/v4/... and then copied to tests/testthat/api/...,
 # where tests/testthat/helper-fixtures.R replays them with the package pointed
 # at the short root "https://api" (keeps paths under R CMD check's 100-byte
 # limit). Fixtures hold response bodies only; the api-key request header is
@@ -34,25 +34,15 @@ dressmaker <- 4019220L   # released 2026-09-21, publisher Free Lives (28663), vg
 free_lives <- 28663L
 
 httptest2::start_capturing()
-# --- v3 ---
-vgi_game_metadata(dressmaker)
-try(vgi_game_metadata(999999999), silent = TRUE)          # 404 -> .R fixture
-vgi_game_rankings(steam_app_id = dressmaker)
-vgi_game_rankings(limit = 3)
-vgi_game_rankings(limit = 6)                               # vgi_top_games(limit = 3) fetches 2x
-vgi_historical_data(dressmaker, version = "v3")
-vgi_insights_ccu(dressmaker, version = "v3")
-vgi_insights_revenue(dressmaker, version = "v3")
-vgi_insights_units(dressmaker, version = "v3")
-vgi_insights_reviews(dressmaker, version = "v3")
-vgi_insights_wishlists(dressmaker, version = "v3")
-vgi_insights_price_history(dressmaker, currency = "USD", version = "v3")
-vgi_insights_playtime(dressmaker, version = "v3")
-vgi_top_countries(dressmaker, version = "v3")
+vgi_game_metadata(dressmaker)                               # same request as vgi_games_metadata(steam_app_ids =)
+vgi_game_metadata(999999999)                                # unknown game -> empty results
+vgi_game_metadata_batch(c(dressmaker, 999999999))
 vgi_player_overlap(dressmaker, limit = 5)
+vgi_all_games_player_overlap(limit = 2)
 vgi_publisher_info(free_lives)
-vgi_publisher_games(free_lives)
-vgi_publishers(limit = 2)
+vgi_publisher_games(free_lives)                             # game-ids + /games/metadata?vgiIds=
+vgi_developer_info(free_lives)
+vgi_developer_games(free_lives)
 # --- v4 ---
 vgi_games_metadata(steam_app_ids = dressmaker)
 vgi_games_metadata(slugs = "dressmaker")
@@ -88,11 +78,10 @@ for (d in rev(list.dirs("tests/testthat/api"))) {
   }
 }
 
-# Long daily histories are trimmed to the launch window after recording so
-# the fixtures stay small: rows with date < 2026-09-15 are dropped from
-# api/v3/historical-data/games/4019220.json,
-# api/v3/interest-level/wishlists/games/4019220.json and the v4
-# api/v4/historical-data-fbd7e9.json (historical-data?steamAppIds=4019220).
+# Long responses are trimmed after recording so the fixtures stay small: rows
+# with date < 2026-09-15 are dropped from api/v4/historical-data-fbd7e9.json
+# (historical-data?steamAppIds=4019220), and player-overlap lists keep their
+# first 20 overlapping games.
 
 files <- list.files("tests/testthat/api", recursive = TRUE, full.names = TRUE)
 cat(sprintf("%7d  %s\n", file.size(files), files), sep = "")

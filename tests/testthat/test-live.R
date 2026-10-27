@@ -7,39 +7,24 @@ skip_if_live_disabled <- function() {
   testthat::skip_on_cran()
 }
 
-test_that("live: v3 metadata, rankings and CCU history agree on Dressmaker", {
+test_that("live: metadata, company and CCU history agree on Dressmaker", {
   skip_if_live_disabled()
   meta <- vgi_game_metadata(4019220)
   expect_equal(meta$name, "Dressmaker")
-  expect_equal(meta$publisher_id, 28663L)
-  expect_equal(meta$release_date, "2026-09-21")
+  expect_true(28663L %in% meta$publishers[[1]]$company_id)
+  expect_equal(meta$release_date_steam, "2026-09-21")
 
-  ranks <- vgi_game_rankings(steam_app_id = 4019220)
-  expect_equal(ranks$steam_app_id, 4019220L)
-  expect_false(is.na(ranks$total_revenue_rank))
+  expect_true(4019220L %in% vgi_publisher_games(28663))
+  expect_equal(vgi_publisher_info(28663)$name, "Free Lives")
 
-  ccu_v3 <- vgi_insights_ccu(4019220, version = "v3")$player_history
-  expect_gte(nrow(ccu_v3), 10)
-  expect_equal(min(ccu_v3$date), as.Date("2026-09-21"))
-  expect_gt(max(ccu_v3$max, na.rm = TRUE), 1000)
+  ccu <- vgi_insights_ccu(4019220)$player_history
+  expect_false(anyDuplicated(ccu$date) > 0)
+  expect_lt(min(ccu$date), as.Date("2026-09-21"))
+  expect_equal(ccu$max[ccu$date == as.Date("2026-09-28")], 32107)
+  expect_gt(max(vgi_insights_units(4019220)$units_sold_total, na.rm = TRUE), 100000)
 })
 
-test_that("live: v4 (default) and v3 per-game series agree on Dressmaker", {
-  skip_if_live_disabled()
-  ccu_v4 <- vgi_insights_ccu(4019220)$player_history
-  expect_false(anyDuplicated(ccu_v4$date) > 0)
-  expect_lt(min(ccu_v4$date), as.Date("2026-09-21"))
-  expect_equal(ccu_v4$max[ccu_v4$date == as.Date("2026-09-28")], 32107)
-
-  units_v4 <- vgi_insights_units(4019220)
-  units_v3 <- vgi_insights_units(4019220, version = "v3")
-  day <- as.Date("2026-09-28")
-  expect_equal(units_v4$units_sold_total[units_v4$date == day],
-               units_v3$units_sold_total[units_v3$date == day])
-  expect_gt(max(units_v4$units_sold_total, na.rm = TRUE), 100000)
-})
-
-test_that("live: v4 metadata resolves the same game by Steam id and slug", {
+test_that("live: metadata, overlap and snapshots resolve the same game by Steam id and slug", {
   skip_if_live_disabled()
   by_id <- vgi_games_metadata(steam_app_ids = 4019220)
   by_slug <- vgi_games_metadata(slugs = "dressmaker")
@@ -50,6 +35,7 @@ test_that("live: v4 metadata resolves the same game by Steam id and slug", {
   overlap <- vgi_player_overlap(slug = "dressmaker", limit = 5)
   expect_equal(overlap$steam_app_id, 4019220L)
   expect_s3_class(overlap$player_overlaps, "tbl_df")
+  expect_false(all(is.na(overlap$player_overlaps$units_sold_overlap_percentage)))
 
   snap <- vgi_historical_data_by_date("2026-09-28", steam_app_ids = 4019220)
   expect_equal(snap$ccu_max, 32107L)

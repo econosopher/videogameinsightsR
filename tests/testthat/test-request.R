@@ -1,23 +1,19 @@
-# Request plumbing: base URL / version resolution, auth, query building,
+# Request plumbing: base URL resolution, auth, query building,
 # pagination and response helpers. These are the contracts every endpoint
 # function relies on, tested once here rather than per endpoint.
 
-test_that("get_base_url resolves the version segment from the configured root", {
+test_that("get_base_url appends v4 to the configured root", {
   withr::local_options(vgi.base_url = NULL)
   withr::local_envvar(VGI_BASE_URL = "")
-  expect_equal(get_base_url(), "https://vginsights.com/api/v3")
-  expect_equal(get_base_url("v4"), "https://vginsights.com/api/v4")
-  expect_equal(get_base_url(4), "https://vginsights.com/api/v4")
+  expect_equal(get_base_url(), "https://vginsights.com/api/v4")
 
-  # Pre-0.2.0 configs pointed at a versioned URL; the suffix is stripped.
-  withr::local_options(vgi.base_url = "https://vginsights.com/api/v4")
-  expect_equal(get_base_url("v3"), "https://vginsights.com/api/v3")
+  # Older configs pointed at a versioned URL; the suffix is stripped.
+  withr::local_options(vgi.base_url = "https://vginsights.com/api/v3")
+  expect_equal(get_base_url(), "https://vginsights.com/api/v4")
 
   withr::local_options(vgi.base_url = NULL)
   withr::local_envvar(VGI_BASE_URL = "https://app.sensortower.com/vgi/api/")
-  expect_equal(get_base_url("v4"), "https://app.sensortower.com/vgi/api/v4")
-
-  expect_error(get_base_url("v2"), "Unsupported VGI API version")
+  expect_equal(get_base_url(), "https://app.sensortower.com/vgi/api/v4")
 })
 
 test_that("get_auth_token prefers the argument, then the environment, else errors", {
@@ -29,15 +25,15 @@ test_that("get_auth_token prefers the argument, then the environment, else error
   })
 })
 
-test_that("make_api_request sends the api-key header to the versioned path", {
+test_that("make_api_request sends the api-key header to the v4 path", {
   seen <- NULL
   httr2::local_mocked_responses(function(req) {
     seen <<- req
     httr2::response_json(body = list(ok = TRUE))
   })
-  res <- make_api_request("games/1/metadata", auth_token = "tok", version = "v4")
+  res <- make_api_request("games/metadata", auth_token = "tok")
   expect_equal(res$ok, TRUE)
-  expect_equal(seen$url, "https://vginsights.com/api/v4/games/1/metadata")
+  expect_equal(seen$url, "https://vginsights.com/api/v4/games/metadata")
   expect_equal(seen$headers[["api-key"]], "tok")
 })
 
@@ -51,7 +47,7 @@ test_that("make_api_request drops NULL query params and raises classed HTTP erro
     httr2::response_json(body = list())
   })
   make_api_request("x", query_params = list(a = 1, b = NULL, c = "z"), auth_token = "tok")
-  expect_equal(seen$url, "https://vginsights.com/api/v3/x?a=1&c=z")
+  expect_equal(seen$url, "https://vginsights.com/api/v4/x?a=1&c=z")
 
   err <- tryCatch(make_api_request("missing", auth_token = "tok"), vgi_http_error = function(e) e)
   expect_s3_class(err, "vgi_http_error")
@@ -77,10 +73,10 @@ test_that(".vgi_single_game_query requires exactly one identifier", {
   expect_error(.vgi_single_game_query(steam_app_id = 1, slug = "x"), "exactly one")
 })
 
-test_that(".vgi_steam_ids reads v3 steamAppId and v4 platform/externalId rows", {
-  v3 <- data.frame(steamAppId = c(10, 20))
+test_that(".vgi_steam_ids reads steamAppId and platform/externalId rows", {
+  plain <- data.frame(steamAppId = c(10, 20))
   v4 <- data.frame(platform = c("steam", "xbox", "steam"), externalId = c("4019220", "ABC123", "730"))
-  expect_equal(.vgi_steam_ids(v3), c(10L, 20L))
+  expect_equal(.vgi_steam_ids(plain), c(10L, 20L))
   expect_equal(.vgi_steam_ids(v4), c(4019220L, NA, 730L))
   expect_equal(.vgi_steam_ids(data.frame()), integer())
   expect_equal(.vgi_steam_row(v4, 730)$externalId, "730")
@@ -146,38 +142,11 @@ test_that(".vgi_fetch_v4_pages does not duplicate a page the API replays for id 
   expect_null(out$next_cursor)
 })
 
-test_that(".vgi_fetch_v3_pages advances offset by page size until a short page", {
-  offsets <- integer()
-  testthat::local_mocked_bindings(
-    make_api_request = function(endpoint, query_params = list(), ...) {
-      offsets <<- c(offsets, query_params$offset)
-      n <- if (query_params$offset >= 4) 1 else 2
-      data.frame(steamAppId = seq_len(n) + query_params$offset)
-    },
-    .package = "videogameinsightsR"
-  )
-  out <- .vgi_fetch_v3_pages("games/rankings", list(), all_pages = TRUE, page_size = 2)
-  expect_equal(out$steamAppId, c(1, 2, 3, 4, 5))
-  expect_equal(offsets, c(0L, 2L, 4L))
-})
-
 test_that(".vgi_clean_list snake_cases list element names and nested tibbles", {
   out <- .vgi_clean_list(list(steamAppId = 1L, playerHistory = data.frame(ccuMax = 5)))
   expect_named(out, c("steam_app_id", "player_history"))
   expect_named(out$player_history, "ccu_max")
   expect_s3_class(out$player_history, "tbl_df")
-})
-
-test_that("deprecated aliases warn once per session and delegate", {
-  testthat::local_mocked_bindings(
-    vgi_units_sold_by_date = function(date, steam_app_ids = NULL, ...) {
-      tibble::tibble(steam_app_id = steam_app_ids, date = date, units_sold = 5L, daily_units = 1L, sales_rank = 1L)
-    },
-    .package = "videogameinsightsR"
-  )
-  withr::local_options(vgi.deprecation_frequency = "always")
-  expect_warning(out <- vgi_entitlements_by_date("2026-09-28", 1), class = "vgi_deprecated")
-  expect_equal(out$units_sold, 5L)
 })
 
 test_that("format_date and validate_* enforce input contracts", {

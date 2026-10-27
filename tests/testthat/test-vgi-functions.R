@@ -55,26 +55,6 @@ test_that("vgi_search_games validates inputs correctly", {
   )
 })
 
-test_that("vgi_top_games validates inputs correctly", {
-  # Test invalid metric
-  expect_error(
-    vgi_top_games("invalid_metric"),
-    "Invalid metric"
-  )
-  
-  # Test invalid platform
-  expect_error(
-    vgi_top_games("revenue", platform = "invalid_platform"),
-    "Invalid platform"
-  )
-  
-  # Test limit validation
-  expect_error(
-    vgi_top_games("revenue", limit = 0),
-    "limit must be at least 1"
-  )
-})
-
 # Units Insights Tests
 test_that("vgi_insights_units validates inputs correctly", {
   # Test non-numeric steam_app_id
@@ -201,19 +181,13 @@ test_that("vgi_player_overlap validates inputs correctly", {
   
   expect_error(
     vgi_player_overlap(NULL),
-    "steam_app_id is required"
+    "Supply exactly one of steam_app_id, vgi_id or slug"
   )
   
   # Test invalid limit
   expect_error(
     vgi_player_overlap(730, limit = 0),
     "limit must be at least 1"
-  )
-  
-  # Test invalid offset
-  expect_error(
-    vgi_player_overlap(730, offset = -1),
-    "offset must be at least 0"
   )
 })
 

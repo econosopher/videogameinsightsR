@@ -1,7 +1,8 @@
 #' Get Metadata for Several Steam Games
 #'
 #' Retrieves metadata for multiple Steam games from `/games/metadata`, up to
-#' 500 IDs per request.
+#' 500 IDs per request. When the API rejects a request because one ID is
+#' unknown, that chunk is fetched one game at a time.
 #'
 #' @param steam_app_ids Numeric vector. The Steam App IDs of the games.
 #' @param auth_token Character string. Your VGI API authentication token.
@@ -30,7 +31,15 @@ vgi_game_metadata_batch <- function(steam_app_ids,
 
   chunks <- split(steam_app_ids, ceiling(seq_along(steam_app_ids) / 500))
   out <- dplyr::bind_rows(lapply(chunks, function(ids) {
-    vgi_games_metadata(steam_app_ids = ids, limit = 1000, auth_token = auth_token, headers = headers)
+    tryCatch(
+      vgi_games_metadata(steam_app_ids = ids, limit = 1000, auth_token = auth_token, headers = headers),
+      vgi_http_error = function(e) {
+        # One unknown ID makes the API reject the whole request with a 404;
+        # fall back to one request per game.
+        if (!identical(e$status, 404L)) rlang::cnd_signal(e)
+        dplyr::bind_rows(lapply(ids, vgi_game_metadata, auth_token = auth_token, headers = headers))
+      }
+    )
   }))
   if (nrow(out) == 0) out <- .vgi_metadata_rows_v4(data.frame())
   out <- out[!is.na(out$steam_app_id) & out$steam_app_id %in% steam_app_ids, , drop = FALSE]

@@ -11,9 +11,7 @@ vgi_all_developer_games(
   slugs = NULL,
   limit = NULL,
   cursor = NULL,
-  offset = NULL,
-  all_pages = FALSE,
-  version = c("v4", "v3")
+  all_pages = FALSE
 )
 }
 \arguments{
@@ -22,30 +20,25 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
 
-\item{vgi_ids}{Integer vector. VGI company IDs to select (v4 only).}
+\item{vgi_ids}{Integer vector. VGI company IDs to select.}
 
-\item{slugs}{Character vector. VGI company slugs to select (v4 only).}
+\item{slugs}{Character vector. VGI company slugs to select.}
 
 \item{limit}{Integer. Records per page (maximum 1000).}
 
-\item{cursor}{Integer. Cursor from a previous page (v4 only).}
-
-\item{offset}{Integer. Records to skip (v3 only).}
+\item{cursor}{Integer. Cursor from a previous page.}
 
 \item{all_pages}{Logical. Fetch every page.}
-
-\item{version}{\code{"v4"} (default) or \code{"v3"}.}
 }
 \value{
-A \link[tibble:tibble]{tibble} with columns \code{developer_id}, \code{name}
-(v4), \code{game_ids} (list-column), \code{id_type} and \code{game_count}; see
+A \link[tibble:tibble]{tibble} with columns \code{developer_id}, \code{name},
+\code{game_ids} (list-column of VGI game IDs) and \code{game_count}; see
 \code{\link[=vgi_all_publisher_games]{vgi_all_publisher_games()}}.
 }
 \description{
-Retrieve the game IDs attached to each developer. The v4
-\verb{/companies/developers/game-ids} endpoint (default) returns VGI game IDs
-and supports selection by company ID or slug; the v3 \verb{/developers/game-ids}
-endpoint returns Steam App IDs with offset paging.
+Retrieve the VGI game IDs attached to each developer from
+\verb{/companies/developers/game-ids}. Games on every platform are included; use
+\code{\link[=vgi_developer_games]{vgi_developer_games()}} for one developer's Steam App IDs.
 }
 \examples{
 \dontrun{

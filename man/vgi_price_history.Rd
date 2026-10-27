@@ -36,7 +36,7 @@ A \link[tibble:tibble]{tibble} with one row per price period and columns
 \description{
 Retrieve price-change periods for a game from the v4 \verb{/price-history}
 endpoint. Exactly one of \code{steam_app_id}, \code{vgi_id} or \code{slug} identifies the
-game. For the Steam-only v3 endpoint see \code{\link[=vgi_insights_price_history]{vgi_insights_price_history()}}.
+game. For Steam prices only see \code{\link[=vgi_insights_price_history]{vgi_insights_price_history()}}.
 }
 \examples{
 \dontrun{

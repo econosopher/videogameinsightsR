@@ -53,7 +53,7 @@ carries the cursor for the next page.
 Retrieve playtime statistics for many games from the v4
 \verb{/player-insights/games/playtime} endpoint, optionally restricted to
 players in given countries or regions. For one Steam game use
-\code{\link[=vgi_insights_playtime]{vgi_insights_playtime()}} (v3).
+\code{\link[=vgi_insights_playtime]{vgi_insights_playtime()}}.
 }
 \examples{
 \dontrun{

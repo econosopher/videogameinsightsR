@@ -8,8 +8,7 @@ vgi_insights_price_history(
   steam_app_id,
   currency = NULL,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list(),
-  version = c("v4", "v3")
+  headers = list()
 )
 }
 \arguments{
@@ -22,9 +21,6 @@ When omitted, price periods for every currency are returned.}
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
-
-\item{version}{API generation, \code{"v4"} (default) or \code{"v3"}. USD history
-goes back to the end of 2014 and other currencies to 2022-04-14 in both.}
 }
 \value{
 A list containing:
@@ -37,11 +33,9 @@ newest period first}
 }
 }
 \description{
-Retrieve the Steam price-change periods for a game. By default this reads
-the v4 \verb{/price-history} endpoint (Steam rows only); \code{version = "v3"} reads
-the v3 \verb{/commercial-performance/price-history/games/\{steamAppId\}[/\{currency\}]}
-endpoints. For PlayStation / Xbox prices and VGI-id or slug lookup see
-\code{\link[=vgi_price_history]{vgi_price_history()}}.
+Retrieve the Steam price-change periods for a game: the Steam rows of
+\code{\link[=vgi_price_history]{vgi_price_history()}}, which also covers PlayStation and Xbox prices and
+VGI-id or slug lookup.
 }
 \examples{
 \dontrun{

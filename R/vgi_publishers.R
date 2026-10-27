@@ -84,7 +84,8 @@ vgi_publisher_games <- function(company_id,
     classification = as.character(.vgi_col(rows, "classification", NA_character_)),
     country = as.character(.vgi_col(rows, "country", NA_character_))
   )
-  out[[games_col]] <- steam(games_col, as.integer)
+  # Publishers carry only gamesReleased; developers also carry gamesDeveloped.
+  out[[games_col]] <- as.integer(.vgi_col(rows, paste0("platformData.steam.", c(games_col, "gamesReleased"))))
   out$gamesInDevelopment <- steam("gamesInDevelopment", as.integer)
   out$revenueTotal <- steam("revenueTotal")
   out$revenueAvgPerGame <- steam("revenueAvgPerGame")

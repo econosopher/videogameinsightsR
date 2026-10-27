@@ -29,7 +29,14 @@ vgi_game_metadata <- function(steam_app_id,
   steam_app_id <- suppressWarnings(as.integer(as.character(steam_app_id)))
   if (is.na(steam_app_id)) stop("steam_app_id must be numeric")
 
-  out <- vgi_games_metadata(steam_app_ids = steam_app_id, auth_token = auth_token, headers = headers)
+  out <- tryCatch(
+    vgi_games_metadata(steam_app_ids = steam_app_id, auth_token = auth_token, headers = headers),
+    vgi_http_error = function(e) {
+      # The API answers 404 when it does not know the game.
+      if (identical(e$status, 404L)) return(.vgi_metadata_rows_v4(data.frame()))
+      rlang::cnd_signal(e)
+    }
+  )
   out <- out[!is.na(out$steam_app_id) & out$steam_app_id == steam_app_id, , drop = FALSE]
   attr(out, "next_cursor") <- NULL
   out[seq_len(min(1L, nrow(out))), , drop = FALSE]

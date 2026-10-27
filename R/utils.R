@@ -591,18 +591,6 @@ warn_if_stale_ids <- function(steam_app_ids) {
   )$results
 }
 
-# --- Deprecation helper ---
-
-.vgi_deprecate <- function(what, instead) {
-  rlang::warn(
-    sprintf("%s is deprecated and will be removed in a future release. Use %s instead.", what, instead),
-    .frequency = getOption("vgi.deprecation_frequency", "once"),
-    .frequency_id = paste0("vgi_deprecate_", what),
-    class = "vgi_deprecated"
-  )
-  invisible(NULL)
-}
-
 # --- Column helpers ---
 
 #' Pull a column by the first matching candidate name, else NA of length n.

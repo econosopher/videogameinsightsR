@@ -6,14 +6,11 @@
 \usage{
 vgi_build_cache(
   force_refresh = FALSE,
-  batch_size = 100,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN")
 )
 }
 \arguments{
 \item{force_refresh}{Logical. Force refresh even if cache exists. Default FALSE.}
-
-\item{batch_size}{Integer. Number of games to fetch metadata for at once. Default 100.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.}
 }

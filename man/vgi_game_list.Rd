@@ -4,30 +4,22 @@
 \alias{vgi_game_list}
 \title{Get the Full Game List}
 \usage{
-vgi_game_list(
-  auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list(),
-  version = c("v4", "v3")
-)
+vgi_game_list(auth_token = Sys.getenv("VGI_AUTH_TOKEN"), headers = list())
 }
 \arguments{
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
-
-\item{version}{\code{"v4"} (default) or \code{"v3"}.}
 }
 \value{
-A \link[tibble:tibble]{tibble} with columns \code{steam_app_id}, \code{name},
-\code{id} (alias of \code{steam_app_id}, kept for backwards compatibility) and
-(v4) \code{vgi_id}, sorted by Steam App ID.
+A \link[tibble:tibble]{tibble} with columns \code{vgi_id}, \code{steam_app_id}
+(NA for games that are not on Steam) and \code{name}, sorted by VGI ID.
 }
 \description{
-Retrieve the catalogue of games known to VGI from \verb{/games/game-list}. The
-v4 endpoint (default) returns the VGI ID alongside the Steam App ID; the v3
-endpoint returns Steam App IDs and names only. Both responses are large
-(several MB) and unpaginated; consider caching the result.
+Retrieve the catalogue of games known to VGI, on every platform, from
+\verb{/games/game-list}. The response is large (several MB) and unpaginated;
+consider caching the result.
 }
 \examples{
 \dontrun{

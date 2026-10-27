@@ -7,49 +7,41 @@
 vgi_publisher_list(
   search = NULL,
   limit = NULL,
-  min_games = NULL,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   headers = list(),
   vgi_ids = NULL,
   slugs = NULL,
   cursor = NULL,
-  all_pages = FALSE,
-  version = c("v4", "v3")
+  all_pages = FALSE
 )
 }
 \arguments{
 \item{search}{Character. Optional case-insensitive regular expression
 applied to publisher names after download.}
 
-\item{limit}{Integer. Records per page (v4; maximum 1000). Ignored by v3.}
-
-\item{min_games}{Deprecated and ignored.}
+\item{limit}{Integer. Records per page (maximum 1000).}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
 
-\item{vgi_ids}{Integer vector. VGI company IDs to select (v4 only).}
+\item{vgi_ids}{Integer vector. VGI company IDs to select.}
 
-\item{slugs}{Character vector. VGI company slugs to select (v4 only).}
+\item{slugs}{Character vector. VGI company slugs to select.}
 
-\item{cursor}{Integer. Cursor from a previous page (v4 only).}
+\item{cursor}{Integer. Cursor from a previous page.}
 
-\item{all_pages}{Logical. Follow the cursor through every page (v4 only).}
-
-\item{version}{\code{"v4"} (default) or \code{"v3"}.}
+\item{all_pages}{Logical. Follow the cursor through every page.}
 }
 \value{
-A \link[tibble:tibble]{tibble} with columns \code{id}, \code{name} and (v4)
-\code{slug}, \code{vgi_url}, sorted by name. The attribute \code{next_cursor} carries
-the v4 cursor for the next page.
+A \link[tibble:tibble]{tibble} with columns \code{id}, \code{name}, \code{slug} and
+\code{vgi_url}, sorted by name. The attribute \code{next_cursor} carries the cursor
+for the next page.
 }
 \description{
-Retrieve the publisher directory. The v4 \verb{/companies/publishers/list}
-endpoint (default) pages with a cursor and includes slugs; the v3
-\verb{/publishers/publisher-list} endpoint returns the whole directory in one
-(large) response.
+Retrieve the publisher directory from \verb{/companies/publishers/list}, which
+pages with a cursor and includes slugs.
 }
 \examples{
 \dontrun{
