@@ -1,0 +1,317 @@
+{
+    "nextCursor": 2152377,
+    "results": [
+        {
+            "vgiId": 2038061,
+            "name": "Side Effects",
+            "slug": "side-effects",
+            "price": {
+                "xbox": null,
+                "steam": 4.99,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2025-11-21",
+                "playstation": null
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Puzzle",
+            "subgenre": "Puzzle (General)",
+            "gameEngines": null,
+            "languages": "Brazilian, English, French, German, Italian, Japanese, Korean, Russian, Simplified Chinese, Spanish",
+            "publisherClassification": "Indie",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "PvP",
+                "Multiple Endings",
+                "Psychological Horror",
+                "Dark"
+            ],
+            "character": [
+                "First-Person"
+            ],
+            "artStyles": [
+                "3D"
+            ],
+            "steamTags": [
+                "Strategy",
+                "Gambling",
+                "Horror",
+                "Dark",
+                "3D",
+                "Multiplayer",
+                "First-Person",
+                "Indie",
+                "PvP",
+                "Psychological",
+                "Surreal",
+                "Psychological Horror",
+                "PvE",
+                "Singleplayer",
+                "Turn-Based Tactics",
+                "Thriller",
+                "Multiple Endings",
+                "Co-op",
+                "Funny"
+            ],
+            "steamGenres": "Indie, Strategy",
+            "steamSubgenres": "Horror",
+            "gameModes": [
+                "Single-player",
+                "Multi-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/side-effects",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/3799100",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20028895/mr-pootsley",
+                    "companyId": 20028895,
+                    "companyName": "Mr.Pootsley"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20028947/jaybooty",
+                    "companyId": 20028947,
+                    "companyName": "Jaybooty"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20028949/hirohun",
+                    "companyId": 20028949,
+                    "companyName": "hirohun"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20063828/lofar42",
+                    "companyId": 20063828,
+                    "companyName": "Lofar42"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/20028945/second-lives",
+                    "companyId": 20028945,
+                    "companyName": "Second Lives"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ]
+        },
+        {
+            "vgiId": 2047657,
+            "name": "Dressmaker",
+            "slug": "dressmaker",
+            "price": {
+                "xbox": null,
+                "steam": 14.99,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2026-09-21",
+                "playstation": null
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Simulation",
+            "subgenre": "Job Simulator",
+            "gameEngines": null,
+            "languages": "English, Japanese, Simplified Chinese",
+            "publisherClassification": "Indie",
+            "publishingType": "Self-Published",
+            "themes": [
+                "Cute",
+                "Relaxing",
+                "Family Friendly"
+            ],
+            "character": null,
+            "artStyles": [
+                "Colorful"
+            ],
+            "steamTags": [
+                "Crafting",
+                "Design & Illustration",
+                "Cozy",
+                "Job Simulator",
+                "Simulation",
+                "Relaxing",
+                "Life Sim",
+                "Management",
+                "Singleplayer",
+                "Casual",
+                "Cute",
+                "Colorful",
+                "Stylized",
+                "Shop Keeper",
+                "Resource Management",
+                "Family Friendly",
+                "LGBTQ+",
+                "Indie",
+                "Immersive Sim",
+                "Historical"
+            ],
+            "steamGenres": "Simulation, Casual",
+            "steamSubgenres": "Crafting, Management, Resource Management",
+            "gameModes": [
+                "Single-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/dressmaker",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/4019220",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20041781/cozy-lives",
+                    "companyId": 20041781,
+                    "companyName": "Cozy Lives"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20041798/oomsarel",
+                    "companyId": 20041798,
+                    "companyName": "oomsarel"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20041830/raithza",
+                    "companyId": 20041830,
+                    "companyName": "raithza"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20041852/elyaradine",
+                    "companyId": 20041852,
+                    "companyName": "elyaradine"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/20041781/cozy-lives",
+                    "companyId": 20041781,
+                    "companyName": "Cozy Lives"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ]
+        },
+        {
+            "vgiId": 2152377,
+            "name": "Fallbearers",
+            "slug": "fallbearers",
+            "price": {
+                "xbox": null,
+                "steam": null,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": null,
+                "playstation": null
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Simulation",
+            "subgenre": "Job Simulator",
+            "gameEngines": null,
+            "languages": "English",
+            "publisherClassification": "Indie",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Medieval"
+            ],
+            "character": null,
+            "artStyles": [
+                "2D",
+                "Cartoony",
+                "Hand-drawn"
+            ],
+            "steamTags": [
+                "Side Scroller",
+                "Casual",
+                "Party Game",
+                "2D",
+                "Alternate History",
+                "Dark Humor",
+                "Historical",
+                "Linear",
+                "Abstract",
+                "Cartoony",
+                "Hand-drawn",
+                "Gothic",
+                "Medieval",
+                "Physics",
+                "Co-op",
+                "Local Co-Op",
+                "Online Co-Op",
+                "Singleplayer",
+                "Local Multiplayer",
+                "Multiplayer"
+            ],
+            "steamGenres": "Casual",
+            "steamSubgenres": "Linear, Physics",
+            "gameModes": [
+                "Single-player",
+                "Multi-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/fallbearers",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/4508230",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20028947/jaybooty",
+                    "companyId": 20028947,
+                    "companyName": "Jaybooty"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20058479/thebeardlyben",
+                    "companyId": 20058479,
+                    "companyName": "TheBeardlyBen"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20058489/jem",
+                    "companyId": 20058489,
+                    "companyName": "Jem"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/20069794/bones-brothers",
+                    "companyId": 20069794,
+                    "companyName": "Bones Brothers"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/20025034/b-team",
+                    "companyId": 20025034,
+                    "companyName": "B-Team"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/20065147/team-pallbearers",
+                    "companyId": 20065147,
+                    "companyName": "Team Pallbearers"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ]
+        }
+    ]
+}

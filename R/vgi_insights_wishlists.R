@@ -3,10 +3,6 @@
 #' Retrieve the outstanding-wishlist history for a single Steam game.
 #'
 #' @param steam_app_id Integer. The Steam App ID of the game.
-#' @param version API generation. `"v4"` (default) takes the series from the
-#'   v4 `/historical-data` endpoint, which covers every day since the game was
-#'   first tracked (pre-release days included). `"v3"` calls the per-game v3
-#'   endpoint ``/interest-level/wishlists/games/{steamAppId}``, which starts closer to release.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
@@ -26,15 +22,11 @@
 #' }
 vgi_insights_wishlists <- function(steam_app_id,
                                    auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                                   headers = list(),
-                                   version = c("v4", "v3")) {
+                                   headers = list()) {
 
   validate_numeric(steam_app_id, "steam_app_id")
-  version <- .vgi_api_version(match.arg(version))
 
-  rows <- .vgi_game_series(steam_app_id, version,
-                           "interest-level/wishlists/games/%s", "wishlistChanges",
-                           auth_token = auth_token, headers = headers)
+  rows <- .vgi_v4_game_history(steam_app_id, auth_token = auth_token, headers = headers)
   if (nrow(rows) == 0) {
     changes_df <- tibble::tibble(
       date = as.Date(character()), wishlistsTotal = integer(), wishlistsChange = integer()

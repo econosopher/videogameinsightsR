@@ -1,8 +1,8 @@
-# VideoGameInsightsR Example Usage
-# This script demonstrates the key functionality of the VideoGameInsightsR package
+# videogameinsightsR Example Usage
+# This script demonstrates the key functionality of the videogameinsightsR package
 
 # Load the package
-library(VideoGameInsightsR)
+library(videogameinsightsR)
 library(ggplot2)
 library(dplyr)
 

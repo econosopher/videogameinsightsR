@@ -3,7 +3,7 @@
 #' Get peak concurrent players (CCU) for multiple Steam app IDs
 #'
 #' @param steam_app_ids Integer vector of Steam app IDs
-#' @return A tibble with columns: name, steamAppId, peak_ccu, peak_date
+#' @return A tibble with columns: name, steam_app_id, peak_ccu, peak_date
 #' @export
 vgi_peak_ccu_by_ids <- function(steam_app_ids) {
   if (is.null(steam_app_ids) || length(steam_app_ids) == 0) {
@@ -38,11 +38,11 @@ vgi_peak_ccu_by_ids <- function(steam_app_ids) {
 #' `vgi_insights_ccu()` per resolved ID. No all-games endpoints are used.
 #'
 #' @param game_names Character vector of game names (e.g., "THE FINALS", "Halo Infinite")
-#' @return A tibble with columns: input_name, name, steamAppId, peak_ccu, peak_date
+#' @return A tibble with columns: input_name, name, steam_app_id, peak_ccu, peak_date
 #' @export
 vgi_peak_ccu_by_names <- function(game_names) {
   if (is.null(game_names) || length(game_names) == 0) {
-    return(.vgi_clean_names(tibble::tibble(input_name = character(), name = character(), steamAppId = integer(), peak_ccu = numeric(), peak_date = as.Date(character()))))
+    return(.vgi_clean_names(tibble::tibble(input_name = character(), name = character(), steam_app_id = integer(), peak_ccu = numeric(), peak_date = as.Date(character()))))
   }
   resolve_one <- function(title) {
     res <- tryCatch(vgi_search_games(title, limit = 5), error = function(e) NULL)
@@ -50,12 +50,12 @@ vgi_peak_ccu_by_names <- function(game_names) {
     res$score <- ifelse(tolower(res$name) == tolower(title), 2,
                    ifelse(startsWith(tolower(res$name), tolower(title)), 1, 0))
     res <- res[order(res$score, decreasing = TRUE), , drop = FALSE]
-    as.integer(res$steamAppId[1] %||% res$id[1] %||% NA_integer_)
+    as.integer(res$steam_app_id[1] %||% NA_integer_)
   }
   ids <- vapply(game_names, resolve_one, integer(1))
   peak_df <- vgi_peak_ccu_by_ids(ids)
   peak_df$input_name <- game_names
-  .vgi_clean_names(peak_df[, c("input_name", "name", "steamAppId", "peak_ccu", "peak_date")])
+  .vgi_clean_names(peak_df[, c("input_name", "name", "steam_app_id", "peak_ccu", "peak_date")])
 }
 
 

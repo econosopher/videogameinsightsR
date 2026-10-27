@@ -2,7 +2,7 @@
 #'
 #' Retrieve price-change periods for a game from the v4 `/price-history`
 #' endpoint. Exactly one of `steam_app_id`, `vgi_id` or `slug` identifies the
-#' game. For the Steam-only v3 endpoint see [vgi_insights_price_history()].
+#' game. For Steam prices only see [vgi_insights_price_history()].
 #'
 #' @param steam_app_id Integer. Steam App ID of the game.
 #' @param vgi_id Integer. VGI internal game ID.
@@ -36,8 +36,7 @@ vgi_price_history <- function(steam_app_id = NULL,
     query_params = qp,
     auth_token = auth_token,
     method = "GET",
-    headers = headers,
-    version = "v4"
+    headers = headers
   )
 
   empty <- .vgi_clean_names(tibble::tibble(

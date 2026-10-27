@@ -7,44 +7,34 @@
 vgi_player_overlap(
   steam_app_id = NULL,
   limit = 10,
-  offset = 0,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
   headers = list(),
   vgi_id = NULL,
-  slug = NULL,
-  version = c("v3", "v4")
+  slug = NULL
 )
 }
 \arguments{
 \item{steam_app_id}{Integer. The Steam App ID of the game.}
 
-\item{limit}{Integer. Maximum number of overlapping games to return. In
-v3 this is the API page size: the API lists overlapping games in Steam
-App ID order, so to find the largest overlaps request a large \code{limit}
-(Dressmaker has about 3,900 rows); returned rows are sorted by units
-overlap.}
-
-\item{offset}{Integer. Records to skip (v3 only).}
+\item{limit}{Integer. Maximum number of overlapping games to return, largest
+units overlap first.}
 
 \item{auth_token}{Character string. Your VGI API authentication token.
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
 
-\item{vgi_id}{Integer. VGI internal game ID (v4 only).}
+\item{vgi_id}{Integer. VGI internal game ID.}
 
-\item{slug}{Character. VGI game slug (v4 only).}
-
-\item{version}{\code{"v3"} or \code{"v4"}. Inferred as \code{"v4"} when \code{vgi_id} or
-\code{slug} is supplied.}
+\item{slug}{Character. VGI game slug.}
 }
 \value{
 A list containing:
 \describe{
-\item{steam_app_id}{Integer. The requested game (NA for non-Steam v4 lookups)}
-\item{vgi_id}{Integer. VGI ID of the requested game (v4 only, else NA)}
+\item{steam_app_id}{Integer. The requested game (NA for non-Steam games)}
+\item{vgi_id}{Integer. VGI ID of the requested game}
 \item{player_overlaps}{Tibble with one row per overlapping game:
-\code{steam_app_id}, \code{vgi_id} (v4), \code{median_playtime}, \code{units_sold_overlap},
+\code{steam_app_id}, \code{vgi_id}, \code{median_playtime}, \code{units_sold_overlap},
 \code{units_sold_overlap_percentage}, \code{units_sold_overlap_index},
 \code{mau_overlap}, \code{mau_overlap_percentage}, \code{mau_overlap_index},
 \code{wishlist_overlap}, \code{wishlist_overlap_percentage},
@@ -52,17 +42,8 @@ A list containing:
 }
 }
 \description{
-Retrieve the games whose audiences overlap most with a given game. The v3
-endpoint \verb{/player-insights/games/\{steamAppId\}/player-overlap} is used when
-a \code{steam_app_id} is given and \code{version = "v3"} (the default). Supplying
-\code{vgi_id} or \code{slug}, or \code{version = "v4"}, uses the multi-platform v4
-\verb{/player-overlap} endpoint.
-}
-\details{
-v3 stays the default here, unlike the other per-game functions: as of
-October 2026 the v4 endpoint lists the overlapping games but returns only
-\code{null} overlap percentages and no counts or indices (checked for Steam
-4019220, 730 and 892970), while v3 returns the full figures.
+Retrieve the games whose audiences overlap most with a given game from
+\verb{/player-overlap}. Identify the game by Steam App ID, VGI ID or slug.
 }
 \examples{
 \dontrun{

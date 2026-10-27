@@ -44,7 +44,7 @@ the cursor for the next page.
 Retrieve the player-share-by-country breakdown for many games from the v4
 \verb{/player-insights/games/top-countries} endpoint. Games can be selected by
 Steam App ID, VGI ID or slug; without identifiers the catalogue is paged
-from the cursor. For one Steam game use \code{\link[=vgi_top_countries]{vgi_top_countries()}} (v3).
+from the cursor. For one Steam game use \code{\link[=vgi_top_countries]{vgi_top_countries()}}.
 }
 \examples{
 \dontrun{

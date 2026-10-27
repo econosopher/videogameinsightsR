@@ -4,27 +4,28 @@
 \alias{vgi_filter_genre}
 \title{Filter Games by Genre}
 \usage{
-vgi_filter_genre(genre, cache_df = NULL)
+vgi_filter_genre(genre, cache_df = NULL, source = c("vgi", "steam"))
 }
 \arguments{
-\item{genre}{Character string. Genre to filter by (e.g., "Shooter", "RPG")}
+\item{genre}{Character string. Regular expression matched case-insensitively
+(e.g. "Shooter", "RPG").}
 
 \item{cache_df}{Optional pre-loaded cache. If NULL, will load automatically.}
+
+\item{source}{\code{"vgi"} (default) matches VGI's \code{genre} and \code{subgenre};
+\code{"steam"} matches \code{steam_genres} and \code{steam_subgenres}.}
 }
 \value{
-Data frame of games matching the genre
+A \link[tibble:tibble]{tibble} of the matching games.
 }
 \description{
-Filter cached games by genre without hitting the API.
+Filter cached games by genre without hitting the API. VGI assigns each game
+one \code{genre} (for example "Shooter"); Steam's own genres are in
+\code{steam_genres} and \code{steam_subgenres}. \code{source} picks which to match.
 }
 \examples{
 \dontrun{
-# Get all shooters
 shooters <- vgi_filter_genre("Shooter")
-
-# Get top 10 shooters by revenue rank
-top_shooters <- shooters \%>\%
-  arrange(totalRevenueRank) \%>\%
-  head(10)
+steam_shooters <- vgi_filter_genre("Shooter", source = "steam")
 }
 }

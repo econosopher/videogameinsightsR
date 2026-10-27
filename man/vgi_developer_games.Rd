@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgi_developers.R
 \name{vgi_developer_games}
 \alias{vgi_developer_games}
-\title{Get a Developer's Steam Games (v3)}
+\title{Get a Developer's Steam Games}
 \usage{
 vgi_developer_games(
   company_id,
@@ -19,11 +19,13 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-An integer vector of Steam App IDs (empty when none).
+An integer vector of Steam App IDs, sorted (empty when none).
 }
 \description{
-Retrieve the Steam App IDs developed by a company from the v3
-\verb{/developers/\{companyId\}/game-ids} endpoint.
+Retrieve the Steam App IDs of the games a company develops. The VGI game
+IDs from \verb{/companies/developers/game-ids} are resolved to Steam App IDs
+through \verb{/games/metadata}; games that are not on Steam are dropped. For the
+VGI IDs of games on every platform use \code{\link[=vgi_all_developer_games]{vgi_all_developer_games()}}.
 }
 \examples{
 \dontrun{

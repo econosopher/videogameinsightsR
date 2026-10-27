@@ -2,7 +2,7 @@
 #'
 #' Retrieve the player-share-by-region breakdown for many games from the v4
 #' `/player-insights/games/top-regions` endpoint, widened to one column per
-#' region. For one Steam game use [vgi_top_regions()] (v3).
+#' region. For one Steam game use [vgi_top_regions()].
 #'
 #' @inheritParams vgi_all_games_top_countries
 #' @return A [tibble][tibble::tibble] with one row per game: `vgi_id`,

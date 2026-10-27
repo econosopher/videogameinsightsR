@@ -1,7 +1,7 @@
-# Rate Limiting Example for VideoGameInsightsR
+# Rate Limiting Example for videogameinsightsR
 # This script demonstrates how to use rate limiting to be gentle on the API
 
-library(VideoGameInsightsR)
+library(videogameinsightsR)
 
 # Method 1: Environment Variables (affects all functions)
 # ======================================================

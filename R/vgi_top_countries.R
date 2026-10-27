@@ -4,10 +4,6 @@
 #' For many games at once use [vgi_all_games_top_countries()].
 #'
 #' @param steam_app_id Integer. The Steam App ID of the game.
-#' @param version API generation. `"v4"` (default) reads the Steam row of
-#'   the multi-game v4 `/player-insights/games/top-countries` endpoint; `"v3"`
-#'   reads `/player-insights/games/{steamAppId}/top-countries`. Both return the same
-#'   figures.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
@@ -22,24 +18,11 @@
 #' }
 vgi_top_countries <- function(steam_app_id,
                               auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-                              headers = list(),
-                              version = c("v4", "v3")) {
+                              headers = list()) {
 
   validate_numeric(steam_app_id, "steam_app_id")
-
-  version <- .vgi_api_version(match.arg(version))
-  result <- if (version == "v4") {
-    .vgi_v4_game_record("player-insights/games/top-countries", steam_app_id,
+  result <- .vgi_v4_game_record("player-insights/games/top-countries", steam_app_id,
                         auth_token = auth_token, headers = headers)
-  } else {
-    make_api_request(
-      endpoint = sprintf("player-insights/games/%s/top-countries", as.integer(steam_app_id)),
-      auth_token = auth_token,
-      method = "GET",
-      headers = headers,
-      version = "v3"
-    )
-  }
 
   .vgi_country_rows(if (is.list(result)) result$topCountries else NULL)
 }

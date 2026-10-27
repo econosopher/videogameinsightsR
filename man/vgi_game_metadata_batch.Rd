@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgi_game_metadata_batch.R
 \name{vgi_game_metadata_batch}
 \alias{vgi_game_metadata_batch}
-\title{Get Batch Game Metadata from Video Game Insights}
+\title{Get Metadata for Several Steam Games}
 \usage{
 vgi_game_metadata_batch(
   steam_app_ids,
@@ -19,24 +19,18 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A \link[tibble:tibble]{tibble} containing metadata for all requested games.
-Each row represents one game with columns for name, release date, price,
-genres, categories, developers, publishers, and more.
+A \link[tibble:tibble]{tibble} with one row per game found, in the shape
+of \code{\link[=vgi_games_metadata]{vgi_games_metadata()}}. IDs the API does not know are reported in a
+warning.
 }
 \description{
-Retrieves metadata for multiple games using their Steam App IDs.
-Since the new API doesn't have a batch endpoint, this function makes
-multiple individual requests and combines the results.
+Retrieves metadata for multiple Steam games from \verb{/games/metadata}, up to
+500 IDs per request. When the API rejects a request because one ID is
+unknown, that chunk is fetched one game at a time.
 }
 \examples{
 \dontrun{
-# Ensure the VGI_AUTH_TOKEN environment variable is set
-# Sys.setenv(VGI_AUTH_TOKEN = "your_auth_token_here")
-
-# Get metadata for multiple games
-game_ids <- c(892970, 1245620, 105600) # Valheim, Elden Ring, Terraria
-games_data <- vgi_game_metadata_batch(game_ids)
-print(games_data)
+vgi_game_metadata_batch(c(892970, 1245620, 105600))
 }
 
 }

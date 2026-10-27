@@ -6,36 +6,31 @@
 \usage{
 vgi_fetch_by_ids(
   steam_app_ids,
-  data_type = c("metadata", "rankings", "active_players"),
+  data_type = c("metadata", "active_players"),
   date = NULL,
-  use_cache = TRUE,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN")
 )
 }
 \arguments{
 \item{steam_app_ids}{Integer vector. List of Steam App IDs to fetch.}
 
-\item{data_type}{Character. Type of data to fetch: "metadata", "rankings", "active_players"}
+\item{data_type}{Character. Type of data to fetch: "metadata" or
+"active_players".}
 
-\item{date}{Character or Date. Required for "active_players" data type.}
-
-\item{use_cache}{Logical. Use local cache if available. Default TRUE.}
+\item{date}{Character or Date. Required for "active_players".}
 
 \item{auth_token}{Character string. Your VGI API authentication token.}
 }
 \value{
-Data frame with requested game data
+A \link[tibble:tibble]{tibble} with the requested game data.
 }
 \description{
-Efficiently fetches game data for a list of Steam App IDs.
-Uses caching and batching to minimize API calls.
+Fetch game data for a list of Steam App IDs: metadata from
+\verb{/games/metadata}, or one day's active players from \verb{/historical-data}.
 }
 \examples{
 \dontrun{
-# Get metadata for specific games
 games <- vgi_fetch_by_ids(c(730, 578080, 1172470), "metadata")
-
-# Get active players for specific games
 active <- vgi_fetch_by_ids(c(730, 578080), "active_players", date = "2025-07-26")
 }
 }

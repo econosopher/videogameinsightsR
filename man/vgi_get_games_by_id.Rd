@@ -14,18 +14,14 @@ vgi_get_games_by_id(steam_app_ids, cache_df = NULL, fetch_missing = TRUE)
 \item{fetch_missing}{Logical. Fetch from API if not in cache. Default TRUE.}
 }
 \value{
-Data frame with game information
+A \link[tibble:tibble]{tibble} with one row per game found.
 }
 \description{
-Efficiently retrieve game information for specific Steam App IDs using cache.
+Retrieve game information for specific Steam App IDs from the cache,
+fetching any missing games from \verb{/games/metadata}.
 }
 \examples{
 \dontrun{
-# Get specific games
 games <- vgi_get_games_by_id(c(730, 578080, 1172470))
-
-# Get games with rankings
-popular_ids <- c(730, 570, 440, 1245620)
-popular_games <- vgi_get_games_by_id(popular_ids)
 }
 }

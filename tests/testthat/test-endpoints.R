@@ -1,9 +1,10 @@
-# v4 endpoint functions replayed against recorded fixtures
-# (tests/testthat/api/v4, recorded 2026-10-07 by
+# Endpoint functions replayed against recorded fixtures
+# (tests/testthat/api/v4, recorded 2026-10-07 and 2026-10-27 by
 # dev/record_fixtures.R for Dressmaker: Steam 4019220, vgiId 2047657,
 # slug "dressmaker"; publisher Free Lives vgiCompanyId 28663).
 
 dressmaker <- 4019220L
+free_lives <- 28663L
 
 test_that("vgi_games_metadata flattens the multi-platform record and exposes the cursor", {
   with_vgi_fixtures({
@@ -71,7 +72,7 @@ test_that("by-date wrappers derive their columns from the v4 snapshot", {
   expect_equal(active$dau_mau_ratio, 83050 / 155194)
 })
 
-test_that("vgi_price_history (v4) returns one row per currency period and filters currencies", {
+test_that("vgi_price_history returns one row per currency period and filters currencies", {
   with_vgi_fixtures({
     all_cur <- vgi_price_history(steam_app_id = dressmaker, auth_token = "test")
     usd <- vgi_price_history(steam_app_id = dressmaker, currency = "usd", auth_token = "test")
@@ -87,7 +88,7 @@ test_that("vgi_price_history (v4) returns one row per currency period and filter
   expect_equal(usd$first_date[is.na(usd$last_date)], max(usd$first_date))
 })
 
-test_that("company v4 functions select by vgi id and return cursors", {
+test_that("company functions select by vgi id and return cursors", {
   with_vgi_fixtures({
     overview <- vgi_publishers_overview(vgi_ids = 28663, auth_token = "test")
     games <- vgi_all_publisher_games(vgi_ids = 28663, auth_token = "test")
@@ -100,7 +101,6 @@ test_that("company v4 functions select by vgi id and return cursors", {
   expect_equal(attr(overview, "next_cursor"), 28663L)
 
   expect_equal(games$publisher_id, 28663L)
-  expect_equal(games$id_type, "vgi_id")
   expect_true(2047657L %in% games$game_ids[[1]])
   expect_equal(games$game_count, length(games$game_ids[[1]]))
 
@@ -110,7 +110,7 @@ test_that("company v4 functions select by vgi id and return cursors", {
   expect_equal(attr(listing, "next_cursor"), max(listing$id))
 })
 
-test_that("v4 player-insights functions nest per-game breakdowns", {
+test_that("multi-game player-insights functions nest per-game breakdowns", {
   with_vgi_fixtures({
     tc <- vgi_all_games_top_countries(steam_app_ids = dressmaker, auth_token = "test")
     pt <- vgi_all_games_playtime(steam_app_ids = dressmaker, countries = "US", auth_token = "test")
@@ -128,7 +128,7 @@ test_that("v4 player-insights functions nest per-game breakdowns", {
   expect_equal(sum(pt$playtime_ranges[[1]]$percentage), 100, tolerance = 0.01)
 })
 
-test_that("vgi_steam_market_data returns monthly totals with a platform column (v4)", {
+test_that("vgi_steam_market_data returns monthly totals with a platform column", {
   with_vgi_fixtures({
     market <- vgi_steam_market_data(auth_token = "test")
   })
@@ -138,7 +138,7 @@ test_that("vgi_steam_market_data returns monthly totals with a platform column (
   expect_true(nrow(market) > 90)
 })
 
-test_that("per-game time series default to the v4 history and match the v3 figures", {
+test_that("per-game time series come from the v4 daily history", {
   with_vgi_fixtures({
     ccu <- vgi_insights_ccu(dressmaker, auth_token = "test")$player_history
     rev <- vgi_insights_revenue(dressmaker, auth_token = "test")
@@ -155,7 +155,7 @@ test_that("per-game time series default to the v4 history and match the v3 figur
   day8 <- as.Date("2026-09-28")
   expect_equal(ccu$max[ccu$date == day8], 32107)
   expect_equal(ccu$avg[ccu$date == day8], 25661)
-  # v4 premiumRevenue* / unitsOwned* map onto the same columns as v3
+  # v4 premiumRevenue* / unitsOwned* map onto revenue_* / units_sold_*
   expect_named(rev, c("steam_app_id", "date", "revenue_change", "revenue_total"))
   expect_equal(rev$revenue_total[rev$date == day8], 1674666)
   expect_equal(rev$revenue_change[rev$date == day8], 253493)
@@ -170,7 +170,7 @@ test_that("per-game time series default to the v4 history and match the v3 figur
   expect_true(all(hist$daily$country == "WW"))
 })
 
-test_that("per-game player insights default to the v4 steam row", {
+test_that("per-game player insights read the steam row", {
   with_vgi_fixtures({
     pt <- vgi_insights_playtime(dressmaker, auth_token = "test")
     regions <- vgi_top_regions(dressmaker, auth_token = "test")
@@ -194,7 +194,7 @@ test_that("per-game player insights default to the v4 steam row", {
   expect_equal(wish$percentage[1], 21.63)
 })
 
-test_that("vgi_insights_price_history reads v4 price periods in the v3 shape", {
+test_that("vgi_insights_price_history returns the Steam price periods", {
   with_vgi_fixtures({
     usd <- vgi_insights_price_history(dressmaker, currency = "USD", auth_token = "test")
     all_cur <- vgi_insights_price_history(dressmaker, auth_token = "test")
@@ -211,4 +211,74 @@ test_that("vgi_insights_price_history reads v4 price periods in the v3 shape", {
   expect_equal(all_cur$currency, "ALL")
   expect_true(length(unique(all_cur$price_changes$currency)) > 20)
   expect_equal(all_cur$price_changes$currency, sort(all_cur$price_changes$currency))
+})
+
+test_that("vgi_game_metadata returns one v4 row and an empty tibble for unknown games", {
+  with_vgi_fixtures({
+    meta <- vgi_game_metadata(dressmaker, auth_token = "test")
+    missing <- vgi_game_metadata(999999999, auth_token = "test")
+  })
+  expect_equal(nrow(meta), 1)
+  expect_equal(meta$name, "Dressmaker")
+  expect_equal(meta$vgi_id, 2047657L)
+  expect_equal(meta$steam_app_id, dressmaker)
+  expect_true(all(c("genre", "subgenre", "steam_genres", "release_date_steam", "publisher_id") %in% names(meta)))
+  expect_null(attr(meta, "next_cursor"))
+  expect_equal(nrow(missing), 0)
+  expect_true("steam_app_id" %in% names(missing))
+})
+
+test_that("vgi_game_metadata_batch keeps known games and warns about the rest", {
+  with_vgi_fixtures({
+    expect_warning(
+      batch <- vgi_game_metadata_batch(c(dressmaker, 999999999), auth_token = "test"),
+      "999999999"
+    )
+  })
+  expect_equal(batch$steam_app_id, dressmaker)
+  expect_equal(batch$name, "Dressmaker")
+})
+
+test_that("vgi_player_overlap returns overlaps sorted by units overlap and limited", {
+  with_vgi_fixtures({
+    ov <- vgi_player_overlap(dressmaker, limit = 5, auth_token = "test")
+  })
+  expect_equal(ov$steam_app_id, dressmaker)
+  expect_equal(ov$vgi_id, 2047657L)
+  po <- ov$player_overlaps
+  expect_equal(nrow(po), 5)
+  expect_equal(po$steam_app_id[1], 413150L)
+  expect_equal(po$units_sold_overlap_percentage[1], 50)
+  expect_true(all(diff(po$units_sold_overlap_percentage) <= 0))
+  expect_true(all(c("vgi_id", "units_sold_overlap", "wishlist_overlap_index") %in% names(po)))
+})
+
+test_that("vgi_all_games_player_overlap walks the cursor one game per request", {
+  with_vgi_fixtures({
+    all_ov <- vgi_all_games_player_overlap(limit = 2, auth_token = "test")
+  })
+  expect_equal(nrow(all_ov), 2)
+  expect_setequal(all_ov$vgi_id, c(610512L, 610517L))
+  expect_equal(all_ov$top_overlap_pct, sort(all_ov$top_overlap_pct, decreasing = TRUE))
+  expect_equal(attr(all_ov, "next_cursor"), 610517L)
+  expect_s3_class(all_ov$top_overlaps[[1]], "tbl_df")
+})
+
+test_that("company info uses the Steam platform figures and *_games returns Steam ids", {
+  with_vgi_fixtures({
+    pub <- vgi_publisher_info(free_lives, auth_token = "test")
+    dev <- vgi_developer_info(free_lives, auth_token = "test")
+    pub_games <- vgi_publisher_games(free_lives, auth_token = "test")
+    dev_games <- vgi_developer_games(free_lives, auth_token = "test")
+  })
+  expect_equal(pub$company_id, 28663L)
+  expect_equal(pub$name, "Free Lives")
+  expect_equal(pub$games_published, 2L)
+  expect_equal(pub$revenue_total, 5470477)
+  expect_equal(dev$games_developed, 9L)
+  expect_true(all(c("games_released_steam", "games_released_xbox", "vgi_url") %in% names(dev)))
+  expect_equal(pub_games, c(3799100L, 4019220L, 4508230L))
+  expect_true(274190L %in% dev_games)   # Broforce; Free Lives publishes but did not develop Dressmaker
+  expect_false(dressmaker %in% dev_games)
+  expect_equal(dev_games, sort(dev_games))
 })

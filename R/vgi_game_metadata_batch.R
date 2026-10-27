@@ -1,74 +1,50 @@
-#' Get Batch Game Metadata from Video Game Insights
+#' Get Metadata for Several Steam Games
 #'
-#' Retrieves metadata for multiple games using their Steam App IDs.
-#' Since the new API doesn't have a batch endpoint, this function makes
-#' multiple individual requests and combines the results.
+#' Retrieves metadata for multiple Steam games from `/games/metadata`, up to
+#' 500 IDs per request. When the API rejects a request because one ID is
+#' unknown, that chunk is fetched one game at a time.
 #'
 #' @param steam_app_ids Numeric vector. The Steam App IDs of the games.
 #' @param auth_token Character string. Your VGI API authentication token.
 #'   Defaults to the VGI_AUTH_TOKEN environment variable.
 #' @param headers List. Optional custom headers to include in the API request.
 #'
-#' @return A [tibble][tibble::tibble] containing metadata for all requested games.
-#'   Each row represents one game with columns for name, release date, price,
-#'   genres, categories, developers, publishers, and more.
+#' @return A [tibble][tibble::tibble] with one row per game found, in the shape
+#'   of [vgi_games_metadata()]. IDs the API does not know are reported in a
+#'   warning.
 #'
 #' @examples
 #' \dontrun{
-#' # Ensure the VGI_AUTH_TOKEN environment variable is set
-#' # Sys.setenv(VGI_AUTH_TOKEN = "your_auth_token_here")
-#'
-#' # Get metadata for multiple games
-#' game_ids <- c(892970, 1245620, 105600) # Valheim, Elden Ring, Terraria
-#' games_data <- vgi_game_metadata_batch(game_ids)
-#' print(games_data)
+#' vgi_game_metadata_batch(c(892970, 1245620, 105600))
 #' }
 #'
 #' @export
-vgi_game_metadata_batch <- function(steam_app_ids, 
+vgi_game_metadata_batch <- function(steam_app_ids,
                                    auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
                                    headers = list()) {
-  
-  # Validate inputs
   if (is.null(steam_app_ids) || length(steam_app_ids) == 0) {
     stop("steam_app_ids must be a non-empty vector")
   }
-  
-  # Convert to numeric if character
-  steam_app_ids <- suppressWarnings(as.numeric(steam_app_ids))
-  
-  # Check for NA values
-  if (any(is.na(steam_app_ids))) {
-    stop("steam_app_ids contains invalid values")
-  }
-  
-  # Make individual requests for each game using the normalized single-game function
-  results <- lapply(steam_app_ids, function(app_id) {
-    tryCatch({
-      row <- vgi_game_metadata(app_id, auth_token = auth_token, headers = headers)
-      if (!is.data.frame(row) || nrow(row) == 0) {
-        warning(sprintf("No metadata found for game %s", app_id))
-        return(NULL)
+  steam_app_ids <- suppressWarnings(as.integer(as.character(steam_app_ids)))
+  if (any(is.na(steam_app_ids))) stop("steam_app_ids contains invalid values")
+  steam_app_ids <- unique(steam_app_ids)
+
+  chunks <- split(steam_app_ids, ceiling(seq_along(steam_app_ids) / 500))
+  out <- dplyr::bind_rows(lapply(chunks, function(ids) {
+    tryCatch(
+      vgi_games_metadata(steam_app_ids = ids, limit = 1000, auth_token = auth_token, headers = headers),
+      vgi_http_error = function(e) {
+        # One unknown ID makes the API reject the whole request with a 404;
+        # fall back to one request per game.
+        if (!identical(e$status, 404L)) rlang::cnd_signal(e)
+        dplyr::bind_rows(lapply(ids, vgi_game_metadata, auth_token = auth_token, headers = headers))
       }
-      # Ensure id column for backward compatibility
-      if (!"id" %in% names(row) && "steam_app_id" %in% names(row)) row$id <- row$steam_app_id
-      tibble::as_tibble(row)
-    }, error = function(e) {
-      warning(sprintf("Failed to fetch metadata for game %s: %s", app_id, e$message))
-      NULL
-    })
-  })
-  
-  # Remove NULL results (failed requests)
-  results <- results[!sapply(results, is.null)]
-  
-  # If no successful results, return empty tibble
-  if (length(results) == 0) {
-    return(tibble::tibble())
-  }
-  
-  # Combine results into a single tibble
-  result <- suppressWarnings(dplyr::bind_rows(results))
-  
-  .vgi_clean_names(result)
+    )
+  }))
+  if (nrow(out) == 0) out <- .vgi_metadata_rows_v4(data.frame())
+  out <- out[!is.na(out$steam_app_id) & out$steam_app_id %in% steam_app_ids, , drop = FALSE]
+  missing <- setdiff(steam_app_ids, out$steam_app_id)
+  if (length(missing) > 0) warning(sprintf("No metadata found for Steam App ID(s): %s", paste(missing, collapse = ", ")))
+  attr(out, "next_cursor") <- NULL
+  out
 }

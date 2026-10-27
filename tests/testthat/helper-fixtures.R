@@ -1,4 +1,4 @@
-# Replay recorded API responses (tests/testthat/api/{v3,v4}, recorded by
+# Replay recorded API responses (tests/testthat/api/v4, recorded by
 # dev/record_fixtures.R). httptest2 maps a request URL to a fixture path by
 # dropping the scheme, so the tests point the package at the short root
 # "https://api"; that keeps fixture paths under the 100-byte limit R CMD check

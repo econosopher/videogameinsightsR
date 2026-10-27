@@ -7,8 +7,7 @@
 vgi_insights_playtime(
   steam_app_id,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list(),
-  version = c("v4", "v3")
+  headers = list()
 )
 }
 \arguments{
@@ -18,11 +17,6 @@ vgi_insights_playtime(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
-
-\item{version}{API generation. \code{"v4"} (default) reads the Steam row of
-the multi-game v4 \verb{/player-insights/games/playtime} endpoint; \code{"v3"}
-reads \verb{/player-insights/games/\{steamAppId\}/playtime}. Both return the same
-figures.}
 }
 \value{
 A list containing \code{steam_app_id}, \code{avg_playtime} and

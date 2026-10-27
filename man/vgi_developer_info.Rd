@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgi_developers.R
 \name{vgi_developer_info}
 \alias{vgi_developer_info}
-\title{Get Developer Information (v3)}
+\title{Get Developer Information}
 \usage{
 vgi_developer_info(
   company_id,
@@ -20,13 +20,17 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 }
 \value{
 A one-row \link[tibble:tibble]{tibble} with columns \code{company_id},
-\code{name}, \code{classification}, \code{games_developed}, \code{games_in_development},
-\code{revenue_total}, \code{revenue_avg_per_game}, \code{revenue_median_per_game}.
+\code{name}, \code{slug}, \code{classification}, \code{country}, \code{games_developed},
+\code{games_in_development}, \code{revenue_total}, \code{revenue_avg_per_game},
+\code{revenue_median_per_game}, \code{games_released_steam},
+\code{games_released_playstation}, \code{games_released_xbox} and \code{vgi_url}.
 Empty when the developer is unknown.
 }
 \description{
-Retrieve a developer's summary metrics from the v3 \verb{/developers/\{companyId\}}
-endpoint. For the multi-platform v4 overview use \code{\link[=vgi_developers_overview]{vgi_developers_overview()}}.
+Retrieve a developer's summary from \verb{/companies/developers}. Revenue and
+game counts are VGI's Steam figures; release counts are given per platform.
+For many developers or the full per-platform breakdown use
+\code{\link[=vgi_developers_overview]{vgi_developers_overview()}}.
 }
 \examples{
 \dontrun{

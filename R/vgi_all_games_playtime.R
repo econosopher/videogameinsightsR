@@ -3,7 +3,7 @@
 #' Retrieve playtime statistics for many games from the v4
 #' `/player-insights/games/playtime` endpoint, optionally restricted to
 #' players in given countries or regions. For one Steam game use
-#' [vgi_insights_playtime()] (v3).
+#' [vgi_insights_playtime()].
 #'
 #' @inheritParams vgi_all_games_top_countries
 #' @param countries Character vector of 2-letter ISO country codes. Limits the

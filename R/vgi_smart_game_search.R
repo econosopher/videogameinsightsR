@@ -61,7 +61,7 @@ vgi_smart_game_search <- function(query,
   
   # Step 1: Find ONE game that matches the query
   # Try cache first for speed
-  package_cache <- system.file("extdata", "game_cache.rds", package = "VideoGameInsightsR")
+  package_cache <- system.file("extdata", "game_cache.rds", package = "videogameinsightsR")
   
   seed_game <- NULL
   
@@ -98,137 +98,39 @@ vgi_smart_game_search <- function(query,
   # Step 2: Get the game's metadata to find publisher/developer
   message("  Fetching metadata for seed game...")
   metadata <- vgi_game_metadata(seed_game$steam_app_id, auth_token = auth_token, headers = headers)
-  
-  if (search_type == "publisher") {
-    publisher_id <- metadata$publisher_id %||% NULL
-    publisher_name <- metadata$publisher_name %||% NULL
-    
-    # If not in direct fields, check publishers field
-    if (is.null(publisher_id) || is.null(publisher_name)) {
-      if (!is.null(metadata$publishers) && length(metadata$publishers) > 0) {
-        if (is.list(metadata$publishers)) {
-          publisher_id <- metadata$publishers[[1]]$id
-          publisher_name <- metadata$publishers[[1]]$name
-        } else {
-          publisher_name <- metadata$publishers[1]
-          # Need to look up publisher by name
-          pub_list <- vgi_publisher_list(auth_token = auth_token, headers = headers)
-          pub_match <- pub_list[pub_list$name == publisher_name, ]
-          if (nrow(pub_match) > 0) {
-            publisher_id <- pub_match$id[1]
-          }
-        }
-      }
-    }
-    
-    if (is.null(publisher_id) || is.null(publisher_name)) {
-      stop("No publisher information found for ", seed_game$name)
-    }
-    
-    message(sprintf("  Publisher: %s (ID: %s)", publisher_name, publisher_id))
-    
-    # Step 3: Get ALL games from this publisher
-    message("  Fetching all games from this publisher...")
-    
-    # Get publisher's game IDs
-    game_ids <- vgi_publisher_games(publisher_id, auth_token = auth_token, headers = headers)
-    if (length(game_ids) == 0) {
-      stop("No games found for publisher ID ", publisher_id)
-    }
-    message(sprintf("  Found %d games from %s", length(game_ids), publisher_name))
-    
-    if (length(game_ids) > limit) {
-      game_ids <- game_ids[1:limit]
-      message(sprintf("  Limiting to first %d games", limit))
-    }
-    
-    games_data <- purrr::map_dfr(game_ids, function(id) {
-      tryCatch({
-        meta <- vgi_game_metadata(id, auth_token = auth_token, headers = headers)
-        tibble::tibble(
-          steamAppId = as.integer(id),
-          name = as.character(meta$name %||% paste0("Game_", id)),
-          publisher = publisher_name,
-          releaseDate = as.Date(meta$release_date %||% NA)
-        )
-      }, error = function(e) {
-        tibble::tibble(
-          steamAppId = as.integer(id),
-          name = paste0("Game_", id),
-          publisher = publisher_name,
-          releaseDate = as.Date(NA)
-        )
-      })
-    })
-    
-  } else {  # search_type == "developer"
-    # Get developer ID and name - check multiple possible field names
-    developer_id <- metadata$developer_id %||% NULL
-    developer_name <- metadata$developer_name %||% NULL
-    
-    # If not in direct fields, check developers field
-    if (is.null(developer_id) || is.null(developer_name)) {
-      if (!is.null(metadata$developers) && length(metadata$developers) > 0) {
-        if (is.list(metadata$developers)) {
-          developer_id <- metadata$developers[[1]]$id
-          developer_name <- metadata$developers[[1]]$name
-        } else {
-          developer_name <- metadata$developers[1]
-          # Need to look up developer by name
-          dev_list <- vgi_developer_list(auth_token = auth_token, headers = headers)
-          dev_match <- dev_list[dev_list$name == developer_name, ]
-          if (nrow(dev_match) > 0) {
-            developer_id <- dev_match$id[1]
-          }
-        }
-      }
-    }
-    
-    if (is.null(developer_id) || is.null(developer_name)) {
-      stop("No developer information found for ", seed_game$name)
-    }
-    
-    message(sprintf("  Developer: %s (ID: %s)", developer_name, developer_id))
-    
-    # Step 3: Get ALL games from this developer
-    message("  Fetching all games from this developer...")
-    
-    # Get developer's game IDs
-    game_ids <- vgi_developer_games(developer_id, auth_token = auth_token, headers = headers)
-    if (length(game_ids) == 0) {
-      stop("No games found for developer ID ", developer_id)
-    }
-    message(sprintf("  Found %d games from %s", length(game_ids), developer_name))
-    
-    if (length(game_ids) > limit) {
-      game_ids <- game_ids[1:limit]
-      message(sprintf("  Limiting to first %d games", limit))
-    }
-    
-    games_data <- purrr::map_dfr(game_ids, function(id) {
-      tryCatch({
-        meta <- vgi_game_metadata(id, auth_token = auth_token, headers = headers)
-        tibble::tibble(
-          steamAppId = as.integer(id),
-          name = as.character(meta$name %||% paste0("Game_", id)),
-          developer = developer_name,
-          releaseDate = as.Date(meta$release_date %||% NA)
-        )
-      }, error = function(e) {
-        tibble::tibble(
-          steamAppId = as.integer(id),
-          name = paste0("Game_", id),
-          developer = developer_name,
-          releaseDate = as.Date(NA)
-        )
-      })
-    })
+  company_id <- metadata[[paste0(search_type, "_id")]]
+  company_name <- metadata[[paste0(search_type, "_name")]]
+  if (length(company_id) == 0 || is.na(company_id[1])) {
+    stop("No ", search_type, " information found for ", seed_game$name)
   }
-  
-  # Sort by release date (newest first)
-  games_data <- games_data[order(games_data$release_date, decreasing = TRUE), ]
-  
+  company_id <- company_id[1]
+  company_name <- company_name[1]
+  message(sprintf("  %s: %s (ID: %s)", tools::toTitleCase(search_type), company_name, company_id))
+
+  # Step 3: Get the company's Steam games
+  message(sprintf("  Fetching all games from this %s...", search_type))
+  game_ids <- if (search_type == "publisher") {
+    vgi_publisher_games(company_id, auth_token = auth_token, headers = headers)
+  } else {
+    vgi_developer_games(company_id, auth_token = auth_token, headers = headers)
+  }
+  if (length(game_ids) == 0) stop("No games found for ", search_type, " ID ", company_id)
+  message(sprintf("  Found %d games from %s", length(game_ids), company_name))
+  if (length(game_ids) > limit) {
+    game_ids <- game_ids[seq_len(limit)]
+    message(sprintf("  Limiting to first %d games", limit))
+  }
+
+  meta <- suppressWarnings(vgi_game_metadata_batch(game_ids, auth_token = auth_token, headers = headers))
+  games_data <- tibble::tibble(
+    steamAppId = as.integer(game_ids),
+    name = meta$name[match(game_ids, meta$steam_app_id)],
+    releaseDate = as.Date(meta$release_date_steam[match(game_ids, meta$steam_app_id)])
+  )
+  games_data[[search_type]] <- company_name
+  games_data <- games_data[order(games_data$releaseDate, decreasing = TRUE), , drop = FALSE]
+
   message(sprintf("\nFound %d games from the same %s", nrow(games_data), search_type))
-  
+
   return(.vgi_clean_names(games_data))
 }

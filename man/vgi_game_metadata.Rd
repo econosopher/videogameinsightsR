@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgi_game_metadata.R
 \name{vgi_game_metadata}
 \alias{vgi_game_metadata}
-\title{Get Game Metadata (v3, single Steam game)}
+\title{Get Game Metadata for a Steam Game}
 \usage{
 vgi_game_metadata(
   steam_app_id,
@@ -19,18 +19,16 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 \item{headers}{List. Optional custom headers to include in the API request.}
 }
 \value{
-A one-row \link[tibble:tibble]{tibble} with columns \code{steam_app_id}, \code{id}
-(alias), \code{name}, \code{price}, \code{release_date}, \code{full_release_date}, \code{genres},
-\code{subgenres}, \code{languages}, \code{publisher_classification}, \code{publishing_type},
-\code{vgi_url}, \code{steam_url}, \code{publisher_id}, \code{publisher_name}, \code{developer_id},
-\code{developer_name}, and list-columns \code{steam_tags}, \code{game_modes}, \code{themes},
-\code{art_styles}, \code{character}, \code{developers}, \code{publishers}. An empty tibble is
-returned when the API has no such game.
+A one-row \link[tibble:tibble]{tibble} with the columns of
+\code{\link[=vgi_games_metadata]{vgi_games_metadata()}}. An empty tibble is returned when the API has no
+such game.
 }
 \description{
-Retrieves metadata for one game from the v3 \verb{/games/\{steamAppId\}/metadata}
-endpoint. For multi-platform metadata, VGI IDs or slugs, or many games in
-one call, use \code{\link[=vgi_games_metadata]{vgi_games_metadata()}} (v4).
+Retrieves the metadata of one Steam game from \verb{/games/metadata}. The row has
+the multi-platform shape of \code{\link[=vgi_games_metadata]{vgi_games_metadata()}}: VGI's own \code{genre} and
+\code{subgenre}, Steam's \code{steam_genres} and \code{steam_subgenres}, per-platform
+prices, release dates and store URLs, plus list-columns for tags, modes,
+themes, developers and publishers.
 }
 \examples{
 \dontrun{

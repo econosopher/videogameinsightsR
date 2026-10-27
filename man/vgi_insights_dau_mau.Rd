@@ -7,8 +7,7 @@
 vgi_insights_dau_mau(
   steam_app_id,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list(),
-  version = c("v4", "v3")
+  headers = list()
 )
 }
 \arguments{
@@ -18,11 +17,6 @@ vgi_insights_dau_mau(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
-
-\item{version}{API generation. \code{"v4"} (default) takes the series from the
-v4 \verb{/historical-data} endpoint, which covers every day since the game was
-first tracked (pre-release days included). \code{"v3"} calls the per-game v3
-endpoint \verb{/engagement/active-players/games/\{steamAppId\}}, which starts closer to release.}
 }
 \value{
 A list containing:

@@ -1,0 +1,783 @@
+{
+    "nextCursor": 859614,
+    "results": [
+        {
+            "vgiId": 660842,
+            "name": "Stick It to the Stickman",
+            "slug": "stick-it-to-the-stickman",
+            "price": {
+                "xbox": null,
+                "steam": 11.99,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2025-08-18",
+                "playstation": null
+            },
+            "steamFullReleaseDate": "2026-09-23",
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Action",
+            "subgenre": "Beat 'em Up",
+            "gameEngines": [
+                "Unity"
+            ],
+            "languages": "Brazilian, English, French, German, Japanese, Korean, Polish, Russian, Simplified Chinese, Spanish, Traditional Chinese, Turkish",
+            "publisherClassification": "AA",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Minimalist",
+                "Funny"
+            ],
+            "character": null,
+            "artStyles": [
+                "2D",
+                "Colorful"
+            ],
+            "steamTags": [
+                "Action",
+                "Beat 'em up",
+                "Multiplayer",
+                "Roguelike",
+                "2D Fighter",
+                "Co-op",
+                "Funny",
+                "Indie",
+                "Combat",
+                "Platformer",
+                "2D",
+                "Spectacle fighter",
+                "Singleplayer",
+                "Colorful",
+                "Minimalist",
+                "Controller",
+                "2D Platformer",
+                "Abstract",
+                "Hack and Slash",
+                "Bullet Time"
+            ],
+            "steamGenres": "Action, Indie",
+            "steamSubgenres": "2D Platformer, Beat 'em up, Hack and Slash, Platformer, Roguelike",
+            "gameModes": [
+                "Single-player",
+                "Multi-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/stick-it-to-the-stickman",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/2085540",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/6436/devolver-digital",
+                    "companyId": 6436,
+                    "companyName": "Devolver Digital"
+                }
+            ]
+        },
+        {
+            "vgiId": 663833,
+            "name": "Cricket Through the Ages",
+            "slug": "cricket-through-the-ages",
+            "price": {
+                "xbox": null,
+                "steam": 7.99,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2024-03-01",
+                "playstation": null
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Sports",
+            "subgenre": "Arcade Sports",
+            "gameEngines": [
+                "Unity"
+            ],
+            "languages": "Arabic, Brazilian, Dutch, English, French, German, Italian, Japanese, Korean, Russian, Simplified Chinese, Spanish, Traditional Chinese, Turkish",
+            "publisherClassification": "AA",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Cute",
+                "Funny",
+                "Family Friendly"
+            ],
+            "character": null,
+            "artStyles": [
+                "2D",
+                "Cartoony",
+                "Colorful"
+            ],
+            "steamTags": [
+                "Action",
+                "Casual",
+                "Sports",
+                "Arcade",
+                "2D",
+                "Cartoony",
+                "Colorful",
+                "Cute",
+                "Archery",
+                "Family Friendly",
+                "Funny",
+                "Golf",
+                "Martial Arts",
+                "Swordplay",
+                "Wrestling",
+                "Controller",
+                "Physics",
+                "Singleplayer",
+                "Local Multiplayer",
+                "Cricket"
+            ],
+            "steamGenres": "Action, Casual, Sports",
+            "steamSubgenres": "Arcade, Physics",
+            "gameModes": [
+                "Single-player",
+                "Multi-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/cricket-through-the-ages",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/2657480",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/6436/devolver-digital",
+                    "companyId": 6436,
+                    "companyName": "Devolver Digital"
+                }
+            ]
+        },
+        {
+            "vgiId": 667740,
+            "name": "GORN",
+            "slug": "gorn",
+            "price": {
+                "xbox": null,
+                "steam": 19.99,
+                "playstation": 19.99
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2017-07-10",
+                "playstation": "2020-05-19"
+            },
+            "steamFullReleaseDate": "2019-07-18",
+            "platforms": [
+                "steam",
+                "playstation"
+            ],
+            "genre": "Action",
+            "subgenre": "Action (General)",
+            "gameEngines": [
+                "Unity"
+            ],
+            "languages": "English",
+            "publisherClassification": "AA",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Gore",
+                "Violent",
+                "Funny",
+                "Nudity",
+                "Medieval"
+            ],
+            "character": [
+                "First-Person"
+            ],
+            "artStyles": null,
+            "steamTags": [
+                "VR",
+                "Gore",
+                "Action",
+                "Violent",
+                "3D Fighter",
+                "Indie",
+                "Funny",
+                "Fighting",
+                "First-Person",
+                "Singleplayer",
+                "Early Access",
+                "Swordplay",
+                "Local Multiplayer",
+                "Medieval",
+                "Moddable",
+                "Horror",
+                "Multiplayer",
+                "Nudity",
+                "Asymmetric VR"
+            ],
+            "steamGenres": "Action, Indie",
+            "steamSubgenres": "Horror, VR",
+            "gameModes": [
+                "Single-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/gorn",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/578620",
+                "playstation": "https://store.playstation.com/en-us/concept/235154"
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/6436/devolver-digital",
+                    "companyId": 6436,
+                    "companyName": "Devolver Digital"
+                }
+            ]
+        },
+        {
+            "vgiId": 689808,
+            "name": "Terra Nil",
+            "slug": "terra-nil",
+            "price": {
+                "xbox": null,
+                "steam": 24.99,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2023-03-28",
+                "playstation": null
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Strategy",
+            "subgenre": "City Builder",
+            "gameEngines": [
+                "Unity"
+            ],
+            "languages": "Arabic, Brazilian, English, French, German, Italian, Japanese, Korean, Latam, Polish, Russian, Simplified Chinese, Spanish, Swedish, Thai, Traditional Chinese, Turkish",
+            "publisherClassification": "AA",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Cute",
+                "Relaxing",
+                "Atmospheric",
+                "Family Friendly",
+                "Procedural Generation"
+            ],
+            "character": null,
+            "artStyles": [
+                "Colorful"
+            ],
+            "steamTags": [
+                "Nature",
+                "Strategy",
+                "Relaxing",
+                "Puzzle",
+                "City Builder",
+                "Procedural Generation",
+                "Atmospheric",
+                "Casual",
+                "Isometric",
+                "Turn-Based Strategy",
+                "Singleplayer",
+                "2.5D",
+                "Colorful",
+                "Resource Management",
+                "Emotional",
+                "Cute",
+                "Family Friendly",
+                "Stylized",
+                "Instrumental Music",
+                "Post-apocalyptic"
+            ],
+            "steamGenres": "Indie, Strategy, Casual",
+            "steamSubgenres": "City Builder, Puzzle, Resource Management, Turn-Based Strategy",
+            "gameModes": [
+                "Single-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/terra-nil",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/1593030",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/7243/clockwork-acorn",
+                    "companyId": 7243,
+                    "companyName": "Clockwork Acorn"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/6436/devolver-digital",
+                    "companyId": 6436,
+                    "companyName": "Devolver Digital"
+                }
+            ]
+        },
+        {
+            "vgiId": 697338,
+            "name": "Anger Foot",
+            "slug": "anger-foot",
+            "price": {
+                "xbox": null,
+                "steam": 19.99,
+                "playstation": 19.99
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2024-07-11",
+                "playstation": "2025-07-01"
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam",
+                "playstation"
+            ],
+            "genre": "Shooter",
+            "subgenre": "Shooter (General)",
+            "gameEngines": [
+                "Unity"
+            ],
+            "languages": "Brazilian, English, French, German, Japanese, Korean, Latam, Russian, Simplified Chinese, Spanish, Traditional Chinese, Turkish",
+            "publisherClassification": "AA",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Comedy",
+                "Great Soundtrack",
+                "Fast-Paced",
+                "Gore",
+                "Violent",
+                "Funny"
+            ],
+            "character": [
+                "First-Person"
+            ],
+            "artStyles": [
+                "3D",
+                "Cartoony",
+                "Colorful"
+            ],
+            "steamTags": [
+                "FPS",
+                "Fast-Paced",
+                "Boomer Shooter",
+                "Arcade",
+                "Action",
+                "Shooter",
+                "Violent",
+                "First-Person",
+                "Gore",
+                "Singleplayer",
+                "Colorful",
+                "Comedy",
+                "Indie",
+                "Combat",
+                "Psychedelic",
+                "Funny",
+                "Cartoony",
+                "Stylized",
+                "3D",
+                "Great Soundtrack"
+            ],
+            "steamGenres": "Action, Indie",
+            "steamSubgenres": "Arcade, FPS, Shooter",
+            "gameModes": [
+                "Single-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/anger-foot",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/1978590",
+                "playstation": "https://store.playstation.com/en-us/concept/10013233"
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/6436/devolver-digital",
+                    "companyId": 6436,
+                    "companyName": "Devolver Digital"
+                }
+            ]
+        },
+        {
+            "vgiId": 699749,
+            "name": "Broforce",
+            "slug": "broforce",
+            "price": {
+                "xbox": 14.99,
+                "steam": 14.99,
+                "playstation": 14.99
+            },
+            "releaseDate": {
+                "xbox": "2023-08-08",
+                "steam": "2014-04-03",
+                "playstation": "2016-03-01"
+            },
+            "steamFullReleaseDate": "2015-10-15",
+            "platforms": [
+                "steam",
+                "playstation",
+                "xbox"
+            ],
+            "genre": "Action",
+            "subgenre": "Shoot 'em up",
+            "gameEngines": [
+                "Unity"
+            ],
+            "languages": "Brazilian, English, French, German, Italian, Japanese, Korean, Simplified Chinese, Spanish",
+            "publisherClassification": "AA",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Comedy",
+                "Retro",
+                "Gore",
+                "Funny"
+            ],
+            "character": null,
+            "artStyles": [
+                "2D",
+                "Pixel Graphics"
+            ],
+            "steamTags": [
+                "Action",
+                "Pixel Graphics",
+                "Co-op",
+                "2D",
+                "Local Co-Op",
+                "Platformer",
+                "Multiplayer",
+                "Indie",
+                "Shooter",
+                "Side Scroller",
+                "Local Multiplayer",
+                "Gore",
+                "Funny",
+                "Retro",
+                "Comedy",
+                "Adventure",
+                "Arcade",
+                "Casual",
+                "Epic",
+                "4 Player Local"
+            ],
+            "steamGenres": "Action, Adventure, Indie, Casual",
+            "steamSubgenres": "Arcade, Platformer, Shooter",
+            "gameModes": [
+                "Single-player",
+                "Multi-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/broforce",
+            "storeUrl": {
+                "xbox": "https://www.xbox.com/en-US/games/store/_/9P03ZQMBMV65",
+                "steam": "https://store.steampowered.com/app/274190",
+                "playstation": "https://store.playstation.com/en-us/concept/216078"
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/6436/devolver-digital",
+                    "companyId": 6436,
+                    "companyName": "Devolver Digital"
+                }
+            ]
+        },
+        {
+            "vgiId": 704835,
+            "name": "Genital Jousting",
+            "slug": "genital-jousting",
+            "price": {
+                "xbox": null,
+                "steam": 6.99,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2016-11-17",
+                "playstation": null
+            },
+            "steamFullReleaseDate": "2018-01-18",
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Arcade",
+            "subgenre": "Social Party",
+            "gameEngines": [
+                "Unity"
+            ],
+            "languages": "English",
+            "publisherClassification": "AA",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Comedy",
+                "Great Soundtrack",
+                "Story Rich",
+                "Cute",
+                "Gore",
+                "Violent",
+                "Funny",
+                "Nudity"
+            ],
+            "character": null,
+            "artStyles": null,
+            "steamTags": [
+                "Sexual Content",
+                "Nudity",
+                "Comedy",
+                "Multiplayer",
+                "Funny",
+                "Action",
+                "Indie",
+                "Memes",
+                "Local Multiplayer",
+                "Story Rich",
+                "Cute",
+                "Co-op",
+                "Local Co-Op",
+                "Great Soundtrack",
+                "Casual",
+                "Violent",
+                "LGBTQ+",
+                "Gore",
+                "Early Access",
+                "Adventure"
+            ],
+            "steamGenres": "Action, Indie",
+            "steamSubgenres": null,
+            "gameModes": [
+                "Single-player",
+                "Multi-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/genital-jousting",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/469820",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/6436/devolver-digital",
+                    "companyId": 6436,
+                    "companyName": "Devolver Digital"
+                }
+            ]
+        },
+        {
+            "vgiId": 728800,
+            "name": "The Expendabros",
+            "slug": "the-expendabros",
+            "price": {
+                "xbox": null,
+                "steam": 0,
+                "playstation": null
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2014-08-05",
+                "playstation": null
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam"
+            ],
+            "genre": "Action",
+            "subgenre": "Shoot 'em up",
+            "gameEngines": [
+                "Unity"
+            ],
+            "languages": "English",
+            "publisherClassification": "AA",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Comedy",
+                "Funny",
+                "Open World"
+            ],
+            "character": null,
+            "artStyles": [
+                "2D",
+                "Pixel Graphics"
+            ],
+            "steamTags": [
+                "Free to Play",
+                "Action",
+                "Pixel Graphics",
+                "2D",
+                "Multiplayer",
+                "Local Co-Op",
+                "Shooter",
+                "Co-op",
+                "Local Multiplayer",
+                "Platformer",
+                "Indie",
+                "Adventure",
+                "Singleplayer",
+                "Funny",
+                "Controller",
+                "Side Scroller",
+                "Comedy",
+                "Classic",
+                "Open World",
+                "4 Player Local"
+            ],
+            "steamGenres": "Action, Adventure, Indie, Free to Play",
+            "steamSubgenres": "Platformer, Shooter",
+            "gameModes": [
+                "Single-player",
+                "Multi-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/the-expendabros",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/312990",
+                "playstation": null
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/6436/devolver-digital",
+                    "companyId": 6436,
+                    "companyName": "Devolver Digital"
+                }
+            ]
+        },
+        {
+            "vgiId": 859614,
+            "name": "GORN 2",
+            "slug": "gorn-2",
+            "price": {
+                "xbox": null,
+                "steam": 19.99,
+                "playstation": 19.99
+            },
+            "releaseDate": {
+                "xbox": null,
+                "steam": "2025-04-17",
+                "playstation": "2025-07-14"
+            },
+            "steamFullReleaseDate": null,
+            "platforms": [
+                "steam",
+                "playstation"
+            ],
+            "genre": "Action",
+            "subgenre": "Action (General)",
+            "gameEngines": [
+                "Unity"
+            ],
+            "languages": "English, French, German, Italian, Japanese, Korean, Polish, Russian, Simplified Chinese, Spanish",
+            "publisherClassification": "AA",
+            "publishingType": "3rd Party Published",
+            "themes": [
+                "Gore",
+                "Violent",
+                "Funny",
+                "Medieval"
+            ],
+            "character": null,
+            "artStyles": [
+                "3D"
+            ],
+            "steamTags": [
+                "Action",
+                "Gore",
+                "3D Fighter",
+                "VR",
+                "3D",
+                "Violent",
+                "Combat",
+                "Singleplayer",
+                "Fighting",
+                "Funny",
+                "Medieval",
+                "Multiplayer"
+            ],
+            "steamGenres": "Action",
+            "steamSubgenres": "VR",
+            "gameModes": [
+                "Single-player"
+            ],
+            "vgiUrl": "https://app.sensortower.com/vgi/game/gorn-2",
+            "storeUrl": {
+                "xbox": null,
+                "steam": "https://store.steampowered.com/app/3391450",
+                "playstation": "https://store.playstation.com/en-us/concept/10014031"
+            },
+            "developers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/28663/free-lives",
+                    "companyId": 28663,
+                    "companyName": "Free Lives"
+                },
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/developer/5192/cortopia-studios",
+                    "companyId": 5192,
+                    "companyName": "Cortopia Studios"
+                }
+            ],
+            "publishers": [
+                {
+                    "vgiUrl": "https://app.sensortower.com/vgi/publisher/6436/devolver-digital",
+                    "companyId": 6436,
+                    "companyName": "Devolver Digital"
+                }
+            ]
+        }
+    ]
+}

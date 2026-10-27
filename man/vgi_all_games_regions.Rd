@@ -43,7 +43,7 @@ the next page.
 \description{
 Retrieve the player-share-by-region breakdown for many games from the v4
 \verb{/player-insights/games/top-regions} endpoint, widened to one column per
-region. For one Steam game use \code{\link[=vgi_top_regions]{vgi_top_regions()}} (v3).
+region. For one Steam game use \code{\link[=vgi_top_regions]{vgi_top_regions()}}.
 }
 \examples{
 \dontrun{

@@ -10,7 +10,7 @@ vgi_peak_ccu_by_names(game_names)
 \item{game_names}{Character vector of game names (e.g., "THE FINALS", "Halo Infinite")}
 }
 \value{
-A tibble with columns: input_name, name, steamAppId, peak_ccu, peak_date
+A tibble with columns: input_name, name, steam_app_id, peak_ccu, peak_date
 }
 \description{
 Resolves each game name to a Steam app ID using \code{vgi_search_games(title, limit = 5)}

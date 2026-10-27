@@ -6,8 +6,7 @@
 \usage{
 vgi_steam_market_data(
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list(),
-  version = c("v4", "v3")
+  headers = list()
 )
 }
 \arguments{
@@ -15,19 +14,15 @@ vgi_steam_market_data(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
-
-\item{version}{\code{"v4"} (default) or \code{"v3"}.}
 }
 \value{
 A \link[tibble:tibble]{tibble} with one row per month: \code{period}
 (\code{YYYY-MM-01}), \code{units_total}, \code{revenue_total}, \code{releases_total},
-\code{users_online}, \code{users_ingame}, \code{accounts_total} and (v4) \code{platform}.
+\code{users_online}, \code{users_ingame}, \code{accounts_total} and \code{platform}.
 }
 \description{
 Retrieve monthly Steam-wide market totals (units, revenue, releases, users
-online, accounts). The v4 \verb{/market-data} endpoint (default) adds a
-\code{platform} column; the v3 \verb{/analytics/steam-market-data} endpoint returns
-the Steam series only.
+online, accounts) from \verb{/market-data}.
 }
 \examples{
 \dontrun{

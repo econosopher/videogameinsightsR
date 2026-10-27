@@ -9,7 +9,7 @@ if (file.exists(parent_env)) {
 }
 
 # Source VGI functions
-vgi_path <- file.path(dirname(getwd()), "VideoGameInsightsR", "R")
+vgi_path <- file.path(dirname(getwd()), "videogameinsightsR", "R")
 if (dir.exists(vgi_path)) {
   source(file.path(vgi_path, "utils.R"))
   source(file.path(vgi_path, "vgi_game_metadata.R"))
@@ -20,7 +20,7 @@ if (dir.exists(vgi_path)) {
   source(file.path(vgi_path, "vgi_game_summary_yoy.R"))
   cat("✅ VGI functions loaded\n")
 } else {
-  stop("VideoGameInsightsR package functions not found")
+  stop("videogameinsightsR package functions not found")
 }
 
 # Check API key

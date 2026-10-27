@@ -11,9 +11,7 @@ vgi_all_publisher_games(
   slugs = NULL,
   limit = NULL,
   cursor = NULL,
-  offset = NULL,
-  all_pages = FALSE,
-  version = c("v4", "v3")
+  all_pages = FALSE
 )
 }
 \arguments{
@@ -22,35 +20,28 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
 
-\item{vgi_ids}{Integer vector. VGI company IDs to select (v4 only).}
+\item{vgi_ids}{Integer vector. VGI company IDs to select.}
 
-\item{slugs}{Character vector. VGI company slugs to select (v4 only).}
+\item{slugs}{Character vector. VGI company slugs to select.}
 
 \item{limit}{Integer. Records per page (maximum 1000).}
 
-\item{cursor}{Integer. Cursor from a previous page (v4 only).}
-
-\item{offset}{Integer. Records to skip (v3 only).}
+\item{cursor}{Integer. Cursor from a previous page.}
 
 \item{all_pages}{Logical. Fetch every page.}
-
-\item{version}{\code{"v4"} (default) or \code{"v3"}.}
 }
 \value{
-A \link[tibble:tibble]{tibble} with columns \code{publisher_id}, \code{name}
-(v4), \code{game_ids} (list-column of VGI IDs for v4, Steam App IDs for v3),
-\code{id_type} ("vgi_id" or "steam_app_id") and \code{game_count}, sorted by game
-count. The attribute \code{next_cursor} carries the v4 cursor.
+A \link[tibble:tibble]{tibble} with columns \code{publisher_id}, \code{name},
+\code{game_ids} (list-column of VGI game IDs) and \code{game_count}, sorted by game
+count. The attribute \code{next_cursor} carries the cursor for the next page.
 }
 \description{
-Retrieve the game IDs attached to each publisher. The v4
-\verb{/companies/publishers/game-ids} endpoint (default) returns VGI game IDs
-and supports selection by company ID or slug; the v3 \verb{/publishers/game-ids}
-endpoint returns Steam App IDs with offset paging.
+Retrieve the VGI game IDs attached to each publisher from
+\verb{/companies/publishers/game-ids}. Games on every platform are included; use
+\code{\link[=vgi_publisher_games]{vgi_publisher_games()}} for one publisher's Steam App IDs.
 }
 \examples{
 \dontrun{
 vgi_all_publisher_games(vgi_ids = 28663)
-vgi_all_publisher_games(version = "v3", limit = 50)
 }
 }

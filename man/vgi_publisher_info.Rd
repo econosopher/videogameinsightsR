@@ -2,7 +2,7 @@
 % Please edit documentation in R/vgi_publishers.R
 \name{vgi_publisher_info}
 \alias{vgi_publisher_info}
-\title{Get Publisher Information (v3)}
+\title{Get Publisher Information}
 \usage{
 vgi_publisher_info(
   company_id,
@@ -20,13 +20,17 @@ Defaults to the VGI_AUTH_TOKEN environment variable.}
 }
 \value{
 A one-row \link[tibble:tibble]{tibble} with columns \code{company_id},
-\code{name}, \code{classification}, \code{games_published}, \code{games_in_development},
-\code{revenue_total}, \code{revenue_avg_per_game}, \code{revenue_median_per_game}.
+\code{name}, \code{slug}, \code{classification}, \code{country}, \code{games_published},
+\code{games_in_development}, \code{revenue_total}, \code{revenue_avg_per_game},
+\code{revenue_median_per_game}, \code{games_released_steam},
+\code{games_released_playstation}, \code{games_released_xbox} and \code{vgi_url}.
 Empty when the publisher is unknown.
 }
 \description{
-Retrieve a publisher's summary metrics from the v3 \verb{/publishers/\{companyId\}}
-endpoint. For the multi-platform v4 overview use \code{\link[=vgi_publishers_overview]{vgi_publishers_overview()}}.
+Retrieve a publisher's summary from \verb{/companies/publishers}. Revenue and
+game counts are VGI's Steam figures; release counts are given per platform.
+For many publishers or the full per-platform breakdown use
+\code{\link[=vgi_publishers_overview]{vgi_publishers_overview()}}.
 }
 \examples{
 \dontrun{

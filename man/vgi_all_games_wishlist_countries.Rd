@@ -44,7 +44,7 @@ cursor for the next page.
 \description{
 Retrieve the wishlist-share-by-country breakdown for many games from the v4
 \verb{/player-insights/games/top-wishlist-countries} endpoint. For one Steam
-game use \code{\link[=vgi_top_wishlist_countries]{vgi_top_wishlist_countries()}} (v3).
+game use \code{\link[=vgi_top_wishlist_countries]{vgi_top_wishlist_countries()}}.
 }
 \examples{
 \dontrun{

@@ -1,4 +1,4 @@
-# VideoGameInsightsR tests
+# videogameinsightsR tests
 
 - `testthat/test-request.R` - request plumbing: base URL / version resolution,
   auth header, query construction, cursor and offset pagination, response

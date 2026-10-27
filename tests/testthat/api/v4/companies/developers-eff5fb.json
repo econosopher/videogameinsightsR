@@ -1,0 +1,58 @@
+{
+    "nextCursor": 28663,
+    "results": [
+        {
+            "vgiCompanyId": 28663,
+            "name": "Free Lives",
+            "slug": "free-lives",
+            "classification": "Indie",
+            "platformData": {
+                "steam": {
+                    "revenueTotal": 41734746,
+                    "gamesReleased": 9,
+                    "gamesDeveloped": 9,
+                    "genreBreakdown": {
+                        "rpg": 0,
+                        "action": 56,
+                        "arcade": 11,
+                        "casino": 0,
+                        "puzzle": 0,
+                        "racing": 0,
+                        "sports": 11,
+                        "shooter": 11,
+                        "strategy": 11,
+                        "tabletop": 0,
+                        "adventure": 0,
+                        "lifestyle": 0,
+                        "simulation": 0
+                    },
+                    "revenueAvgPerGame": 4637194,
+                    "gamesInDevelopment": 0,
+                    "selfPublishedCount": 0,
+                    "revenueMedianPerGame": 3161835,
+                    "selfPublishedPercentage": 0
+                },
+                "xbox": {
+                    "gamesReleased": 1,
+                    "genreBreakdown": {
+                        "rpg": 0,
+                        "action": 100,
+                        "arcade": 0,
+                        "casino": 0,
+                        "puzzle": 0,
+                        "racing": 0,
+                        "sports": 0,
+                        "shooter": 0,
+                        "strategy": 0,
+                        "tabletop": 0,
+                        "adventure": 0,
+                        "lifestyle": 0,
+                        "simulation": 0
+                    }
+                }
+            },
+            "country": "South Africa",
+            "vgiUrl": "https://app.sensortower.com/vgi/developer/28663/free-lives"
+        }
+    ]
+}

@@ -7,8 +7,7 @@
 vgi_historical_data(
   steam_app_id,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list(),
-  version = c("v4", "v3")
+  headers = list()
 )
 }
 \arguments{
@@ -18,11 +17,6 @@ vgi_historical_data(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
-
-\item{version}{API generation. \code{"v4"} (default) reads the v4
-\verb{/historical-data} endpoint filtered to the game, which covers every day
-since the game was first tracked, world-wide. \code{"v3"} reads the per-game
-v3 \verb{/historical-data/games/\{steamAppId\}} endpoint.}
 }
 \value{
 A list with element \code{steam_app_id} plus one tibble (or \code{NULL} when

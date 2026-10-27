@@ -7,8 +7,7 @@
 vgi_top_wishlist_countries(
   steam_app_id,
   auth_token = Sys.getenv("VGI_AUTH_TOKEN"),
-  headers = list(),
-  version = c("v4", "v3")
+  headers = list()
 )
 }
 \arguments{
@@ -18,9 +17,6 @@ vgi_top_wishlist_countries(
 Defaults to the VGI_AUTH_TOKEN environment variable.}
 
 \item{headers}{List. Optional custom headers to include in the API request.}
-
-\item{version}{API generation, \code{"v4"} (default) or \code{"v3"}; both return
-the same figures.}
 }
 \value{
 A \link[tibble:tibble]{tibble} with columns \code{country} (ISO code),
@@ -28,10 +24,8 @@ A \link[tibble:tibble]{tibble} with columns \code{country} (ISO code),
 }
 \description{
 Retrieve the countries contributing the largest share of a Steam game's
-wishlists (v4 \verb{/player-insights/games/top-wishlist-countries} by default,
-v3 \verb{/player-insights/games/\{steamAppId\}/top-wishlist-countries} with
-\code{version = "v3"}). For many games at once use
-\code{\link[=vgi_all_games_wishlist_countries]{vgi_all_games_wishlist_countries()}}.
+wishlists, from v4 \verb{/player-insights/games/top-wishlist-countries}. For many
+games at once use \code{\link[=vgi_all_games_wishlist_countries]{vgi_all_games_wishlist_countries()}}.
 }
 \examples{
 \dontrun{
