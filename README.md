@@ -5,26 +5,21 @@
 <!-- badges: end -->
 
 R package for the [Video Game Insights](https://app.sensortower.com/vgi/) API
-(by Sensor Tower). Retrieve player counts, revenue, units sold, wishlists,
-reviews, and more for Steam games -- all returned as tidy tibbles with
-snake\_case column names.
+(by Sensor Tower). Retrieve player counts, revenue, units, wishlists, reviews,
+player insights and company data for games on Steam, Xbox and PlayStation,
+all returned as tidy tibbles with snake\_case column names.
 
-The package covers both API generations:
-
-- **v3** -- per-Steam-game endpoints (CCU, DAU/MAU, revenue, units,
-  reviews, wishlists, followers, price history, rankings, player overlap)
-  with offset/limit paging. Per-game series functions reach these with
-  `version = "v3"`. Interactive docs: <https://app.sensortower.com/vgi/api/v3/api-docs/>.
-- **v4** (default for per-game series and player insights) -- multi-platform
-  (Steam, Xbox, PlayStation) metadata, companies, player insights, full daily
-  histories and snapshots by date, with VGI IDs / slugs and cursor paging.
-  Interactive docs: <https://app.sensortower.com/vgi/api/v4/api-docs/>.
-
-See `dev/api_coverage_2026-10.md` for the endpoint-by-endpoint mapping.
+Since 0.3.0 the package uses only the v4 API: multi-platform rows, VGI IDs and
+slugs alongside Steam App IDs, and cursor paging. Interactive docs:
+<https://app.sensortower.com/vgi/api/v4/api-docs/>. See
+`dev/api_coverage_2026-10.md` for the endpoint-by-endpoint mapping.
 
 ## Installation
 
 ```r
+install.packages("videogameinsightsR")
+
+# development version
 devtools::install_github("econosopher/videogameinsightsR")
 ```
 
@@ -44,7 +39,6 @@ vgi_game_metadata(892970)
 ## Core Workflow
 
 The typical workflow is **search -> inspect -> pull time series -> analyse**.
-Every function returns a tibble so results pipe naturally.
 
 ```r
 library(dplyr)
@@ -53,48 +47,54 @@ library(dplyr)
 games <- vgi_search_games("Elden Ring")
 app_id <- games$steam_app_id[1]
 
-# 2. Pull metadata
+# 2. Pull metadata (one row per game; per-platform prices, dates and store URLs)
 meta <- vgi_game_metadata(app_id)
-meta$name
-#> "ELDEN RING"
+meta[, c("name", "genre", "steam_genres", "release_date_steam")]
 
-# 3. Pull the full daily history for one game (v4; add version = "v3" for v3)
+# 3. Pull the full daily history for one Steam game
 ccu   <- vgi_insights_ccu(app_id)$player_history   # date, avg, median, max, min
 rev   <- vgi_insights_revenue(app_id)              # date, revenue_change, revenue_total
 units <- vgi_insights_units(app_id)                # date, units_sold_change, units_sold_total
 wl    <- vgi_insights_wishlists(app_id)$wishlist_changes
 
-# 4. Or grab every metric at once with the historical data endpoint
+# 4. Or grab every metric at once
 hist <- vgi_historical_data(app_id)
 names(hist)
 #> "steam_app_id" "revenue" "units_sold" "concurrent_players" "active_players"
 #> "reviews" "wishlists" "followers" "price_history" "daily"
 
-# 5. One day across many games (v4 snapshot, optional country breakdown)
+# 5. One day across many games, every platform, optional country breakdown
 snap <- vgi_historical_data_by_date("2025-06-01", steam_app_ids = c(app_id, 730))
 by_country <- vgi_historical_data_by_date("2025-06-01", steam_app_ids = app_id,
                                           countries = c("US", "DE"))
 ```
 
+## Genres
+
+VGI assigns each game one genre and subgenre (`genre`, `subgenre`, for example
+"Shooter" / "Shooter (General)"). Steam's own store genres, several per game,
+are kept separately in `steam_genres` and `steam_subgenres`. The two can
+disagree: ARC Raiders is an "Action" game to VGI but a "Shooter" subgenre on
+Steam. `vgi_filter_genre()` filters the local cache on either
+(`source = "vgi"` or `"steam"`).
+
 ## Function Families
 
-### Game Discovery
+### Game discovery and metadata
 
 | Function | Description |
 |---|---|
-| `vgi_search_games()` | Search by title (uses local cache + API fallback) |
-| `vgi_game_list()` | Full game catalogue (v4 adds `vgi_id`) |
-| `vgi_top_games()` | Top games by ranking metric |
-| `vgi_game_rankings()` | Rank / percentile table, or one game's ranks |
-| `vgi_game_metadata()` | v3 metadata for a single Steam game |
-| `vgi_games_metadata()` | v4 multi-platform metadata by Steam id, VGI id or slug |
+| `vgi_search_games()` | Search by title (local cache, then slug lookup) |
+| `vgi_game_list()` | Full catalogue: `vgi_id`, `steam_app_id` (NA off Steam), `name` |
+| `vgi_game_metadata()` | Metadata for one Steam game |
+| `vgi_game_metadata_batch()` | Metadata for many Steam games |
+| `vgi_games_metadata()` | Metadata by Steam ID, VGI ID or slug, with cursor paging |
 
 ### Snapshots by date
 
-All accept `date` and optional `steam_app_ids` to filter (v4 snapshot).
-`vgi_historical_data_by_date()` returns every metric at once and supports
-`vgi_ids`, `slugs`, `countries` and `regions`; `vgi_snapshot_by_date()` gives
-direct access to the v3 `{date}` endpoints.
+All accept `date` and optional `steam_app_ids`. `vgi_historical_data_by_date()`
+returns every metric at once and supports `vgi_ids`, `slugs`, `countries` and
+`regions`.
 
 | Function | Columns |
 |---|---|
@@ -106,15 +106,7 @@ direct access to the v3 `{date}` endpoints.
 | `vgi_followers_by_date()` | `follower_count` |
 | `vgi_wishlists_by_date()` | `wishlist_count` |
 
-### Per-game history (v3)
-
-```r
-hist <- vgi_historical_data(892970)
-hist$revenue        # tibble: date, revenue, daily_revenue
-hist$active_players # tibble: date, dau, mau
-hist$price_history  # tibble: date, price_initial, price_final
-hist$daily          # the raw daily table with every metric
-```
+### Per-game history (Steam)
 
 | Function | Returns |
 |---|---|
@@ -126,29 +118,38 @@ hist$daily          # the raw daily table with every metric
 | `vgi_insights_wishlists()` | `$wishlist_changes`: date, wishlists_total, wishlists_change |
 | `vgi_insights_followers()` | `$followers_change`: date, followers_total, followers_change |
 | `vgi_insights_price_history()` | `$price_changes`: currency, price_initial, price_final, first_date, last_date |
-| `vgi_price_history()` | v4 multi-platform price periods by Steam id, VGI id or slug |
+| `vgi_price_history()` | price periods on every platform, by Steam ID, VGI ID or slug |
 
 ### Player insights
 
 | Function | Scope |
 |---|---|
-| `vgi_insights_playtime()`, `vgi_top_countries()`, `vgi_top_regions()`, `vgi_top_wishlist_countries()` | one Steam game (v3) |
-| `vgi_player_overlap()` | one game; v3 by Steam id, v4 by `vgi_id` / `slug` |
-| `vgi_all_games_playtime()`, `vgi_all_games_top_countries()`, `vgi_all_games_regions()`, `vgi_all_games_wishlist_countries()` | many games (v4); filter by `steam_app_ids`, `vgi_ids`, `slugs`; playtime also by `countries` / `regions` |
+| `vgi_insights_playtime()`, `vgi_top_countries()`, `vgi_top_regions()`, `vgi_top_wishlist_countries()` | one Steam game |
+| `vgi_player_overlap()` | one game, by Steam ID, VGI ID or slug |
+| `vgi_all_games_player_overlap()` | walks the catalogue one game per request |
+| `vgi_all_games_playtime()`, `vgi_all_games_top_countries()`, `vgi_all_games_regions()`, `vgi_all_games_wishlist_countries()` | many games; filter by `steam_app_ids`, `vgi_ids`, `slugs`; playtime also by `countries` / `regions` |
 
-### Convenience Functions
+### Publishers and developers
 
 ```r
-# Everything in one call
+vgi_publishers_overview(slugs = "free-lives")  # per-platform revenue and genre mix
+vgi_publisher_list(search = "valve")           # directory (id, name, slug)
+vgi_publisher_info(28663)                      # Steam revenue and game counts, releases per platform
+vgi_publisher_games(28663)                     # the publisher's Steam App IDs
+vgi_all_publisher_games(vgi_ids = 28663)       # VGI game IDs on every platform
+# ...and the matching vgi_developer*() functions
+```
+
+### Convenience functions
+
+```r
 summary <- vgi_game_summary(
   steam_app_ids = c(892970, 1245620),
   start_date = "2025-01-01",
   end_date   = "2025-01-31"
 )
 summary$summary_table
-summary$time_series$concurrent
 
-# Year-over-year comparison
 yoy <- vgi_game_summary_yoy(
   steam_app_ids = 892970,
   years = c(2024, 2025),
@@ -158,21 +159,10 @@ yoy <- vgi_game_summary_yoy(
 yoy$comparison_table
 ```
 
-### Publishers and Developers
-
-```r
-vgi_publishers_overview(slugs = "free-lives")  # v4: per-platform revenue, genre mix
-vgi_publisher_list(search = "valve")           # v4 directory (id, name, slug)
-vgi_publisher_info(28663)                      # v3 summary metrics
-vgi_publisher_games(28663)                     # v3 Steam App IDs for the publisher
-vgi_publishers(limit = 100)                    # v3 catalogue with metrics
-# ...and the matching vgi_developer*() functions
-```
-
 ### Pagination
 
-v4 functions take `limit` and `cursor` and return the next cursor as an
-attribute; pass `all_pages = TRUE` to fetch everything.
+Functions that list many records take `limit` and `cursor` and return the next
+cursor as an attribute; pass `all_pages = TRUE` to fetch everything.
 
 ```r
 page1 <- vgi_games_metadata(limit = 500)
@@ -183,7 +173,7 @@ everything <- vgi_publisher_list(all_pages = TRUE)
 ## Configuration
 
 ```r
-# API root (the version segment is added per call; default shown)
+# API root (the /v4 segment is added; default shown)
 options(vgi.base_url = "https://vginsights.com/api")
 
 # Timeouts and retries
@@ -204,16 +194,15 @@ options(vgi.verbose = TRUE)
 
 ## Important Notes
 
-- **Steam App IDs required**: Pass explicit IDs to snapshot-by-date functions.
+- **Platforms**: on Xbox, VGI's "units owned" includes Game Pass players and
+  other free copies; "paid units" excludes them. Xbox and PlayStation figures
+  are VGI model estimates.
+- **Steam App IDs**: pass explicit IDs to the snapshot-by-date functions.
   Without them the API returns its default handful of games.
-- **API host**: requests go to `https://vginsights.com/api/{v3,v4}`, which
-  redirects to `https://app.sensortower.com/vgi/api/{v3,v4}`. The old
-  `vginsights.com/api` documentation page is gone; use the Sensor Tower
-  Swagger pages linked above.
-- **DAU/MAU availability**: DAU from 2024-03-18, MAU from 2024-03-23.
-- **Column names**: All output uses snake\_case (e.g. `steam_app_id`,
-  `peak_concurrent`, `daily_revenue`). This is a breaking change from v0.0.x.
-- **Return types**: All data-returning functions produce tibbles.
+- **API host**: requests go to `https://vginsights.com/api/v4`, which
+  redirects to `https://app.sensortower.com/vgi/api/v4`.
+- **Return types**: all data-returning functions produce tibbles with
+  snake\_case columns.
 
 ## Development
 
@@ -223,7 +212,7 @@ devtools::test()
 devtools::check(cran = TRUE)
 ```
 
-Tests replay `httptest2` fixtures under `tests/testthat/{v3,v4}/`
+Tests replay `httptest2` fixtures under `tests/testthat/api/v4/`
 (re-record with `Rscript dev/record_fixtures.R`). Live smoke tests run only
 when `VGI_AUTH_TOKEN` is set.
 
